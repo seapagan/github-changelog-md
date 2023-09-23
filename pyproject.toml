@@ -1,0 +1,142 @@
+[tool.poetry]
+name = "github-changelog-md"
+version = "0.1.0"
+description = "Generate a Markdown Changelog from your Github repository."
+authors = ["Grant Ramsay <seapagan@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+
+packages = [{ include = "github_changelog_md" }]
+
+homepage = ""
+repository = "https://github/com/seapagan/github_changelog_md"
+
+[tool.poetry.urls]
+# customize the below URLs to point to your own GitHub repo. These will be
+# shown on [Pypi.org](https://pypi.org/) if you are creating a public package.
+"Pull Requests" = "https://github/com/seapagan/github_changelog_md/pulls"
+"Bug Tracker" = "https://github/com/seapagan/github_changelog_md/issues"
+
+[tool.poetry.scripts]
+# rename "github-changelog-md" below to change the executable name. You can also
+# add more scripts if your package offers multiple commands.
+github-changelog-md = "github_changelog_md.main:app"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# Configure dev dependencies you can add or remove as needed
+[tool.poetry.group.dev.dependencies]
+# linting, type-checking and security checks
+bandit = { extras = ["toml"], version = "^1.7.5" }
+black = "^23.7.0"
+flake8 = "^6.0.0"
+flake8-pydocstyle = "^0.2.2"
+flake8-pyproject = "^1.2.3"
+flake8-pytest-style = "^1.7.2"
+flake8-type-checking = "^2.4.1"
+flake8-use-pathlib = "^0.3.0"
+isort = "^5.12.0"
+pylint = "^2.17.2"
+pylint-pydantic = "^0.2.4"
+pylint-pytest = "^1.1.2"
+pep8-naming = "^0.13.3"
+pre-commit = "^3.3.3"
+pydocstyle = "^6.3.0"
+pymarkdownlnt = "^0.9.12"
+mypy = "^1.4.1"
+tryceratops = "^2.3.2"
+
+# task runner
+poethepoet = ">=0.21.1,<0.23.0"
+
+# testing
+pytest = "^7.4.0"
+pytest-cov = "^4.0.0"
+pytest-xdist = "^3.2.1"
+pytest-sugar = "^0.9.7"
+pytest-randomly = "^3.13.0"
+pytest-reverse = "^1.7.0"
+pytest-asyncio = "^0.21.1"
+pytest-mock = "^3.11.1"
+mock = "^5.1.0"
+faker = "^19.2.0"
+
+# documentation
+mkdocs = "^1.4.3"
+mkdocs-autorefs = "^0.5.0"
+mkdocs-material = "^9.1.19"
+mkdocs-minify-plugin = "^0.7.0"
+pymdown-extensions = "^10.1"
+pygments = "^2.15.1"
+
+# setup PoeThePoet tasks
+[tool.poe.tasks]
+pre = "pre-commit run --all-files"
+pylint = "pylint **/*.py"
+mypy = "mypy **/*.py"
+flake8 = "flake8 **/*.py"
+black = "black **/*.py"
+try = "tryceratops **/*.py"
+markdown = "pymarkdown scan **/*.md"
+lint = ["black", "flake8", "pylint", "mypy", "try"]
+
+# configure assorted tools and linters
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 80
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | venv
+  | \.venv
+  | _build
+  | build
+  | dist
+)/
+'''
+
+[tool.flake8]
+max-line-length = 80
+exclude = ["__init__.py", ".git"]
+extend-ignore=["E203", "W503"]
+extend-select = ["TC", "TC1", "TRY"]
+docstring-convention = "google"
+classmethod-decorators = ["classmethod", "validator"]
+
+[tool.bandit]
+exclude_dirs = []
+
+[tool.bandit.assert_used]
+skips = ['*_test.py', '*/test_*.py']
+
+[tool.pylint.MAIN]
+load-plugins = ["pylint_pytest", "pylint_pydantic"]
+extension-pkg-whitelist = "pydantic"
+
+[tool.pylint.DESIGN]
+exclude-too-few-public-methods = "pydantic"
+max-attributes = 10
+
+[tool.pydocstyle]
+add-ignore = ["D104"]
+
+[tool.pymarkdown]
+plugins.md014.enabled = false
+
+[tool.pytest.ini_options]
+addopts = ["--cov", "--cov-report", "term-missing", "--cov-report", "html"]
+filterwarnings = []
+mock_use_standalone_module = true
+
+[tool.coverage.run]
+# source = []
+omit = ["*/tests/*"]
