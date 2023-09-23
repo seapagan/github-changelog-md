@@ -9,13 +9,13 @@ license = "MIT"
 packages = [{ include = "github_changelog_md" }]
 
 homepage = ""
-repository = "https://github/com/seapagan/github_changelog_md"
+repository = "https://github/com/seapagan/github-changelog-md"
 
 [tool.poetry.urls]
 # customize the below URLs to point to your own GitHub repo. These will be
 # shown on [Pypi.org](https://pypi.org/) if you are creating a public package.
-"Pull Requests" = "https://github/com/seapagan/github_changelog_md/pulls"
-"Bug Tracker" = "https://github/com/seapagan/github_changelog_md/issues"
+"Pull Requests" = "https://github/com/seapagan/github-changelog-md/pulls"
+"Bug Tracker" = "https://github/com/seapagan/github-changelog-md/issues"
 
 [tool.poetry.scripts]
 # rename "github-changelog-md" below to change the executable name. You can also
@@ -107,7 +107,7 @@ exclude = '''
 [tool.flake8]
 max-line-length = 80
 exclude = ["__init__.py", ".git"]
-extend-ignore=["E203", "W503"]
+extend-ignore = ["E203", "W503"]
 extend-select = ["TC", "TC1", "TRY"]
 docstring-convention = "google"
 classmethod-decorators = ["classmethod", "validator"]
