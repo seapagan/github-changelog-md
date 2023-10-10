@@ -1,10 +1,7 @@
-"""Entry point for the main application loop.
+"""Entry point for the main application loop."""
+from github import Auth, Github
 
-You can customize this file to your liking, or indeed empty it entirely and
-start from scratch.
-Note that if you remove the 'App' class entirely, you will need to remove the
-`[tool.poetry.scripts]` section from pyproject.toml as well (if it exist).
-"""
+from .config.settings import settings
 
 
 class App:  # pylint: disable=too-few-public-methods
@@ -16,10 +13,14 @@ class App:  # pylint: disable=too-few-public-methods
     def __call__(self) -> None:
         """Call the application."""
         print("Welcome to Github Changelog Md!")
+        auth = Auth.Token(settings.github_pat)
+        git = Github(auth=auth)
+
+        for repo in git.get_user().get_repos():
+            print(repo.name)
 
 
 app = App()
-
 
 if __name__ == "__main__":
     app()
