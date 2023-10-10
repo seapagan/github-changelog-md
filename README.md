@@ -3,6 +3,8 @@
 This is currently a placeholder for a project to create a tool to generate a
 Markdown changelog from a Github repository.
 
+**There is no usable code here yet.**
+
 - [Development setup](#development-setup)
 - [License](#license)
 - [Credits](#credits)
