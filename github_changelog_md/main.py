@@ -23,11 +23,11 @@ def main(
         None, "-v", "--version", is_eager=True
     )
 ) -> None:
-    """Entry point for the application."""
+    """Generate your CHANGELOG file Automatically."""
     if version:
         print(
             "\n[green]Github Changelog Markdown - "
-            "Generate your CHANGELOG automatically."
+            "Generate your CHANGELOG file automatically."
             f"\n[/green]Version: {get_app_version()}; "
             "\u00a9 Grant Ramsay 2023\n"
         )
