@@ -3,6 +3,8 @@
 This will encapsulate the logic for generating the changelog.
 """
 
+from typing import Optional
+
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
 from rich import print
@@ -24,12 +26,15 @@ def git_error(exc: GithubException) -> None:
 class ChangeLog:
     """Define the Changelog class."""
 
-    def __init__(self, repo) -> None:
+    def __init__(self, repo_name: str, user_name: Optional[str] = None) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(settings.github_pat)
         self.git = Github(auth=self.auth)
 
-        self.repo = repo
+        self.repo_name = repo_name
+        self.user = user_name
+
+        self.repo_data = None
 
     def run(self) -> None:
         """Run the changelog."""
@@ -37,12 +42,16 @@ class ChangeLog:
         print("  [green]->[/green] Getting Repository data ... ", end="")
 
         try:
-            repo = self.git.get_user().get_repo(self.repo)
+            repo_user = self.user if self.user else self.git.get_user().login
+
+            self.repo_data = self.git.get_user(repo_user).get_repo(
+                self.repo_name
+            )
         except GithubException as exc:
             git_error(exc)
         else:
             print("[green]Done[/green]")
             print(
                 "  [green]->[/green] Repository : "
-                f"[bold]{repo.full_name}[/bold]"
+                f"[bold]{self.repo_data.full_name}[/bold]"
             )

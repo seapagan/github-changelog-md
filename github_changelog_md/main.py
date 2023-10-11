@@ -27,6 +27,13 @@ def main(
         help="Name of the repository to generate the changelog for.",
         show_default=False,
     ),
+    user: Optional[str] = typer.Option(
+        None,
+        "-u",
+        "--user",
+        help="Name of the user or organisation that owns the repository.",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically."""
     if version:
@@ -38,7 +45,7 @@ def main(
         )
         raise typer.Exit()
 
-    cl = ChangeLog(repo)
+    cl = ChangeLog(repo, user)
     cl.run()
 
 

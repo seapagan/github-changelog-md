@@ -24,5 +24,9 @@ implemented but it's good to have a list of ideas.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams
-- allow specifiying a 'user' on the cmd line, to generate a changelog for from
-  that user's repository. Otherwise it will use the user from the GitHub PAT.
+- this app really needs a `local` configuration file, since options may change
+  from project to project. This also allows setting the `user` and `repo` etc
+  options in this file and not having to specify them on the command line.
+  However, **since the config file contains the users PAT, it should be added to
+  the project `.gitignore`**. Maybe the config file should be called
+  `github-changelog-md.toml`
