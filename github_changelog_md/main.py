@@ -2,12 +2,10 @@
 from typing import Optional
 
 import typer
-from github import Auth, Github
 from rich import print  # pylint: disable=redefined-builtin
 
+from github_changelog_md.changelog import ChangeLog
 from github_changelog_md.helpers import get_app_version
-
-from .config.settings import settings
 
 app = typer.Typer(
     pretty_exceptions_show_locals=False,
@@ -21,7 +19,14 @@ app = typer.Typer(
 def main(
     version: Optional[bool] = typer.Option(
         None, "-v", "--version", is_eager=True
-    )
+    ),
+    repo: str = typer.Option(
+        ...,
+        "-repo",
+        "-r",
+        help="Name of the repository to generate the changelog for.",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically."""
     if version:
@@ -32,12 +37,9 @@ def main(
             "\u00a9 Grant Ramsay 2023\n"
         )
         raise typer.Exit()
-    print("Welcome to Github Changelog Md!")
-    auth = Auth.Token(settings.github_pat)
-    git = Github(auth=auth)
 
-    for repo in git.get_user().get_repos():
-        print(repo.name)
+    cl = ChangeLog(repo)
+    cl.run()
 
 
 if __name__ == "__main__":

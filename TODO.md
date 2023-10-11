@@ -24,3 +24,5 @@ implemented but it's good to have a list of ideas.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams
+- allow specifiying a 'user' on the cmd line, to generate a changelog for from
+  that user's repository. Otherwise it will use the user from the GitHub PAT.
