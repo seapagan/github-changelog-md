@@ -30,3 +30,5 @@ implemented but it's good to have a list of ideas.
   However, **since the config file contains the users PAT, it should be added to
   the project `.gitignore`**. Maybe the config file should be called
   `github-changelog-md.toml`
+- option to include the release body in the changelog, default to false since we
+  can probably generate a better changelog than the release body
