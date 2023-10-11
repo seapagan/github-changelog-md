@@ -50,3 +50,11 @@ def get_app_version() -> str:
         except metadata.PackageNotFoundError as exc:
             print(f"Problem getting the Version : {exc}")
             sys.exit(ExitErrors.OS_ERROR)
+
+
+def header() -> None:
+    """Print the application header."""
+    print(
+        "\n[bold blue]GitHub Changelog Generator[/bold blue] "
+        f"v{get_app_version()}\n"
+    )
