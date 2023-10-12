@@ -1,17 +1,16 @@
-# Welcome to MkDocs
+# Markdown Changelog Generator
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Generate a Markdown changelog from a Github repository.
 
-## Commands
+!!! warning "Under Development"
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+    This project is still in development and currently has no useable features,
+    this webpage and the package on
+    [PyPI](https://pypi.org/project/github-changelog-md){:target="_blank"}
+    are just placeholders for now.
 
-## Project layout
+    I expect to have a working version quite soon :wink:, but for now you can
+    check out the repository
+    [here](https://github.com/seapagan/github-changelog-md){:target="_blank"}.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+    Don't forget to star the repository if you want updates on progress :star:!
