@@ -96,6 +96,8 @@ lint = ["black", "flake8", "pylint", "mypy", "try"]
 "docs:serve" = "mkdocs serve -w TODO.md -w CHANGELOG.md"
 "docs:serve:all" = "mkdocs serve -w TODO.md -w CHANGELOG.md -a 0.0.0.0:9000"
 
+changelog = "github_changelog_generator --user seapagan --project github-changelog-md"
+
 # configure assorted tools and linters
 [tool.isort]
 profile = "black"
