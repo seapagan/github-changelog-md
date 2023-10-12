@@ -4,7 +4,6 @@ For now, just some notes to myself. Not all of these will (or should!) be
 implemented but it's good to have a list of ideas.
 
 - Implement the basic functionality!
-- Use a TOML file for configuration. Use my `simple-toml-settings` library.
 - Get repo information from the current directory, read from the `.git` folder.
   If this is missing (e.g. because the current directory is not a git repo),
   then the user should be able to specify the repo information manually.
