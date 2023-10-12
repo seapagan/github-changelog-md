@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/seapagan/github-changelog-md/compare/2b1e759edb6e8c13c681c44dc39c9ad94bb40b6b...HEAD)
 
+**Documentation:**
+
+- Start working on docs [\#17](https://github.com/seapagan/github-changelog-md/pull/17) ([seapagan](https://github.com/seapagan))
+
 **Dependency Updates:**
 
 - Bump pylint from 2.17.7 to 3.0.1 [\#16](https://github.com/seapagan/github-changelog-md/pull/16) ([dependabot[bot]](https://github.com/apps/dependabot))
