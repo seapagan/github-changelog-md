@@ -4,7 +4,7 @@ This will encapsulate the logic for generating the changelog.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -56,12 +56,47 @@ class ChangeLog:
         self.get_repo_releases()
         # get all closed PRs
         self.get_closed_prs()
+        # get closed issues
+        self.get_closed_issues()
 
-        for pr in self.repo_prs:
-            if pr.merged_at:
-                print(pr.title, [label.name for label in pr.labels])
+        # filter out non-merged PRs and actual issues (PR's are issues too but
+        # we don't want them in the list)
+        self.filter_prs_and_issues()
 
-    def get_closed_prs(self):
+        # for pr in self.repo_prs:
+        #     if pr.merged_at:
+        #         print(pr.title, [label.name for label in pr.labels])
+
+    def filter_prs_and_issues(self) -> None:
+        """Filter out non-merged PRs and actual issues."""
+        print("  [green]->[/green] Filtering PRs and Issues ... ", end="")
+        self.filtered_repo_prs: List = [
+            pr for pr in self.repo_prs if pr.merged_at
+        ]
+        self.filtered_repo_issues: List = [
+            issue for issue in self.repo_issues if not issue.pull_request
+        ]
+        print("[green]Done[/green]")
+
+        print(
+            f"  [green]->[/green] Found [green]{len(self.filtered_repo_prs)}"
+            f"[/green] Merged PRs and [green]{len(self.filtered_repo_issues)}"
+            "[/green] Actual Closed Issues"
+        )
+
+    def get_closed_issues(self) -> None:
+        """Get info on all the closed issues from GitHub."""
+        print("  [green]->[/green] Getting Closed Issues ... ", end="")
+        try:
+            self.repo_issues = self.repo_data.get_issues(
+                state="closed", sort="created"
+            )
+        except GithubException as exc:
+            git_error(exc)
+        else:
+            print(f"[green]{self.repo_issues.totalCount} Found[/green]")
+
+    def get_closed_prs(self) -> None:
         """Get info on all the closed PRs from GitHub."""
         print("  [green]->[/green] Getting Closed PRs ... ", end="")
         try:
@@ -73,7 +108,7 @@ class ChangeLog:
         else:
             print(f"[green]{self.repo_prs.totalCount} Found[/green]")
 
-    def get_repo_releases(self):
+    def get_repo_releases(self) -> None:
         """Get info on all the releases from GitHub."""
         print("  [green]->[/green] Getting Releases ... ", end="")
         try:
@@ -83,7 +118,7 @@ class ChangeLog:
         else:
             print(f"[green]{self.repo_releases.totalCount} Found[/green]")
 
-    def get_repo_data(self):
+    def get_repo_data(self) -> None:
         """Read the repository data from GitHub."""
         print("  [green]->[/green] Getting Repository data ... ", end="")
         try:

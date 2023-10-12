@@ -32,3 +32,5 @@ implemented but it's good to have a list of ideas.
   `github-changelog-md.toml`
 - option to include the release body in the changelog, default to false since we
   can probably generate a better changelog than the release body
+- include closed issues in the changelog, linked to the PR that closed them.
+- all PRs, Users, Issues etc should be linked to the relevant GitHub page.
