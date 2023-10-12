@@ -15,7 +15,10 @@ from github_changelog_md.constants import ExitErrors
 from github_changelog_md.helpers import header
 
 if TYPE_CHECKING:
+    from github.GitRelease import GitRelease
+    from github.Issue import Issue
     from github.PaginatedList import PaginatedList
+    from github.PullRequest import PullRequest
     from github.Repository import Repository
 
 
@@ -40,8 +43,11 @@ class ChangeLog:
         self.user = user_name
 
         self.repo_data: Repository
-        self.repo_releases: PaginatedList
-        self.repo_prs: PaginatedList
+        self.repo_releases: PaginatedList[GitRelease]
+        self.repo_prs: PaginatedList[PullRequest]
+
+        self.filtered_repo_prs: List[PullRequest]
+        self.filtered_repo_issues: List[Issue]
 
     def run(self) -> None:
         """Run the changelog.
@@ -63,17 +69,11 @@ class ChangeLog:
         # we don't want them in the list)
         self.filter_prs_and_issues()
 
-        # for pr in self.repo_prs:
-        #     if pr.merged_at:
-        #         print(pr.title, [label.name for label in pr.labels])
-
     def filter_prs_and_issues(self) -> None:
         """Filter out non-merged PRs and actual issues."""
-        print("  [green]->[/green] Filtering PRs and Issues ... ", end="")
-        self.filtered_repo_prs: List = [
-            pr for pr in self.repo_prs if pr.merged_at
-        ]
-        self.filtered_repo_issues: List = [
+        print("\n  [green]->[/green] Filtering PRs and Issues ... ", end="")
+        self.filtered_repo_prs = [pr for pr in self.repo_prs if pr.merged_at]
+        self.filtered_repo_issues = [
             issue for issue in self.repo_issues if not issue.pull_request
         ]
         print("[green]Done[/green]")
