@@ -77,6 +77,7 @@ mkdocs = "^1.4.3"
 mkdocs-autorefs = "^0.5.0"
 mkdocs-material = "^9.1.19"
 mkdocs-minify-plugin = "^0.7.0"
+mkdocs-git-revision-date-localized-plugin = "^1.2.0"
 pymdown-extensions = "^10.1"
 pygments = "^2.15.1"
 
@@ -95,6 +96,8 @@ lint = ["black", "flake8", "pylint", "mypy", "try"]
 "docs:build" = "mkdocs build"
 "docs:serve" = "mkdocs serve -w TODO.md -w CHANGELOG.md"
 "docs:serve:all" = "mkdocs serve -w TODO.md -w CHANGELOG.md -a 0.0.0.0:9000"
+
+changelog = "github_changelog_generator --user seapagan --project github-changelog-md"
 
 # configure assorted tools and linters
 [tool.isort]

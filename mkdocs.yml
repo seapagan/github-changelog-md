@@ -1,14 +1,26 @@
+site_name: Markdown Changelog Generator
 
-site_name: Github Changelog Md
-
-# default to using the material theme
 theme:
   name: material
+  palette:
+    primary: light-blue
+    accent: blue
+  features:
+    - navigation.footer
+    - navigation.expand
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/seapagan/github-changelog-md
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/gnramsay_dev
 
-# default plugins here are to minify the html, css and js plus enable the search
-# plugin. Adjust to your liking.
+copyright: © 2023 Grant Ramsay (Seapagan)
+
 plugins:
   - search
+  - git-revision-date-localized:
+      enable_creation_date: true
   - minify:
       minify_html: true
       minify_css: true
@@ -17,13 +29,24 @@ plugins:
         remove_comments: true
         remove_empty_space: true
 
+repo_url: https://github.com/seapagan/github-changelog-md
+repo_name: github-changelog-md
+
 # edit these MARKDOWN extensions to your liking
 markdown_extensions:
   - admonition
   - pymdownx.snippets
   - pymdownx.superfences
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      linenums: false
+      auto_title: false
   - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+
+extra_css:
+  - css/extra.css
+
+nav:
+  - Home: index.md
