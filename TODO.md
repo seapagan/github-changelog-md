@@ -47,3 +47,7 @@ implemented but it's good to have a list of ideas.
   information.
 - if there are no PR for a specific release then say something to that effect
   instead of just leaving the section empty.
+- option to change PR/Issue/Commit links to use the GitHub autolink syntax
+  instead of explicitly linking to the GitHub page.
+- add the 'three dot' link to the top of each release that links to the
+  GitHub compare page for that release.
