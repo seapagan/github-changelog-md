@@ -8,7 +8,7 @@ license = "MIT"
 
 packages = [{ include = "github_changelog_md" }]
 
-homepage = ""
+homepage = "https://seapagan.github.io/github-changelog-md/"
 repository = "https://github.com/seapagan/github-changelog-md"
 
 [tool.poetry.urls]
