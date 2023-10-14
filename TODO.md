@@ -45,3 +45,5 @@ implemented but it's good to have a list of ideas.
 - add ability to place a section between releases with custom markdown, eg to
   explain changes in the version numbering scheme or other important
   information.
+- if there are no PR for a specific release then say something to that effect
+  instead of just leaving the section empty.

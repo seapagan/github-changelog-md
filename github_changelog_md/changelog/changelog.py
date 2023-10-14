@@ -4,8 +4,8 @@ This will encapsulate the logic for generating the changelog.
 """
 from __future__ import annotations
 
-import time
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
+from pathlib import Path
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from github.PaginatedList import PaginatedList
     from github.PullRequest import PullRequest
     from github.Repository import Repository
+    from github.Tag import Tag
 
 
 def git_error(exc: GithubException) -> None:
@@ -46,11 +47,11 @@ class ChangeLog:
         self.user: Optional[str] = user_name
 
         self.repo_data: Repository
-        self.repo_releases: PaginatedList[GitRelease]
+        self.repo_releases: List[GitRelease]
         self.repo_prs: PaginatedList[PullRequest]
+        self.repo_tags: List[Tag]
         self.repo_issues: PaginatedList[Issue]
-        self.release_data: List[Tuple[int, float, str, str]]
-        self.pr_by_date: Dict[float, PullRequest]
+        self.pr_by_release: Dict[int, List[PullRequest]]
         self.filtered_repo_issues: List[Issue]
 
     def run(self) -> None:
@@ -63,50 +64,66 @@ class ChangeLog:
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
         self.repo_prs = self.get_closed_prs()
+        self.repo_tags = self.get_repo_tags()
         self.repo_issues = self.get_closed_issues()
         # filter out PRs from actual issues (PR's are issues too but
         # we don't want them in the list).
         self.filtered_repo_issues = self.filter_issues()
 
-        self.release_data = self.extract_release_data()
-        self.pr_by_date = self.extract_pr_by_date()
+        self.pr_by_release = self.link_pull_requests()
 
-        print(self.filtered_repo_issues)
-        print(self.release_data)
-        print(self.pr_by_date)
+        for tag in self.repo_tags:
+            print(tag)
 
-    def extract_pr_by_date(self) -> Dict[float, PullRequest]:
-        """Extract PRs by date into a dictionary.
+        self.generate_changelog()
 
-        This will enable much faster lookup of PRs by date
-        """
-        print("  [green]->[/green] Extracting PRs by date ... ", end="")
-        pr_by_date = {
-            time.mktime(pr.merged_at.timetuple()): pr
-            for pr in self.repo_prs
-            if pr.merged_at
-        }
-        print(self.done_str)
-        return pr_by_date
+    def generate_changelog(self) -> None:
+        """Generate a markdown changelog using the data we have gererated."""
+        print("\n  [green]->[/green] Generating Changelog ... ", end="")
 
-    def extract_release_data(self) -> List[Tuple[int, float, str, str]]:
-        """Extract creation dates and more for each Release.
-
-        return a list of tuples
-        """
-        print("\n  [green]->[/green] Extracting Release data ... ", end="")
-        release_data = []
-        for release in self.repo_releases:
-            release_data.append(
-                (
-                    release.id,
-                    time.mktime(release.created_at.timetuple()),
-                    release.title,
-                    release.tag_name,
+        with Path(Path.cwd() / "CHANGELOG.md").open(
+            mode="w", encoding="utf-8"
+        ) as f:
+            f.write("# Changelog\n\n")
+            for release in self.repo_releases:
+                f.write(
+                    f"## [{release.tag_name}]({release.html_url}) "
+                    f"({release.created_at.date()})\n\n"
                 )
-            )
+                pr_list: List[PullRequest] = self.pr_by_release.get(
+                    release.id, []
+                )
+                for pr in pr_list[::-1]:
+                    f.write(f"- {pr.title} ([#{pr.number}]({pr.html_url}))\n")
+                f.write("\n")
+
         print(self.done_str)
-        return release_data
+
+    def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
+        """Link Pull Requests to their respective Release.
+
+        This will create a dictionary with the key on the release id and
+        the value a list of pull requests.
+        """
+        print(
+            "\n  [green]->[/green] Linking Pull Requests to their respective "
+            "Release ... ",
+            end="",
+        )
+        pr_by_release: Dict[int, List[PullRequest]] = {}
+        for release in self.repo_releases[::-1]:
+            pr_by_release[release.id] = []
+            for pr in self.repo_prs:
+                if (
+                    pr.merged_at
+                    and pr.merged_at <= release.created_at
+                    and not any(
+                        pr in pr_list for pr_list in pr_by_release.values()
+                    )
+                ):
+                    pr_by_release[release.id].append(pr)
+        print(self.done_str)
+        return pr_by_release
 
     def filter_issues(self) -> List[Issue]:
         """Filter out non-merged PRs and actual issues."""
@@ -147,7 +164,18 @@ class ChangeLog:
             print(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
-    def get_repo_releases(self) -> PaginatedList[GitRelease]:  # type: ignore
+    def get_repo_tags(self) -> List[Tag]:  # type: ignore
+        """Get info on all the tags from GitHub."""
+        print("  [green]->[/green] Getting Tags ... ", end="")
+        try:
+            repo_tags = self.repo_data.get_tags()
+        except GithubException as exc:
+            git_error(exc)
+        else:
+            print(f"[green]{repo_tags.totalCount} Found[/green]")
+            return list(repo_tags)
+
+    def get_repo_releases(self) -> List[GitRelease]:  # type: ignore
         """Get info on all the releases from GitHub."""
         print("  [green]->[/green] Getting Releases ... ", end="")
         try:
@@ -156,7 +184,7 @@ class ChangeLog:
             git_error(exc)
         else:
             print(f"[green]{repo_releases.totalCount} Found[/green]")
-            return repo_releases
+            return list(repo_releases)
 
     def get_repo_data(self) -> Repository:  # type: ignore
         """Read the repository data from GitHub."""
