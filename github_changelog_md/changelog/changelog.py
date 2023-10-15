@@ -69,6 +69,8 @@ class ChangeLog:
 
         self.pr_by_release = self.link_pull_requests()
 
+        print(self.pr_by_release)
+
         # actually generate the changelog file from all the data we have
         # collected.
         self.generate_changelog()
@@ -130,6 +132,15 @@ class ChangeLog:
                     )
                 ):
                     pr_by_release[release.id].append(pr)
+        # Add any pull request more recent than the last release to the key 0
+        last_release = self.repo_releases[-1]
+        pr_by_release[0] = [
+            pr
+            for pr in self.repo_prs
+            if pr.merged_at
+            and pr.merged_at > last_release.created_at
+            and not any(pr in pr_list for pr_list in pr_by_release.values())
+        ]
         print(self.done_str)
         return pr_by_release
 
