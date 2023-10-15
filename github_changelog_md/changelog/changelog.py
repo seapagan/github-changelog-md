@@ -85,6 +85,17 @@ class ChangeLog:
         ) as f:
             f.write("# Changelog\n\n")
             prev_release = None
+
+            if len(self.unreleased) > 0:
+                f.write("## Unreleased\n\n")
+                for pr in self.unreleased[::-1]:
+                    f.write(
+                        f"- {pr.title}\n"
+                        f"([#{pr.number}]({pr.html_url}))\n"
+                        f"by **[{pr.user.login}]({pr.user.html_url})**\n"
+                    )
+                f.write("\n")
+
             for release in self.repo_releases:
                 if prev_release:
                     f.write(
