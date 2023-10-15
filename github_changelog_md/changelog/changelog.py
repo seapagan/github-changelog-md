@@ -16,6 +16,8 @@ from github_changelog_md.constants import ExitErrors
 from github_changelog_md.helpers import header
 
 if TYPE_CHECKING:
+    from io import TextIOWrapper
+
     from github.GitRelease import GitRelease
     from github.Issue import Issue
     from github.PaginatedList import PaginatedList
@@ -87,14 +89,11 @@ class ChangeLog:
             prev_release = None
 
             if len(self.unreleased) > 0:
-                f.write("## Unreleased\n\n")
-                for pr in self.unreleased[::-1]:
-                    f.write(
-                        f"- {pr.title}\n"
-                        f"([#{pr.number}]({pr.html_url}))\n"
-                        f"by **[{pr.user.login}]({pr.user.html_url})**\n"
-                    )
-                f.write("\n")
+                f.write(
+                    f"## [Unreleased]({self.repo_data.html_url}"
+                    "/tree/HEAD)\n\n"
+                )
+                self.print_prs(f, self.unreleased)
 
             for release in self.repo_releases:
                 if prev_release:
@@ -110,13 +109,7 @@ class ChangeLog:
                 pr_list: List[PullRequest] = self.pr_by_release.get(
                     release.id, []
                 )
-                for pr in pr_list[::-1]:
-                    f.write(
-                        f"- {pr.title}\n"
-                        f"([#{pr.number}]({pr.html_url}))\n"
-                        f"by **[{pr.user.login}]({pr.user.html_url})**\n"
-                    )
-                f.write("\n")
+                self.print_prs(f, pr_list)
                 prev_release = release
 
         print(self.done_str)
@@ -124,6 +117,22 @@ class ChangeLog:
             f"\n  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
+
+    def print_prs(self, f: TextIOWrapper, pr_list: List[PullRequest]) -> None:
+        """Print all the PRs for a given release.
+
+        This will be expanded soon to include the issues as well, and will
+        sort the PRs by type (enhancement, bugfix, etc) based on their label.
+
+        For now it just prints the PRs with the latest PR first.
+        """
+        for pr in pr_list[::-1]:
+            f.write(
+                f"- {pr.title}\n"
+                f"([#{pr.number}]({pr.html_url}))\n"
+                f"by **[{pr.user.login}]({pr.user.html_url})**\n"
+            )
+        f.write("\n")
 
     def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
         """Link Pull Requests to their respective Release.
