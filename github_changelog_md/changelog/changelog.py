@@ -109,8 +109,9 @@ class ChangeLog:
                 pr_list: List[PullRequest] = self.pr_by_release.get(
                     release.id, []
                 )
-                self.print_prs(f, pr_list)
-                prev_release = release
+                if len(pr_list) > 0:
+                    self.print_prs(f, pr_list)
+                    prev_release = release
 
         print(self.done_str)
         print(
@@ -157,8 +158,11 @@ class ChangeLog:
                     )
                 ):
                     pr_by_release[release.id].append(pr)
-        # Add any pull request more recent than the last release to the key 0
+        # Add any pull request more recent than the last release to a specific
+        # list
+        # TODO: This fails if there are no releases
         last_release = self.repo_releases[-1]
+
         self.unreleased = [
             pr
             for pr in self.repo_prs
