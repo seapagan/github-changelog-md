@@ -81,7 +81,14 @@ class ChangeLog:
             mode="w", encoding="utf-8"
         ) as f:
             f.write("# Changelog\n\n")
+            prev_release = None
             for release in self.repo_releases:
+                if prev_release:
+                    f.write(
+                        f"[`Full Changelog`]"
+                        f"({self.repo_data.html_url}/compare/"
+                        f"{release.tag_name}...{prev_release.tag_name})\n\n"
+                    )
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
                     f"({release.created_at.date()})\n\n"
@@ -96,6 +103,7 @@ class ChangeLog:
                         f"by **[{pr.user.login}]({pr.user.html_url})**\n"
                     )
                 f.write("\n")
+                prev_release = release
 
         print(self.done_str)
 
