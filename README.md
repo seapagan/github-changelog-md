@@ -3,7 +3,11 @@
 This is currently a placeholder for a project to create a tool to generate a
 Markdown changelog from a Github repository.
 
-**There is no usable code here yet.**
+The code is functional but lacking any documentation and a few features that I
+want to add before the first proper release.
+
+Documentation will be available on <https://changelog.seapagan.net> very
+shortly.
 
 - [Development setup](#development-setup)
 - [License](#license)
