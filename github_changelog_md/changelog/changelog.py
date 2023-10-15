@@ -51,6 +51,7 @@ class ChangeLog:
         self.repo_issues: PaginatedList[Issue]
         self.pr_by_release: Dict[int, List[PullRequest]]
         self.filtered_repo_issues: List[Issue]
+        self.unreleased: List[PullRequest]
 
     def run(self) -> None:
         """Run the changelog.
@@ -69,7 +70,7 @@ class ChangeLog:
 
         self.pr_by_release = self.link_pull_requests()
 
-        print(self.pr_by_release)
+        print(self.unreleased)
 
         # actually generate the changelog file from all the data we have
         # collected.
@@ -108,6 +109,10 @@ class ChangeLog:
                 prev_release = release
 
         print(self.done_str)
+        print(
+            f"\n  [green]->[/green] Changelog generated to "
+            f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
+        )
 
     def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
         """Link Pull Requests to their respective Release.
@@ -134,7 +139,7 @@ class ChangeLog:
                     pr_by_release[release.id].append(pr)
         # Add any pull request more recent than the last release to the key 0
         last_release = self.repo_releases[-1]
-        pr_by_release[0] = [
+        self.unreleased = [
             pr
             for pr in self.repo_prs
             if pr.merged_at
