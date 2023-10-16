@@ -5,10 +5,11 @@ This will encapsulate the logic for generating the changelog.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
+from github.GitRelease import GitRelease
 from rich import print
 
 from github_changelog_md.config import settings
@@ -18,7 +19,6 @@ from github_changelog_md.helpers import header
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
-    from github.GitRelease import GitRelease
     from github.Issue import Issue
     from github.PaginatedList import PaginatedList
     from github.PullRequest import PullRequest
@@ -94,14 +94,11 @@ class ChangeLog:
                     "/tree/HEAD)\n\n"
                 )
                 self.print_prs(f, self.unreleased)
+                prev_release = "HEAD"
 
             for release in self.repo_releases:
                 if prev_release:
-                    f.write(
-                        f"[`Full Changelog`]"
-                        f"({self.repo_data.html_url}/compare/"
-                        f"{release.tag_name}...{prev_release.tag_name})\n\n"
-                    )
+                    self.get_diff_url(f, prev_release, release)
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
                     f"({release.created_at.date()})\n\n"
@@ -117,6 +114,21 @@ class ChangeLog:
         print(
             f"\n  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
+        )
+
+    def get_diff_url(
+        self,
+        f,
+        prev_release: Union[GitRelease, str],
+        release_tag: GitRelease,
+    ):
+        """Generate a GitHub 3-dots link to the diff between two releases."""
+        if isinstance(prev_release, GitRelease):
+            prev_release = prev_release.tag_name
+        f.write(
+            f"[`Full Changelog`]"
+            f"({self.repo_data.html_url}/compare/"
+            f"{release_tag.tag_name}...{prev_release})\n\n"
         )
 
     def print_prs(self, f: TextIOWrapper, pr_list: List[PullRequest]) -> None:
