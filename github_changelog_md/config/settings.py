@@ -8,4 +8,6 @@ class Settings(TOMLSettings):
     github_pat: str = ""
 
 
-settings = Settings("changelog_gen")
+settings = Settings(
+    "changelog_gen", local_file=True, settings_file_name=".changelog_gen.toml"
+)

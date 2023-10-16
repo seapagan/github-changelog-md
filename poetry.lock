@@ -2159,13 +2159,17 @@ version = "0.2.2"
 description = "A Python library to save your settings in a TOML file."
 optional = false
 python-versions = ">=3.9,<4.0"
-files = [
-    {file = "simple_toml_settings-0.2.2-py3-none-any.whl", hash = "sha256:fd01180e9e1d9109adf101598bf6d79ee7c9142c374b1dd20d3381bf03f982e9"},
-    {file = "simple_toml_settings-0.2.2.tar.gz", hash = "sha256:63cfbfae7a797073536829b7c06260e1a7e7915b2d087f2263855fa974ec25de"},
-]
+files = []
+develop = false
 
 [package.dependencies]
-rtoml = ">=0.9.0,<0.10.0"
+rtoml = "^0.9.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/seapagan/simple-toml-settings"
+reference = "HEAD"
+resolved_reference = "04d1b6f4ae49c2d8f621d70d5f2dfbb64294d863"
 
 [[package]]
 name = "six"
@@ -2510,4 +2514,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "980806ad07b177c8ad53cc592a6935389d31a77137d4036a56957eb929fd3fe7"
+content-hash = "6d8bdf9b74a96a8ed55c3f0b08f1dd0def068abfac7d899a7885822bc946e929"
