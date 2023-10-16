@@ -19,6 +19,7 @@ from github_changelog_md.helpers import header
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
+    from github.Commit import Commit
     from github.Issue import Issue
     from github.PaginatedList import PaginatedList
     from github.PullRequest import PullRequest
@@ -71,8 +72,6 @@ class ChangeLog:
         self.filtered_repo_issues = self.filter_issues()
 
         self.pr_by_release = self.link_pull_requests()
-
-        print(self.unreleased)
 
         # actually generate the changelog file from all the data we have
         # collected.
@@ -171,15 +170,20 @@ class ChangeLog:
                 ):
                     pr_by_release[release.id].append(pr)
         # Add any pull request more recent than the last release to a specific
-        # list
-        # TODO: This fails if there are no releases
-        last_release = self.repo_releases[-1]
+        # list. We need some special handling if there are no releases yet.
+        try:
+            last_release_date = self.repo_releases[-1].created_at
+        except IndexError:
+            # there have been no releases yet, so we need to get the date of
+            # the first commit.
+            first_commit: Commit = self.repo_data.get_commits().reversed[0]
+            last_release_date = first_commit.commit.committer.date
 
         self.unreleased = [
             pr
             for pr in self.repo_prs
             if pr.merged_at
-            and pr.merged_at > last_release.created_at
+            and pr.merged_at > last_release_date
             and not any(pr in pr_list for pr_list in pr_by_release.values())
         ]
         print(self.done_str)
