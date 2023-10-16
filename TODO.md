@@ -45,3 +45,4 @@ implemented but it's good to have a list of ideas.
   instead of just leaving the section empty.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
+- delete extra line-breaks from end of generated file.
