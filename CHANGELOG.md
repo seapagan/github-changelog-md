@@ -2,6 +2,12 @@
 
 ## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
 
+- Use local config file
+([#20](https://github.com/seapagan/github-changelog-md/pull/20))
+by **[seapagan](https://github.com/seapagan)**
+- Bump mkdocs-git-revision-date-localized-plugin from 1.2.0 to 1.2.1
+([#19](https://github.com/seapagan/github-changelog-md/pull/19))
+by **[dependabot[bot]](https://github.com/apps/dependabot)**
 - Bump simple-toml-settings from 0.2.0 to 0.2.2
 ([#18](https://github.com/seapagan/github-changelog-md/pull/18))
 by **[dependabot[bot]](https://github.com/apps/dependabot)**

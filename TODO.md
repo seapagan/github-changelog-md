@@ -22,13 +22,6 @@ implemented but it's good to have a list of ideas.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- this app really needs a `local` configuration file, since options may change
-  from project to project. This also allows setting the `user` and `repo` etc
-  options in this file and not having to specify them on the command line.
-  However, **since the config file contains the users PAT, it should be added to
-  the project `.gitignore`**. Maybe the config file should be called
-  `github-changelog-md.toml`. **This needs changes in the `simple-toml-settings`
-  library (also one of mine so not a major problem 😁)**
 - option to include the release body in the changelog, default to false since we
   can probably generate a better changelog than the release body.
 - include closed issues in the changelog, linked to the PR that closed them.
