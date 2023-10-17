@@ -27,7 +27,7 @@ python = ">=3.9,<4.0"
 gitpython = "^3.1.37"
 pygithub = ">=1.59.1,<3.0.0"
 pydantic = "^2.3.0"
-simple-toml-settings = {git = "https://github.com/seapagan/simple-toml-settings"}
+simple-toml-settings = { git = "https://github.com/seapagan/simple-toml-settings" }
 typer = "^0.9.0"
 rtoml = "^0.9.0"
 
@@ -97,7 +97,7 @@ lint = ["black", "flake8", "pylint", "mypy", "try"]
 "docs:serve" = "mkdocs serve -w TODO.md -w CHANGELOG.md"
 "docs:serve:all" = "mkdocs serve -w TODO.md -w CHANGELOG.md -a 0.0.0.0:9000"
 
-changelog = "github_changelog_generator --user seapagan --project github-changelog-md"
+changelog = "github-changelog-md -r github-changelog-md"
 
 # configure assorted tools and linters
 [tool.isort]
@@ -145,6 +145,7 @@ add-ignore = ["D104"]
 
 [tool.pymarkdown]
 plugins.md014.enabled = false
+plugins.md036.enabled = false
 
 [tool.pytest.ini_options]
 addopts = ["--cov", "--cov-report", "term-missing", "--cov-report", "html"]
