@@ -114,7 +114,7 @@ class ChangeLog:
             f"({release.created_at.date()})\n\n"
         )
         if release.title != release.tag_name and release.title:
-            f.write(f"### {release.title}\n\n")
+            f.write(f"**_'{release.title}'_**\n\n")
         pr_list: List[PullRequest] = self.pr_by_release.get(release.id, [])
         if len(pr_list) > 0:
             self.print_prs(f, pr_list)
@@ -175,7 +175,7 @@ class ChangeLog:
 
         for heading, prs in release_sections.items():
             if len(prs) > 0:
-                f.write(f"### {heading}\n\n")
+                f.write(f"**{heading}**\n\n")
                 for pr in prs[::-1]:
                     f.write(
                         f"- {pr.title}\n"
