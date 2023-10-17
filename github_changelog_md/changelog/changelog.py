@@ -100,7 +100,7 @@ class ChangeLog:
                     self.get_diff_url(f, prev_release, release)
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
-                    f"({release.created_at.date()})\n"
+                    f"({release.created_at.date()})\n\n"
                 )
                 if release.title != release.tag_name:
                     f.write(f"### {release.title}\n\n")
@@ -109,7 +109,9 @@ class ChangeLog:
                 )
                 if len(pr_list) > 0:
                     self.print_prs(f, pr_list)
-                    prev_release = release
+                else:
+                    f.write(release.body)
+                prev_release = release
 
         print(self.done_str)
         print(
