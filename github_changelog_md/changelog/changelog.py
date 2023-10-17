@@ -5,7 +5,7 @@ This will encapsulate the logic for generating the changelog.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -85,7 +85,7 @@ class ChangeLog:
             mode="w", encoding="utf-8"
         ) as f:
             f.write("# Changelog\n\n")
-            prev_release = None
+            prev_release: Union[GitRelease, Literal["HEAD"], None] = None
 
             if len(self.unreleased) > 0:
                 f.write(
@@ -97,17 +97,32 @@ class ChangeLog:
 
             for release in self.repo_releases:
                 if prev_release:
-                    self.get_diff_url(f, prev_release, release)
+                    self.generate_diff_url(f, prev_release, release)
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
                     f"({release.created_at.date()})\n\n"
                 )
+                if release.title != release.tag_name and release.title:
+                    f.write(f"### {release.title}\n\n")
                 pr_list: List[PullRequest] = self.pr_by_release.get(
                     release.id, []
                 )
                 if len(pr_list) > 0:
                     self.print_prs(f, pr_list)
-                    prev_release = release
+                else:
+                    # first remove any existing diff links so we can add our
+                    # own. The auto-generated release notes on GitHub will
+                    # add a diff link to the release notes. We don't want that.
+                    body_lines = release.body.split("\n")
+                    for i, line in enumerate(body_lines):
+                        if f"{self.repo_data.html_url}/compare/" in line:
+                            body_lines.pop(i)
+                            break
+                    body = "\n".join(body_lines)
+                    if body[-2] != "\n":
+                        body += "\n"
+                    f.write(body)
+                prev_release = release
 
         print(self.done_str)
         print(
@@ -115,12 +130,12 @@ class ChangeLog:
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
 
-    def get_diff_url(
+    def generate_diff_url(
         self,
         f,
         prev_release: Union[GitRelease, str],
         release_tag: GitRelease,
-    ):
+    ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
         if isinstance(prev_release, GitRelease):
             prev_release = prev_release.tag_name
@@ -254,4 +269,5 @@ class ChangeLog:
                 "  [green]->[/green] Repository : "
                 f"[bold]{repo_data.full_name}[/bold]"
             )
+            return repo_data
             return repo_data
