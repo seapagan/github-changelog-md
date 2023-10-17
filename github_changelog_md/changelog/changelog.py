@@ -96,32 +96,7 @@ class ChangeLog:
                 prev_release = "HEAD"
 
             for release in self.repo_releases:
-                if prev_release:
-                    self.generate_diff_url(f, prev_release, release)
-                f.write(
-                    f"## [{release.tag_name}]({release.html_url}) "
-                    f"({release.created_at.date()})\n\n"
-                )
-                if release.title != release.tag_name and release.title:
-                    f.write(f"### {release.title}\n\n")
-                pr_list: List[PullRequest] = self.pr_by_release.get(
-                    release.id, []
-                )
-                if len(pr_list) > 0:
-                    self.print_prs(f, pr_list)
-                else:
-                    # first remove any existing diff links so we can add our
-                    # own. The auto-generated release notes on GitHub will
-                    # add a diff link to the release notes. We don't want that.
-                    body_lines = release.body.split("\n")
-                    for i, line in enumerate(body_lines):
-                        if f"{self.repo_data.html_url}/compare/" in line:
-                            body_lines.pop(i)
-                            break
-                    body = "\n".join(body_lines)
-                    if body[-2] != "\n":
-                        body += "\n"
-                    f.write(body)
+                self.process_release(f, prev_release, release)
                 prev_release = release
 
         print(self.done_str)
@@ -129,6 +104,33 @@ class ChangeLog:
             f"\n  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
+
+    def process_release(self, f, prev_release, release):
+        """Process a single release."""
+        if prev_release:
+            self.generate_diff_url(f, prev_release, release)
+        f.write(
+            f"## [{release.tag_name}]({release.html_url}) "
+            f"({release.created_at.date()})\n\n"
+        )
+        if release.title != release.tag_name and release.title:
+            f.write(f"### {release.title}\n\n")
+        pr_list: List[PullRequest] = self.pr_by_release.get(release.id, [])
+        if len(pr_list) > 0:
+            self.print_prs(f, pr_list)
+        else:
+            # first remove any existing diff links so we can add our
+            # own. The auto-generated release notes on GitHub will
+            # add a diff link to the release notes. We don't want that.
+            body_lines = release.body.split("\n")
+            for i, line in enumerate(body_lines):
+                if f"{self.repo_data.html_url}/compare/" in line:
+                    body_lines.pop(i)
+                    break
+            body = "\n".join(body_lines)
+            if body[-2] != "\n":
+                body += "\n"
+            f.write(body)
 
     def generate_diff_url(
         self,
