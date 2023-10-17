@@ -3,6 +3,7 @@
 For now, just some notes to myself. Not all of these will (or should!) be
 implemented but it's good to have a list of ideas.
 
+- Add testing with `pytest`
 - Get repo information from the current directory, read from the `.git` folder.
   If this is missing (e.g. because the current directory is not a git repo),
   then the user should be able to specify the repo information manually.
@@ -45,5 +46,5 @@ implemented but it's good to have a list of ideas.
   formatting.`]**_
 - offer the ability to collapse other sections (or all sections) too. _**[`See
   Above`]**_
-- escape any 'dunder' strings in the PR title, e.g. `__init__` or `__main__` as
-  otherwise they will be interpreted as markdown and made BOLD.
+- add a flag eg [no changelog] to PR titles to allow skipping of PRs that don't
+  need to be in the changelog.

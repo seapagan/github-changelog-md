@@ -177,8 +177,9 @@ class ChangeLog:
             if len(prs) > 0:
                 f.write(f"**{heading}**\n\n")
                 for pr in prs[::-1]:
+                    escaped_title = pr.title.replace("__", "\\_\\_")
                     f.write(
-                        f"- {pr.title}\n"
+                        f"- {escaped_title}\n"
                         f"([#{pr.number}]({pr.html_url}))\n"
                         f"by [{pr.user.login}]({pr.user.html_url})\n"
                     )
