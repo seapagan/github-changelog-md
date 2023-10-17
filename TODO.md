@@ -13,7 +13,7 @@ implemented but it's good to have a list of ideas.
   (allows user customization to the CHANGELOG).
 - Ability to specify a custom CHANGELOG file (e.g. `HISTORY.md` or
   `CHANGES.md`).
-- Ability to specify a custom template file (e.g. `changelog.jinja`).
+- Ability to specify a custom template layout.
 - Ability to upload the CHANGELOG to a remote server.
 - Allow filtering of commits based on commit message or other criteria.
 - Allow customization of the commit message format in the changelog.
@@ -22,8 +22,6 @@ implemented but it's good to have a list of ideas.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- option to include the release body in the changelog, default to false since we
-  can probably generate a better changelog than the release body.
 - include closed issues in the changelog, linked to the PR that closed them.
 - add ability to create a new release on GitHub with the latest changelog text
   as the body.
@@ -35,11 +33,17 @@ implemented but it's good to have a list of ideas.
   explain changes in the version numbering scheme or other important
   information.
 - if there are no PR for a specific release then say something to that effect
-  instead of just leaving the section empty.
+  instead of just leaving the section empty. We already use the Release 'body'
+  for this, but if that is missing too we need to say something.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
 - delete extra line-breaks from end of generated file.
-- when we finally sort the PRs for each release by tag, put the
-  'dependency'-tagged PR's in a collapsable list at the bottom of the release,
-  to avoid cluttering the changelog with a bunch of Dependabot PRs.
-- offer the ability to collapse other sections (or all sections) too.
+- put the 'dependency'-tagged PR's in a collapsable list at the bottom of the
+  release, to avoid cluttering the changelog with a bunch of Dependabot PRs.
+  _**[`This would be very useful however it breaks loading the CHANGELOG directly
+  into MkDocs as it marks this up as a collapsable boxed section and mangles the
+  formatting.`]**_
+- offer the ability to collapse other sections (or all sections) too. _**[`See
+  Above`]**_
+- escape any 'dunder' strings in the PR title, e.g. `__init__` or `__main__` as
+  otherwise they will be interpreted as markdown and made BOLD.
