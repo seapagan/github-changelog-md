@@ -97,12 +97,12 @@ class ChangeLog:
 
             for release in self.repo_releases:
                 if prev_release:
-                    self.get_diff_url(f, prev_release, release)
+                    self.generate_diff_url(f, prev_release, release)
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
                     f"({release.created_at.date()})\n\n"
                 )
-                if release.title != release.tag_name:
+                if release.title != release.tag_name and release.title:
                     f.write(f"### {release.title}\n\n")
                 pr_list: List[PullRequest] = self.pr_by_release.get(
                     release.id, []
@@ -128,7 +128,7 @@ class ChangeLog:
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
 
-    def get_diff_url(
+    def generate_diff_url(
         self,
         f,
         prev_release: Union[GitRelease, str],
