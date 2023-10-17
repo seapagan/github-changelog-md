@@ -119,6 +119,8 @@ class ChangeLog:
                             body_lines.pop(i)
                             break
                     body = "\n".join(body_lines)
+                    if body[-2] != "\n":
+                        body += "\n"
                     f.write(body)
                 prev_release = release
 
