@@ -39,3 +39,7 @@ implemented but it's good to have a list of ideas.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
 - delete extra line-breaks from end of generated file.
+- when we finally sort the PRs for each release by tag, put the
+  'dependency'-tagged PR's in a collapsable list at the bottom of the release,
+  to avoid cluttering the changelog with a bunch of Dependabot PRs.
+- offer the ability to collapse other sections (or all sections) too.
