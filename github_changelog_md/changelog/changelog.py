@@ -13,7 +13,7 @@ from github.GitRelease import GitRelease
 from rich import print
 
 from github_changelog_md.config import settings
-from github_changelog_md.constants import ExitErrors
+from github_changelog_md.constants import SECTIONS, ExitErrors
 from github_changelog_md.helpers import header
 
 if TYPE_CHECKING:
@@ -150,18 +150,39 @@ class ChangeLog:
     def print_prs(self, f: TextIOWrapper, pr_list: List[PullRequest]) -> None:
         """Print all the PRs for a given release.
 
-        This will be expanded soon to include the issues as well, and will
-        sort the PRs by type (enhancement, bugfix, etc) based on their label.
-
-        For now it just prints the PRs with the latest PR first.
+        They are sorted into sections depending on the labels they have.
         """
-        for pr in pr_list[::-1]:
-            f.write(
-                f"- {pr.title}\n"
-                f"([#{pr.number}]({pr.html_url}))\n"
-                f"by **[{pr.user.login}]({pr.user.html_url})**\n"
+        release_sections = {
+            heading: [
+                pr
+                for pr in pr_list
+                if label in [label.name for label in pr.labels]
+            ]
+            for heading, label in SECTIONS
+        }
+
+        # default section for PRs that don't have any of the specific labels we
+        # have defined for section headings. This may be able to be merged with
+        # the above dict comprehension?
+        release_sections["Merged Pull Requests"] = [
+            pr
+            for pr in pr_list
+            if not any(
+                label in [label.name for label in pr.labels]
+                for _, label in SECTIONS
             )
-        f.write("\n")
+        ]
+
+        for heading, prs in release_sections.items():
+            if len(prs) > 0:
+                f.write(f"### {heading}\n\n")
+                for pr in prs[::-1]:
+                    f.write(
+                        f"- {pr.title}\n"
+                        f"([#{pr.number}]({pr.html_url}))\n"
+                        f"by [{pr.user.login}]({pr.user.html_url})\n"
+                    )
+                f.write("\n")
 
     def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
         """Link Pull Requests to their respective Release.
