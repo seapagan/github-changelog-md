@@ -110,7 +110,16 @@ class ChangeLog:
                 if len(pr_list) > 0:
                     self.print_prs(f, pr_list)
                 else:
-                    f.write(release.body)
+                    # first remove any existing diff links so we can add our
+                    # own. The auto-generated release notes on GitHub will
+                    # add a diff link to the release notes. We don't want that.
+                    body_lines = release.body.split("\n")
+                    for i, line in enumerate(body_lines):
+                        if f"{self.repo_data.html_url}/compare/" in line:
+                            body_lines.pop(i)
+                            break
+                    body = "\n".join(body_lines)
+                    f.write(body)
                 prev_release = release
 
         print(self.done_str)
@@ -258,4 +267,5 @@ class ChangeLog:
                 "  [green]->[/green] Repository : "
                 f"[bold]{repo_data.full_name}[/bold]"
             )
+            return repo_data
             return repo_data
