@@ -100,8 +100,10 @@ class ChangeLog:
                     self.get_diff_url(f, prev_release, release)
                 f.write(
                     f"## [{release.tag_name}]({release.html_url}) "
-                    f"({release.created_at.date()})\n\n"
+                    f"({release.created_at.date()})\n"
                 )
+                if release.title != release.tag_name:
+                    f.write(f"### {release.title}\n\n")
                 pr_list: List[PullRequest] = self.pr_by_release.get(
                     release.id, []
                 )
