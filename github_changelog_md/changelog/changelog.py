@@ -5,7 +5,7 @@ This will encapsulate the logic for generating the changelog.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -85,7 +85,7 @@ class ChangeLog:
             mode="w", encoding="utf-8"
         ) as f:
             f.write("# Changelog\n\n")
-            prev_release = None
+            prev_release: Union[GitRelease, Literal["HEAD"], None] = None
 
             if len(self.unreleased) > 0:
                 f.write(
@@ -135,7 +135,7 @@ class ChangeLog:
         f,
         prev_release: Union[GitRelease, str],
         release_tag: GitRelease,
-    ):
+    ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
         if isinstance(prev_release, GitRelease):
             prev_release = prev_release.tag_name
