@@ -14,22 +14,22 @@ class Settings(TOMLSettings):
 
     github_pat: str
 
-    @staticmethod
-    def get_settings():
-        """Return a settings object for this app."""
-        return Settings(
-            "changelog_generator",
-            local_file=True,
-            settings_file_name=".changelog_generator.toml",
-            auto_create=False,
-        )
+
+def get_settings() -> Settings:
+    """Return a settings object for this app."""
+    return Settings(
+        "changelog_generator",
+        local_file=True,
+        settings_file_name=".changelog_generator.toml",
+        auto_create=False,
+    )
 
 
 # not too happy with this method of doing it. Ideally I need to modify the
 # Settings class to allow for a default value of PAT to be set though the
 # constructor, then enable autosave again.
 try:
-    settings = Settings.get_settings()
+    settings = get_settings()
 except SettingsNotFound:
     try:
         get_pat = Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
@@ -40,7 +40,7 @@ except SettingsNotFound:
     try:
         with Path(".changelog_generator.toml").open("w") as f:
             f.write(f"[changelog_generator]\ngithub_pat = '{get_pat}'\n")
-        settings = Settings.get_settings()
+        settings = get_settings()
         settings.save()
     except PermissionError:
         print(
