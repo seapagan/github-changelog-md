@@ -119,7 +119,7 @@ $ poetry shell
 
 ## License
 
-This project is released under the terms of the MIT license.
+This project is released under the terms of the [MIT license](LICENSE.txt).
 
 ## Credits
 
