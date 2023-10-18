@@ -4,6 +4,7 @@ This will encapsulate the logic for generating the changelog.
 """
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
 
@@ -40,13 +41,19 @@ class ChangeLog:
 
     done_str = "[green]Done[/green]"
 
-    def __init__(self, repo_name: str, user_name: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        repo_name: str,
+        user_name: Optional[str] = None,
+        next_release: Optional[str] = None,
+    ) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(settings.github_pat)
         self.git = Github(auth=self.auth)
 
         self.repo_name: str = repo_name
         self.user: Optional[str] = user_name
+        self.next_release: Optional[str] = next_release
 
         self.repo_data: Repository
         self.repo_releases: List[GitRelease]
@@ -88,9 +95,14 @@ class ChangeLog:
             prev_release: Union[GitRelease, Literal["HEAD"], None] = None
 
             if len(self.unreleased) > 0:
+                heading = (
+                    self.next_release if self.next_release else "Unreleased"
+                )
+                release_date = f" ({date.today()})" if self.next_release else ""
                 f.write(
-                    f"## [Unreleased]({self.repo_data.html_url}"
-                    "/tree/HEAD)\n\n"
+                    f"## [{heading}]({self.repo_data.html_url}"
+                    "/tree/HEAD)"
+                    f"{release_date}\n\n"
                 )
                 self.print_prs(f, self.unreleased)
                 prev_release = "HEAD"
