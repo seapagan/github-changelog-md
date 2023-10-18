@@ -13,6 +13,9 @@ by [seapagan](https://github.com/seapagan)
 - include closed issues in the changelog, linked to the PR that closed them.
 ([#31](https://github.com/seapagan/github-changelog-md/issues/31))
 by [seapagan](https://github.com/seapagan)
+- Finish Documentation
+([#30](https://github.com/seapagan/github-changelog-md/issues/30))
+by [seapagan](https://github.com/seapagan)
 - Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is.
 ([#22](https://github.com/seapagan/github-changelog-md/issues/22))
 by [seapagan](https://github.com/seapagan)
@@ -49,6 +52,9 @@ by [seapagan](https://github.com/seapagan)
 
 **Documentation**
 
+- Create release docs
+([#32](https://github.com/seapagan/github-changelog-md/pull/32))
+by [seapagan](https://github.com/seapagan)
 - Start working on docs
 ([#17](https://github.com/seapagan/github-changelog-md/pull/17))
 by [seapagan](https://github.com/seapagan)
