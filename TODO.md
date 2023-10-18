@@ -4,9 +4,6 @@ For now, just some notes to myself. Not all of these will (or should!) be
 implemented but it's good to have a list of ideas.
 
 - Add testing with `pytest`
-- Get repo information from the current directory, read from the `.git` folder.
-  If this is missing (e.g. because the current directory is not a git repo),
-  then the user should be able to specify the repo information manually.
 - Allow custom sections in the output, set by `label` or a regex.
 - Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
@@ -23,7 +20,6 @@ implemented but it's good to have a list of ideas.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- include closed issues in the changelog, linked to the PR that closed them.
 - add ability to create a new release on GitHub with the latest changelog text
   as the body.
 - add some form of text or even block to the oldest release that says something
@@ -48,8 +44,5 @@ implemented but it's good to have a list of ideas.
   Above`]**_
 - add a flag eg [no changelog] to PR titles to allow skipping of PRs that don't
   need to be in the changelog.
-- add a 'Next release' flag or similar which will create a virtual release
-  containing all PRs that have been merged since the last release. This will
-  allow the changelog to be updated before a release is made.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
