@@ -5,7 +5,7 @@ import typer
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.changelog import ChangeLog
-from github_changelog_md.helpers import get_app_version
+from github_changelog_md.helpers import get_app_version, get_repo_name
 
 app = typer.Typer(
     pretty_exceptions_show_locals=False,
@@ -44,6 +44,19 @@ def main(
             "\u00a9 Grant Ramsay 2023\n"
         )
         raise typer.Exit()
+
+    if not repo:
+        """Try to get the repo from the current directory."""
+        if not repo:
+            repo = get_repo_name()
+
+            if not repo:
+                # cant find a local repo and none specified on the cmd line.
+                print(
+                    "[red]  ->  Could not find a local repository, "
+                    "Please use the --repo option.\n"
+                )
+                raise typer.Exit()
 
     cl = ChangeLog(repo, user)
     cl.run()

@@ -2,6 +2,7 @@
 import sys
 from importlib import metadata, resources
 from pathlib import Path
+from typing import Union
 
 import rtoml
 from rich import print  # pylint: disable=redefined-builtin
@@ -58,3 +59,15 @@ def header() -> None:
         "\n[bold blue]GitHub Changelog Generator[/bold blue] "
         f"v{get_app_version()}\n"
     )
+
+
+def get_repo_name() -> Union[str, None]:
+    """Return the name of the repository from the current directory."""
+    git_config_path = Path.cwd() / ".git" / "config"
+    repo_name = None
+    if git_config_path.exists():
+        with Path(git_config_path).open("r", encoding="utf-8") as git_config:
+            for line in git_config:
+                if "url" in line:
+                    repo_name = Path(line.split("=")[-1]).stem
+    return repo_name
