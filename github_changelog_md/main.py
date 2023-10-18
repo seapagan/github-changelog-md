@@ -34,8 +34,20 @@ def main(
         help="Name of the user or organisation that owns the repository.",
         show_default=False,
     ),
+    next_release: Optional[str] = typer.Option(
+        None,
+        "--next-release",
+        "-n",
+        help="Name of the next release to generate the changelog for.",
+        show_default=False,
+    ),
 ) -> None:
-    """Generate your CHANGELOG file Automatically."""
+    """Generate your CHANGELOG file Automatically.
+
+    If you don't specify a repository name, the application will try to
+    get the repository name from the current directory (assuming it is a git
+    repository).
+    """
     if version:
         print(
             "\n[green]Github Changelog Markdown - "
@@ -58,7 +70,7 @@ def main(
                 )
                 raise typer.Exit()
 
-    cl = ChangeLog(repo, user)
+    cl = ChangeLog(repo, user, next_release)
     cl.run()
 
 
