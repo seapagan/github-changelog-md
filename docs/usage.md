@@ -3,6 +3,8 @@
 At this time there are no real options or configuration for this tool. Check the
 [Todo List](todo_list.md) for planned features.
 
+## Basic Usage
+
 Simply run the tool in the folder of a git repository and it will generate a
 `CHANGELOG.md` file in the current folder. You can specify the name of the
 repository you want to generate the changelog for using the `--repo` or `-r`
@@ -38,9 +40,26 @@ As mentioned in the [Installation](installation.md) section, you will be
 prompted for your GitHub PAT the first time you run the tool, and a config
 file will be created in the current folder if it does not already exist.
 
-!!! info "Future plans"
+## Advanced Usage
 
-    At this time the tool does not have any real options or configuration, but
-    in the future we plan to add a lot of options to customize the output.
+There are some options you can use to customize the output of the tool.
 
-    See the [Todo List](todo_list.md) for planned features.
+### `--next-release` \ `-n`
+
+This option allows you to specify the name of the next release. By default, any
+PRs that are merged after the last existing release will be added to the
+`Unreleased` section of the changelog. If you specify a value for this option,
+the tool will create a new section with the specified name and add the PRs to
+that section instead.
+
+Useful to prep for a release before it is actually released.
+
+```console
+$ github-changelog-md --next-release 1.2.3
+```
+
+## Future plans
+
+At this time the tool does not have many options or configuration, but in the
+future we plan to add a lot of options to customize the output. See the [Todo
+List](todo_list.md) for planned features.
