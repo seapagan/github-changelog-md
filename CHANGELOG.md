@@ -2,8 +2,35 @@
 
 ## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
 
+**Closed Issues**
+
+- add a '--next-release' flag which will create a virtual release containing all PRs that have been merged since the last release.
+([#35](https://github.com/seapagan/github-changelog-md/issues/35))
+by [seapagan](https://github.com/seapagan)
+- Try to take repo name from the current folder if it is a git repo
+([#34](https://github.com/seapagan/github-changelog-md/issues/34))
+by [seapagan](https://github.com/seapagan)
+- include closed issues in the changelog, linked to the PR that closed them.
+([#31](https://github.com/seapagan/github-changelog-md/issues/31))
+by [seapagan](https://github.com/seapagan)
+- Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is.
+([#22](https://github.com/seapagan/github-changelog-md/issues/22))
+by [seapagan](https://github.com/seapagan)
+
 **Enhancements**
 
+- List closed issues
+([#38](https://github.com/seapagan/github-changelog-md/pull/38))
+by [seapagan](https://github.com/seapagan)
+- Add the '--next-release' option
+([#37](https://github.com/seapagan/github-changelog-md/pull/37))
+by [seapagan](https://github.com/seapagan)
+- Get repo name from local if possible
+([#36](https://github.com/seapagan/github-changelog-md/pull/36))
+by [seapagan](https://github.com/seapagan)
+- Prompt for PAT if config file is missing
+([#33](https://github.com/seapagan/github-changelog-md/pull/33))
+by [seapagan](https://github.com/seapagan)
 - Sort prs into sections based on their labels
 ([#23](https://github.com/seapagan/github-changelog-md/pull/23))
 by [seapagan](https://github.com/seapagan)
