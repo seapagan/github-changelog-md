@@ -105,7 +105,12 @@ class ChangeLog:
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
 
-    def process_release(self, f, prev_release, release):
+    def process_release(
+        self,
+        f: TextIOWrapper,
+        prev_release: Union[GitRelease, Literal["HEAD"], None],
+        release: GitRelease,
+    ) -> None:
         """Process a single release."""
         if prev_release:
             self.generate_diff_url(f, prev_release, release)
@@ -134,7 +139,7 @@ class ChangeLog:
 
     def generate_diff_url(
         self,
-        f,
+        f: TextIOWrapper,
         prev_release: Union[GitRelease, str],
         release_tag: GitRelease,
     ) -> None:
