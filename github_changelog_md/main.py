@@ -20,8 +20,8 @@ def main(
     version: Optional[bool] = typer.Option(
         None, "-v", "--version", is_eager=True
     ),
-    repo: str = typer.Option(
-        ...,
+    repo: Optional[str] = typer.Option(
+        None,
         "--repo",
         "-r",
         help="Name of the repository to generate the changelog for.",
