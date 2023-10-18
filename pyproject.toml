@@ -16,6 +16,7 @@ repository = "https://github.com/seapagan/github-changelog-md"
 # shown on [Pypi.org](https://pypi.org/) if you are creating a public package.
 "Pull Requests" = "https://github.com/seapagan/github-changelog-md/pulls"
 "Bug Tracker" = "https://github.com/seapagan/github-changelog-md/issues"
+"Changelog" = "https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md"
 
 [tool.poetry.scripts]
 # rename "github-changelog-md" below to change the executable name. You can also
