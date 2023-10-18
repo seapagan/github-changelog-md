@@ -1,6 +1,6 @@
 # Contributing to GitHub Changelog Generator
 
-Thank you for your interest in contributing to github-changelog-md! We welcome
+Thank you for your interest in contributing to `github-changelog-md`! We welcome
 all contributions, big or small.
 
 If you are not sure where to start, please take a look at the [open
