@@ -42,7 +42,12 @@ def main(
         show_default=False,
     ),
 ) -> None:
-    """Generate your CHANGELOG file Automatically."""
+    """Generate your CHANGELOG file Automatically.
+
+    If you don't specify a repository name, the application will try to
+    get the repository name from the current directory (assuming it is a git
+    repository).
+    """
     if version:
         print(
             "\n[green]Github Changelog Markdown - "
