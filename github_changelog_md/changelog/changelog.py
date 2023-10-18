@@ -225,7 +225,7 @@ class ChangeLog:
                     )
                 f.write("\n")
 
-    def link_issues(self):
+    def link_issues(self) -> Dict[int, List[Issue]]:
         """Link Issues to their respective Release.
 
         This will create a dictionary with the key on the release id and
@@ -267,7 +267,7 @@ class ChangeLog:
         print(self.done_str)
         return issue_by_release
 
-    def get_latest_release_date(self):
+    def get_latest_release_date(self) -> date:
         """Return the date of the latest release."""
         try:
             last_release_date = self.repo_releases[-1].created_at
