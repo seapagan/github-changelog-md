@@ -22,15 +22,15 @@ def main(
     ),
     repo: str = typer.Option(
         ...,
-        "-repo",
+        "--repo",
         "-r",
         help="Name of the repository to generate the changelog for.",
         show_default=False,
     ),
     user: Optional[str] = typer.Option(
         None,
-        "-u",
         "--user",
+        "-u",
         help="Name of the user or organisation that owns the repository.",
         show_default=False,
     ),

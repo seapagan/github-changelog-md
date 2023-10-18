@@ -51,3 +51,5 @@ implemented but it's good to have a list of ideas.
 - add a 'Next release' flag or similar which will create a virtual release
   containing all PRs that have been merged since the last release. This will
   allow the changelog to be updated before a release is made.
+- For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
+  environment variable instead of creating a config file.
