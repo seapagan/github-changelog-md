@@ -1,44 +1,12 @@
-# Markdown Changelog Generator <!-- omit in toc -->
-
-**Generate a Markdown changelog from a Github repository.**
-
-    Note: This is pre-release documentation for the next version of this
-    project which will be released soon. It is not yet available in the current
-    PyPI release, though you can install it from the `main` branch on Github.
-
-    Once unit tests are added, the documentation will be updated and a new
-    release will be made.
-
-This project will automatically generate a Markdown-formatted changelog from a
-Github repository. It will automatically detect the latest release and generate
-a changelog based on the **merged** Pull Requests since that release along with
-a section for **unmerged** PRs at the top. It will also include a list of all
-Issues closed for each release.
-
-The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
-latest to oldest in this release.
-
-For an example of the output, see the [Changelog](CHANGELOG.md) for this
-project.
-
-**Full documentation is available at:** <https://changelog.seapagan.net>
-
-- [Install Locally for a project](#install-locally-for-a-project)
-- [Globally](#globally)
-- [Setup a GitHub PAT](#setup-a-github-pat)
-  - [PAT Permissions](#pat-permissions)
-- [Create a config file](#create-a-config-file)
-- [Development setup](#development-setup)
-- [License](#license)
-- [Credits](#credits)
+# Installation
 
 It is possible to install this package both locally within your projects and
 globally so it can be used in every project. You also need to generate a GitHub
 Personal Access Token (PAT) to use this tool or use an existing one. This should
-be stored in a config file `.github-changelog-md.toml` in the directory you run
+be stored in a config file `.changelog-generator.toml` in the directory you run
 the tool from.
 
-## Install Locally for a project
+## Locally for a project
 
 Change to your project directory and install the package using your preferred
 package manager or plain `pip`.
@@ -58,9 +26,24 @@ $ pip install github-changelog-md
 
 ## Globally
 
-You could also install the package globally if you want to use it in every
-project. See the [Documentation](http://127.0.0.1:8000/installation/#globally)
-for more information.
+Install the package globally using pip:
+
+```console
+$ pip install github-changelog-md
+```
+
+If you cannot install globally due to permissions, you can install it to your
+user install directory:
+
+```console
+$ pip install --user github-changelog-md
+```
+
+or use [pipx](https://pypa.github.io/pipx/) (recommended)
+
+```console
+$ pipx install github-changelog-md
+```
 
 ## Setup a GitHub PAT
 
@@ -103,26 +86,12 @@ app will continue.
 $ github-changelog-md
 ```
 
-## Development setup
+!!! info "Note"
 
-Install the dependencies using Poetry:
+    Future versions of this tool may require a newer schema version, so it is
+    recommended to always use the latest version.
 
-```console
-$ poetry install
-```
-
-Then, activate the virtual environment:
-
-```console
-$ poetry shell
-```
-
-## License
-
-This project is released under the terms of the MIT license.
-
-## Credits
-
-The original Python boilerplate for this package was created using
-[Pymaker](https://github.com/seapagan/py-maker) by [Grant
-Ramsay](https://github.com/seapagan)
+    It is also planned to have a global config file in the user's home folder,
+    with the settings from the local config file being merged with the global
+    config file. This will allow you to set the PAT once and use it for all
+    projects.

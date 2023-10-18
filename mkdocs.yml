@@ -50,5 +50,9 @@ extra_css:
 
 nav:
   - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
   - Todo List: todo_list.md
+  - Contributing: contributing.md
   - Changelog: changelog.md
+  - License: license.md
