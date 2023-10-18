@@ -4,6 +4,7 @@ This will encapsulate the logic for generating the changelog.
 """
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
 
@@ -40,21 +41,29 @@ class ChangeLog:
 
     done_str = "[green]Done[/green]"
 
-    def __init__(self, repo_name: str, user_name: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        repo_name: str,
+        user_name: Optional[str] = None,
+        next_release: Optional[str] = None,
+    ) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(settings.github_pat)
         self.git = Github(auth=self.auth)
 
         self.repo_name: str = repo_name
         self.user: Optional[str] = user_name
+        self.next_release: Optional[str] = next_release
 
         self.repo_data: Repository
         self.repo_releases: List[GitRelease]
         self.repo_prs: PaginatedList[PullRequest]
         self.repo_issues: PaginatedList[Issue]
         self.pr_by_release: Dict[int, List[PullRequest]]
+        self.issue_by_release: Dict[int, List[Issue]]
         self.filtered_repo_issues: List[Issue]
         self.unreleased: List[PullRequest]
+        self.unreleased_issues: List[Issue]
 
     def run(self) -> None:
         """Run the changelog.
@@ -72,6 +81,7 @@ class ChangeLog:
         self.filtered_repo_issues = self.filter_issues()
 
         self.pr_by_release = self.link_pull_requests()
+        self.issue_by_release = self.link_issues()
 
         # actually generate the changelog file from all the data we have
         # collected.
@@ -88,10 +98,19 @@ class ChangeLog:
             prev_release: Union[GitRelease, Literal["HEAD"], None] = None
 
             if len(self.unreleased) > 0:
-                f.write(
-                    f"## [Unreleased]({self.repo_data.html_url}"
-                    "/tree/HEAD)\n\n"
+                heading = (
+                    self.next_release if self.next_release else "Unreleased"
                 )
+                release_date = f" ({date.today()})" if self.next_release else ""
+                f.write(
+                    f"## [{heading}]({self.repo_data.html_url}"
+                    "/tree/HEAD)"
+                    f"{release_date}\n\n"
+                )
+
+                if len(self.unreleased_issues) > 0:
+                    self.print_issues(f, self.unreleased_issues)
+
                 self.print_prs(f, self.unreleased)
                 prev_release = "HEAD"
 
@@ -105,7 +124,12 @@ class ChangeLog:
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
         )
 
-    def process_release(self, f, prev_release, release):
+    def process_release(
+        self,
+        f: TextIOWrapper,
+        prev_release: Union[GitRelease, Literal["HEAD"], None],
+        release: GitRelease,
+    ) -> None:
         """Process a single release."""
         if prev_release:
             self.generate_diff_url(f, prev_release, release)
@@ -116,6 +140,10 @@ class ChangeLog:
         if release.title != release.tag_name and release.title:
             f.write(f"**_'{release.title}'_**\n\n")
         pr_list: List[PullRequest] = self.pr_by_release.get(release.id, [])
+        issue_list: List[Issue] = self.issue_by_release.get(release.id, [])
+
+        if len(issue_list) > 0:
+            self.print_issues(f, issue_list)
         if len(pr_list) > 0:
             self.print_prs(f, pr_list)
         else:
@@ -132,9 +160,21 @@ class ChangeLog:
                 body += "\n"
             f.write(body)
 
+    def print_issues(self, f: TextIOWrapper, issue_list: List[Issue]) -> None:
+        """Print all the closed issues for a given release."""
+        f.write("**Closed Issues**\n\n")
+        for issue in issue_list:
+            escaped_title = issue.title.replace("__", "\\_\\_")
+            f.write(
+                f"- {escaped_title}\n"
+                f"([#{issue.number}]({issue.html_url}))\n"
+                f"by [{issue.user.login}]({issue.user.html_url})\n"
+            )
+        f.write("\n")
+
     def generate_diff_url(
         self,
-        f,
+        f: TextIOWrapper,
         prev_release: Union[GitRelease, str],
         release_tag: GitRelease,
     ) -> None:
@@ -185,6 +225,59 @@ class ChangeLog:
                     )
                 f.write("\n")
 
+    def link_issues(self) -> Dict[int, List[Issue]]:
+        """Link Issues to their respective Release.
+
+        This will create a dictionary with the key on the release id and
+        the value a list of issues.
+        """
+        print(
+            "\n  [green]->[/green] Linking Closed Issues to their respective "
+            "Release ... ",
+            end="",
+        )
+        issue_by_release: Dict[int, List[Issue]] = {}
+        for release in self.repo_releases[::-1]:
+            issue_by_release[release.id] = []
+            for issue in self.filtered_repo_issues:
+                if (
+                    issue.closed_at
+                    and issue.closed_at <= release.created_at
+                    and not any(
+                        issue in issue_list
+                        for issue_list in issue_by_release.values()
+                    )
+                ):
+                    issue_by_release[release.id].append(issue)
+
+        # Add any issue more recent than the last release to a specific
+        # list. We need some special handling if there are no releases yet.
+        last_release_date = self.get_latest_release_date()
+
+        self.unreleased_issues = [
+            issue
+            for issue in self.filtered_repo_issues
+            if issue.closed_at
+            and issue.closed_at > last_release_date
+            and not any(
+                issue in pr_list for pr_list in issue_by_release.values()
+            )
+        ]
+
+        print(self.done_str)
+        return issue_by_release
+
+    def get_latest_release_date(self) -> date:
+        """Return the date of the latest release."""
+        try:
+            last_release_date = self.repo_releases[-1].created_at
+        except IndexError:
+            # there have been no releases yet, so we need to get the date of
+            # the first commit.
+            first_commit: Commit = self.repo_data.get_commits().reversed[0]
+            last_release_date = first_commit.commit.committer.date
+        return last_release_date
+
     def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
         """Link Pull Requests to their respective Release.
 
@@ -210,13 +303,7 @@ class ChangeLog:
                     pr_by_release[release.id].append(pr)
         # Add any pull request more recent than the last release to a specific
         # list. We need some special handling if there are no releases yet.
-        try:
-            last_release_date = self.repo_releases[-1].created_at
-        except IndexError:
-            # there have been no releases yet, so we need to get the date of
-            # the first commit.
-            first_commit: Commit = self.repo_data.get_commits().reversed[0]
-            last_release_date = first_commit.commit.committer.date
+        last_release_date = self.get_latest_release_date()
 
         self.unreleased = [
             pr
