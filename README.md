@@ -24,7 +24,7 @@ project.
 **Full documentation is available at:** <https://changelog.seapagan.net>
 
 - [Install Locally for a project](#install-locally-for-a-project)
-- [Globally](#globally)
+- [Install Globally](#install-globally)
 - [Setup a GitHub PAT](#setup-a-github-pat)
   - [PAT Permissions](#pat-permissions)
 - [Create a config file](#create-a-config-file)
@@ -43,8 +43,8 @@ the tool from.
 Change to your project directory and install the package using your preferred
 package manager or plain `pip`.
 
-I'd recommend using [Poetry](https://python-poetry.org/){:target="_blank"} for
-managing your project dependencies if you don't already have a preference:
+I'd recommend using [Poetry](https://python-poetry.org/) for managing your
+project dependencies if you don't already have a preference:
 
 ```console
 $ poetry add github-changelog-md --group dev
@@ -56,7 +56,7 @@ or
 $ pip install github-changelog-md
 ```
 
-## Globally
+## Install Globally
 
 You could also install the package globally if you want to use it in every
 project. See the [Documentation](http://127.0.0.1:8000/installation/#globally)
@@ -65,11 +65,11 @@ for more information.
 ## Setup a GitHub PAT
 
 Since this tool uses the GitHub API, you will need to create a [Personal Access
-Token](https://github.com/settings/tokens){:target="_blank} (PAT) to use this
-tool without being rate limited. You can create a PAT with the `repo` scope to
-access private repositories, or just leave all the scopes unchecked to only
-access public repositories. Generate a 'classic' token unless you need more
-fine-grained control over the permissions.
+Token](https://github.com/settings/tokens) (PAT) to use this tool without being
+rate limited. You can create a PAT with the `repo` scope to access private
+repositories, or just leave all the scopes unchecked to only access public
+repositories. Generate a 'classic' token unless you need more fine-grained
+control over the permissions.
 
 Choose a descriptive name for your token, such as `github-changelog-md`, an
 expiry time (or choose to not have it expire at all) and copy the token to your
@@ -86,8 +86,8 @@ use this on private repositories).
 ## Create a config file
 
 This tool will look for a config file `.changelog-generator.toml` in the
-location it is run from. The config file is a simple
-[TOML](https://toml.io/en/){:target="_blank"} file with the following format:
+location it is run from. The config file is a simple [TOML](https://toml.io/en/)
+file with the following format:
 
 ```toml
 [changelog_generator]
