@@ -28,6 +28,18 @@ by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
+- Bump gitpython from 3.1.37 to 3.1.38
+([#28](https://github.com/seapagan/github-changelog-md/pull/28))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+- Bump flake8-type-checking from 2.4.2 to 2.5.1
+([#27](https://github.com/seapagan/github-changelog-md/pull/27))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+- Bump black from 23.9.1 to 23.10.0
+([#26](https://github.com/seapagan/github-changelog-md/pull/26))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+- Bump urllib3 from 2.0.6 to 2.0.7
+([#25](https://github.com/seapagan/github-changelog-md/pull/25))
+by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump mkdocs-git-revision-date-localized-plugin from 1.2.0 to 1.2.1
 ([#19](https://github.com/seapagan/github-changelog-md/pull/19))
 by [dependabot[bot]](https://github.com/apps/dependabot)

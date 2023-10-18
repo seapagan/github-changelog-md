@@ -48,3 +48,6 @@ implemented but it's good to have a list of ideas.
   Above`]**_
 - add a flag eg [no changelog] to PR titles to allow skipping of PRs that don't
   need to be in the changelog.
+- add a 'Next release' flag or similar which will create a virtual release
+  containing all PRs that have been merged since the last release. This will
+  allow the changelog to be updated before a release is made.
