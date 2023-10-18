@@ -1,8 +1,5 @@
 # Usage
 
-At this time there are no real options or configuration for this tool. Check the
-[Todo List](todo_list.md) for planned features.
-
 ## Basic Usage
 
 Simply run the tool in the folder of a git repository and it will generate a
