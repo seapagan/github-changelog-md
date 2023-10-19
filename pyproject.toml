@@ -82,6 +82,7 @@ pymdown-extensions = "^10.1"
 pygments = "^2.15.1"
 
 # setup PoeThePoet tasks
+pyfakefs = "^5.3.0"
 [tool.poe.tasks]
 pre = "pre-commit run --all-files"
 pylint = "pylint **/*.py"
@@ -151,7 +152,8 @@ plugins.md036.enabled = false
 addopts = ["--cov", "--cov-report", "term-missing", "--cov-report", "html"]
 filterwarnings = []
 mock_use_standalone_module = true
+pythonpath = ["github_changelog_md"]
 
 [tool.coverage.run]
-# source = []
+source = ["github_changelog_md"]
 omit = ["*/tests/*"]
