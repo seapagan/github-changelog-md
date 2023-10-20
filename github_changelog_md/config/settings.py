@@ -1,4 +1,5 @@
 """Handle the settings for the project."""
+import sys
 from pathlib import Path
 
 from rich import print  # pylint: disable=redefined-builtin
@@ -25,6 +26,11 @@ def get_settings() -> Settings:
     )
 
 
+def get_pat_input() -> str:
+    """Return the GitHub PAT."""
+    return Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
+
+
 # not too happy with this method of doing it. Ideally I need to modify the
 # Settings class to allow for a default value of PAT to be set though the
 # constructor, then enable autosave again.
@@ -32,10 +38,10 @@ try:
     settings = get_settings()
 except SettingsNotFound:
     try:
-        get_pat = Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
+        get_pat = get_pat_input()
     except KeyboardInterrupt:
         print("\n[red]Exiting[/red]")
-        exit(ExitErrors.USER_ABORT)
+        sys.exit(ExitErrors.USER_ABORT)
 
     try:
         with Path(".changelog_generator.toml").open("w") as f:
@@ -45,6 +51,6 @@ except SettingsNotFound:
     except PermissionError:
         print(
             "\n[red]Permission denied. Please run the command in a folder "
-            "you have write-access to.[/red]"
+            "you have write-access to.[/red]",
         )
-        exit(ExitErrors.PERMISSION_DENIED)
+        sys.exit(ExitErrors.PERMISSION_DENIED)

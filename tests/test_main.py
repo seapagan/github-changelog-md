@@ -1,3 +1,4 @@
+"""Test module for the 'main' module."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -15,18 +16,21 @@ if TYPE_CHECKING:
 
 @pytest.fixture()
 def mock_changelog(mocker: MockerFixture) -> MockType:
+    """Return a mocked ChangeLog class."""
     return mocker.patch("github_changelog_md.main.ChangeLog")
 
 
 class TestMain:
     """Test class for the 'main' module."""
 
-    def test_main_with_versio(self) -> None:
+    def test_main_with_version(self) -> None:
+        """Test the main function with the version flag."""
         runner = CliRunner()
         result = runner.invoke(app, ["--version"])
         assert "Github Changelog Markdown" in result.output
 
     def test_main_with_repo(self, mock_changelog: MockType) -> None:
+        """Test the main function with the repo flag."""
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
@@ -36,6 +40,7 @@ class TestMain:
         mock_changelog_instance.run.assert_called_once()
 
     def test_main_with_repo_and_user(self, mock_changelog: MockType) -> None:
+        """Test the main function with the repo and user flags."""
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
@@ -48,6 +53,7 @@ class TestMain:
         self,
         mock_changelog: MockType,
     ) -> None:
+        """Test the main function with the repo, user and next release flags."""
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
@@ -67,8 +73,14 @@ class TestMain:
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_get_from_local_repo(
-        self, mocker: MockerFixture, mock_changelog: MockType
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
     ) -> None:
+        """Test the main function with no repo specified.
+
+        It should read the name from the local repo.
+        """
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
@@ -83,13 +95,20 @@ class TestMain:
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_and_no_local_repo_found(
-        self, mocker: MockerFixture, mock_changelog: MockType
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
     ) -> None:
+        """Test the main function with no repo specified.
+
+        In this case there is also no local repo to read from.
+        """
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
         mocker.patch(
-            "github_changelog_md.main.get_repo_name", return_value=None
+            "github_changelog_md.main.get_repo_name",
+            return_value=None,
         )
 
         runner = CliRunner()
