@@ -72,7 +72,3 @@ def main(
 
     cl = ChangeLog(repo, user, next_release)
     cl.run()
-
-
-if __name__ == "__main__":
-    app()
