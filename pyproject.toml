@@ -33,24 +33,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 # linting, type-checking and security checks
-bandit = { extras = ["toml"], version = "^1.7.5" }
 black = "^23.7.0"
-flake8 = "^6.0.0"
-flake8-pydocstyle = "^0.2.2"
-flake8-pyproject = "^1.2.3"
-flake8-pytest-style = "^1.7.2"
-flake8-type-checking = "^2.4.1"
-flake8-use-pathlib = "^0.3.0"
 isort = "^5.12.0"
-pylint = ">=2.17.2,<4.0.0"
-pylint-pydantic = ">=0.2.4,<0.4.0"
-pylint-pytest = "^1.1.2"
-pep8-naming = "^0.13.3"
 pre-commit = "^3.3.3"
 pydocstyle = "^6.3.0"
 pymarkdownlnt = "^0.9.12"
 mypy = "^1.4.1"
-tryceratops = "^2.3.2"
+ruff = "^0.1.1"
 
 # task runner
 poethepoet = ">=0.21.1,<0.23.0"
@@ -80,13 +69,11 @@ pygments = "^2.15.1"
 # setup PoeThePoet tasks
 [tool.poe.tasks]
 pre = "pre-commit run --all-files"
-pylint = "pylint **/*.py"
 mypy = "mypy **/*.py"
-flake8 = "flake8 **/*.py"
 black = "black **/*.py"
-try = "tryceratops **/*.py"
 markdown = "pymarkdown scan **/*.md"
-lint = ["black", "flake8", "pylint", "mypy", "try"]
+ruff = "ruff check ."
+lint = ["black", "ruff", "mypy"]
 
 "docs:publish" = "mkdocs gh-deploy"
 "docs:build" = "mkdocs build"
@@ -114,28 +101,6 @@ exclude = '''
 )/
 '''
 
-[tool.flake8]
-max-line-length = 80
-exclude = ["__init__.py", ".git"]
-extend-ignore = ["E203", "W503"]
-extend-select = ["TC", "TC1", "TRY"]
-docstring-convention = "google"
-classmethod-decorators = ["classmethod", "validator"]
-
-[tool.bandit]
-exclude_dirs = []
-
-[tool.bandit.assert_used]
-skips = ['*_test.py', '*/test_*.py']
-
-[tool.pylint.MAIN]
-load-plugins = ["pylint_pytest", "pylint_pydantic"]
-extension-pkg-whitelist = "pydantic"
-
-[tool.pylint.DESIGN]
-exclude-too-few-public-methods = "pydantic"
-max-attributes = 10
-
 [tool.pydocstyle]
 add-ignore = ["D104"]
 
@@ -152,3 +117,22 @@ pythonpath = ["github_changelog_md"]
 [tool.coverage.run]
 source = ["github_changelog_md"]
 omit = ["*/tests/*"]
+
+[tool.ruff]
+line-length = 80
+select = ["ALL"]              # we are being very strict!
+ignore = ["ANN101", "PGH003"] # These rules are too strict even for us 😝
+src = ["github_changelog_md"]
+target-version = "py39"       # minimum python version supported
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.ruff.extend-per-file-ignores]
+"tests/**/*.py" = ["S101"] # we can (and MUST!) use 'assert' in test files.
+"github_changelog_md/main.py" = [
+  "UP007",
+] # Typer is not compatible with that syntax
+
+[tool.ruff.isort]
+known-local-folder = ["github_changelog_md"]

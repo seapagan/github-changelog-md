@@ -65,3 +65,5 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           name: codecov-python-${{ matrix.python-version }}
+      - name: Lint the code using Ruff
+        uses: chartboost/ruff-action@v1
