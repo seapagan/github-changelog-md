@@ -1,8 +1,8 @@
 """Define constants used throughout the application."""
 from enum import IntEnum
-from typing import List, Tuple, TypeAlias, Union
+from typing import List, Tuple, Union
 
-SectionHeadings: TypeAlias = Tuple[str, Union[str, None]]
+SectionHeadings = Tuple[str, Union[str, None]]
 
 
 class ExitErrors(IntEnum):
