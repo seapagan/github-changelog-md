@@ -28,7 +28,11 @@ def get_settings_object() -> Settings:
 
 def get_pat_input() -> str:
     """Return the GitHub PAT."""
-    return Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
+    user_pat = Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
+    if not user_pat:
+        print("[red]No PAT entered, exiting.[/red]")
+        sys.exit(ExitErrors.INVALID_ACTION)
+    return user_pat
 
 
 # not too happy with this method of doing it. Ideally I need to modify the
