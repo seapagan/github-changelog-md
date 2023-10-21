@@ -170,6 +170,7 @@ class TestChangelog:
         mock_repo_data,
         mock_repo,
         mocker,
+        config_file,  # noqa: ARG002
     ) -> None:
         """Test the overall run method."""
         mock_header = mocker.patch(

@@ -11,19 +11,9 @@ from github_changelog_md.config.settings import (
     get_settings,
     get_settings_object,
 )
-from github_changelog_md.constants import ExitErrors
+from github_changelog_md.constants import CONFIG_FILE, ExitErrors
 
-CONFIG_FILE = ".changelog_generator.toml"
 MOCK_PROMPT_ASK = "rich.prompt.Prompt.ask"
-
-
-@pytest.fixture()
-def config_file(fs) -> None:  # noqa: PT004
-    """Create a fake config file."""
-    fs.create_file(
-        CONFIG_FILE,
-        contents="[changelog_generator]\ngithub_pat = '1234'\n",
-    )
 
 
 class TestSettings:
