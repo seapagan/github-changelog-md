@@ -1,6 +1,16 @@
 # Changelog
 
-## [0.2.0](https://github.com/seapagan/github-changelog-md/tree/HEAD) (2023-10-21)
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**Dependency Updates**
+
+- Bump pytest-mock from 3.11.1 to 3.12.0
+([#44](https://github.com/seapagan/github-changelog-md/pull/44))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...HEAD)
+
+## [0.2.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.0) (2023-10-21)
 
 **Closed Issues**
 
@@ -70,6 +80,9 @@ by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
+- Bump pymdown-extensions from 10.3 to 10.3.1
+([#43](https://github.com/seapagan/github-changelog-md/pull/43))
+by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump faker from 19.10.0 to 19.11.0
 ([#41](https://github.com/seapagan/github-changelog-md/pull/41))
 by [dependabot[bot]](https://github.com/apps/dependabot)
