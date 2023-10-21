@@ -7,13 +7,6 @@ version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.i
 
 **Generate a Markdown changelog from a Github repository.**
 
-    Note: This is pre-release documentation for the next version of this
-    project which will be released soon. It is not yet available in the current
-    PyPI release, though you can install it from the `main` branch on Github.
-
-    Once unit tests are added, the documentation will be updated and a new
-    release will be made.
-
 This project will automatically generate a Markdown-formatted changelog from a
 Github repository. It will automatically detect the latest release and generate
 a changelog based on the **merged** Pull Requests since that release along with

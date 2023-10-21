@@ -92,7 +92,7 @@ poe pre
 
 We are using [pytest](https://docs.pytest.org/) for testing.
 
-At the moment the test framework is set up but we only have minimal tests. We
+At the moment the test framework is set up but we only about 50% coverage. We
 will be adding more tests as we go along - and most definitely welcome any
 contributions to this area!
 

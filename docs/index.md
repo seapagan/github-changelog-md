@@ -1,16 +1,11 @@
 # Markdown Changelog Generator
 
-!!! danger "Pre-release docs"
-
-    This is **pre-release** documentation for the next version of this project
-    which will be released soon. It is not yet available in the current PyPI
-    release, though you can install it from the `main` branch on Github. Link
-    is above in the header.
-
-    Once unit tests are added, the documentation will be updated and a new
-    release will be made.
-
 **Generate a Markdown changelog from your Github repository.**
+
+[![PyPI
+version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/pyproject-maker)&nbsp;
+![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)&nbsp;
+[![Ruff](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml)
 
 This project will automatically generate a Markdown-formatted changelog from a
 Github repository. It will automatically detect the latest release and generate
