@@ -26,3 +26,5 @@ SECTIONS: list[SectionHeadings] = [
     ("Documentation", "documentation"),
     ("Dependency Updates", "dependencies"),
 ]
+
+CONFIG_FILE = ".changelog_generator.toml"

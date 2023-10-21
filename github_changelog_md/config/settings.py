@@ -7,7 +7,7 @@ from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
 from simple_toml_settings.exceptions import SettingsNotFound
 
-from github_changelog_md.constants import ExitErrors
+from github_changelog_md.constants import CONFIG_FILE, ExitErrors
 
 
 class Settings(TOMLSettings):
@@ -21,7 +21,7 @@ def get_settings_object() -> Settings:
     return Settings(
         "changelog_generator",
         local_file=True,
-        settings_file_name=".changelog_generator.toml",
+        settings_file_name=CONFIG_FILE,
         auto_create=False,
     )
 
@@ -55,7 +55,7 @@ def get_settings() -> Settings:
             sys.exit(ExitErrors.USER_ABORT)
 
         try:
-            with Path(".changelog_generator.toml").open("w") as f:
+            with Path(CONFIG_FILE).open("w") as f:
                 f.write(f"[changelog_generator]\ngithub_pat = '{get_pat}'\n")
             settings = get_settings_object()
             settings.save()
