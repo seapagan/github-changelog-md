@@ -3,7 +3,7 @@
 For now, just some notes to myself. Not all of these will (or should!) be
 implemented but it's good to have a list of ideas.
 
-- Add testing with `pytest`
+- complete testing with `pytest` to 100% or as close as possible.
 - Allow custom sections in the output, set by `label` or a regex.
 - Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
