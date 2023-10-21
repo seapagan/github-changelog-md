@@ -140,3 +140,6 @@ convention = "google"
 
 [tool.ruff.isort]
 known-local-folder = ["github_changelog_md"]
+
+[tool.ruff.pyupgrade]
+keep-runtime-typing = true

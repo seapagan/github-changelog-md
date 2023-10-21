@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, Optional
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -44,8 +44,8 @@ class ChangeLog:
     def __init__(
         self,
         repo_name: str,
-        user_name: str | None,
-        next_release: str | None,
+        user_name: Optional[str] = None,
+        next_release: Optional[str] = None,
     ) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(get_settings().github_pat)
@@ -386,5 +386,4 @@ class ChangeLog:
                 "  [green]->[/green] Repository : "
                 f"[bold]{repo_data.full_name}[/bold]",
             )
-            return repo_data
             return repo_data
