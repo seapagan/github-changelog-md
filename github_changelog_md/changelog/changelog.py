@@ -4,16 +4,16 @@ This will encapsulate the logic for generating the changelog.
 """
 from __future__ import annotations
 
-from datetime import date
+import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
+from typing import TYPE_CHECKING, Literal, Optional
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
 from github.GitRelease import GitRelease
 from rich import print
 
-from github_changelog_md.config import settings
+from github_changelog_md.config import get_settings
 from github_changelog_md.constants import SECTIONS, ExitErrors
 from github_changelog_md.helpers import header
 
@@ -31,7 +31,7 @@ def git_error(exc: GithubException) -> None:
     """Handle a Git Exception."""
     print(
         f"\n[red]  X  Error {exc.status} while getting the "
-        f"Repo : {exc.data.get('message')}\n"
+        f"Repo : {exc.data.get('message')}\n",
     )
     raise typer.Exit(ExitErrors.GIT_ERROR)
 
@@ -48,22 +48,22 @@ class ChangeLog:
         next_release: Optional[str] = None,
     ) -> None:
         """Initialize the class."""
-        self.auth = Auth.Token(settings.github_pat)
+        self.auth = Auth.Token(get_settings().github_pat)
         self.git = Github(auth=self.auth)
 
         self.repo_name: str = repo_name
-        self.user: Optional[str] = user_name
-        self.next_release: Optional[str] = next_release
+        self.user: str | None = user_name
+        self.next_release: str | None = next_release
 
         self.repo_data: Repository
-        self.repo_releases: List[GitRelease]
+        self.repo_releases: list[GitRelease]
         self.repo_prs: PaginatedList[PullRequest]
         self.repo_issues: PaginatedList[Issue]
-        self.pr_by_release: Dict[int, List[PullRequest]]
-        self.issue_by_release: Dict[int, List[Issue]]
-        self.filtered_repo_issues: List[Issue]
-        self.unreleased: List[PullRequest]
-        self.unreleased_issues: List[Issue]
+        self.pr_by_release: dict[int, list[PullRequest]]
+        self.issue_by_release: dict[int, list[Issue]]
+        self.filtered_repo_issues: list[Issue]
+        self.unreleased: list[PullRequest]
+        self.unreleased_issues: list[Issue]
 
     def run(self) -> None:
         """Run the changelog.
@@ -92,20 +92,25 @@ class ChangeLog:
         print("\n  [green]->[/green] Generating Changelog ... ", end="")
 
         with Path(Path.cwd() / "CHANGELOG.md").open(
-            mode="w", encoding="utf-8"
+            mode="w",
+            encoding="utf-8",
         ) as f:
             f.write("# Changelog\n\n")
-            prev_release: Union[GitRelease, Literal["HEAD"], None] = None
+            prev_release: GitRelease | (Literal["HEAD"] | None) = None
 
             if len(self.unreleased) > 0:
                 heading = (
                     self.next_release if self.next_release else "Unreleased"
                 )
-                release_date = f" ({date.today()})" if self.next_release else ""
+                release_date = (
+                    f" ({datetime.datetime.now(tz=datetime.timezone.utc).date()})"  # noqa: E501
+                    if self.next_release
+                    else ""
+                )
                 f.write(
                     f"## [{heading}]({self.repo_data.html_url}"
                     "/tree/HEAD)"
-                    f"{release_date}\n\n"
+                    f"{release_date}\n\n",
                 )
 
                 if len(self.unreleased_issues) > 0:
@@ -121,13 +126,13 @@ class ChangeLog:
         print(self.done_str)
         print(
             f"\n  [green]->[/green] Changelog generated to "
-            f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n"
+            f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n",
         )
 
     def process_release(
         self,
         f: TextIOWrapper,
-        prev_release: Union[GitRelease, Literal["HEAD"], None],
+        prev_release: GitRelease | (Literal["HEAD"] | None),
         release: GitRelease,
     ) -> None:
         """Process a single release."""
@@ -135,12 +140,12 @@ class ChangeLog:
             self.generate_diff_url(f, prev_release, release)
         f.write(
             f"## [{release.tag_name}]({release.html_url}) "
-            f"({release.created_at.date()})\n\n"
+            f"({release.created_at.date()})\n\n",
         )
         if release.title != release.tag_name and release.title:
             f.write(f"**_'{release.title}'_**\n\n")
-        pr_list: List[PullRequest] = self.pr_by_release.get(release.id, [])
-        issue_list: List[Issue] = self.issue_by_release.get(release.id, [])
+        pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
+        issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
         if len(issue_list) > 0:
             self.print_issues(f, issue_list)
@@ -160,7 +165,7 @@ class ChangeLog:
                 body += "\n"
             f.write(body)
 
-    def print_issues(self, f: TextIOWrapper, issue_list: List[Issue]) -> None:
+    def print_issues(self, f: TextIOWrapper, issue_list: list[Issue]) -> None:
         """Print all the closed issues for a given release."""
         f.write("**Closed Issues**\n\n")
         for issue in issue_list:
@@ -168,14 +173,14 @@ class ChangeLog:
             f.write(
                 f"- {escaped_title}\n"
                 f"([#{issue.number}]({issue.html_url}))\n"
-                f"by [{issue.user.login}]({issue.user.html_url})\n"
+                f"by [{issue.user.login}]({issue.user.html_url})\n",
             )
         f.write("\n")
 
     def generate_diff_url(
         self,
         f: TextIOWrapper,
-        prev_release: Union[GitRelease, str],
+        prev_release: GitRelease | str,
         release_tag: GitRelease,
     ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
@@ -184,10 +189,10 @@ class ChangeLog:
         f.write(
             f"[`Full Changelog`]"
             f"({self.repo_data.html_url}/compare/"
-            f"{release_tag.tag_name}...{prev_release})\n\n"
+            f"{release_tag.tag_name}...{prev_release})\n\n",
         )
 
-    def print_prs(self, f: TextIOWrapper, pr_list: List[PullRequest]) -> None:
+    def print_prs(self, f: TextIOWrapper, pr_list: list[PullRequest]) -> None:
         """Print all the PRs for a given release.
 
         They are sorted into sections depending on the labels they have.
@@ -221,11 +226,11 @@ class ChangeLog:
                     f.write(
                         f"- {escaped_title}\n"
                         f"([#{pr.number}]({pr.html_url}))\n"
-                        f"by [{pr.user.login}]({pr.user.html_url})\n"
+                        f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
 
-    def link_issues(self) -> Dict[int, List[Issue]]:
+    def link_issues(self) -> dict[int, list[Issue]]:
         """Link Issues to their respective Release.
 
         This will create a dictionary with the key on the release id and
@@ -236,7 +241,7 @@ class ChangeLog:
             "Release ... ",
             end="",
         )
-        issue_by_release: Dict[int, List[Issue]] = {}
+        issue_by_release: dict[int, list[Issue]] = {}
         for release in self.repo_releases[::-1]:
             issue_by_release[release.id] = []
             for issue in self.filtered_repo_issues:
@@ -267,7 +272,7 @@ class ChangeLog:
         print(self.done_str)
         return issue_by_release
 
-    def get_latest_release_date(self) -> date:
+    def get_latest_release_date(self) -> datetime.date:
         """Return the date of the latest release."""
         try:
             last_release_date = self.repo_releases[-1].created_at
@@ -278,7 +283,7 @@ class ChangeLog:
             last_release_date = first_commit.commit.committer.date
         return last_release_date
 
-    def link_pull_requests(self) -> Dict[int, List[PullRequest]]:
+    def link_pull_requests(self) -> dict[int, list[PullRequest]]:
         """Link Pull Requests to their respective Release.
 
         This will create a dictionary with the key on the release id and
@@ -289,7 +294,7 @@ class ChangeLog:
             "Release ... ",
             end="",
         )
-        pr_by_release: Dict[int, List[PullRequest]] = {}
+        pr_by_release: dict[int, list[PullRequest]] = {}
         for release in self.repo_releases[::-1]:
             pr_by_release[release.id] = []
             for pr in self.repo_prs:
@@ -315,7 +320,7 @@ class ChangeLog:
         print(self.done_str)
         return pr_by_release
 
-    def filter_issues(self) -> List[Issue]:
+    def filter_issues(self) -> list[Issue]:
         """Filter out non-merged PRs and actual issues."""
         print("\n  [green]->[/green] Filtering Issues from PRs... ", end="")
         filtered_repo_issues = [
@@ -326,16 +331,17 @@ class ChangeLog:
         print(
             f"  [green]->[/green] Found [green]"
             f"{len(filtered_repo_issues)}"
-            "[/green] Actual Closed Issues"
+            "[/green] Actual Closed Issues",
         )
         return filtered_repo_issues
 
-    def get_closed_issues(self) -> PaginatedList[Issue]:  # type: ignore
+    def get_closed_issues(self) -> PaginatedList[Issue]:  # type: ignore[return]
         """Get info on all the closed issues from GitHub."""
         print("  [green]->[/green] Getting Closed Issues ... ", end="")
         try:
             repo_issues = self.repo_data.get_issues(
-                state="closed", sort="created"
+                state="closed",
+                sort="created",
             )
         except GithubException as exc:
             git_error(exc)
@@ -354,7 +360,7 @@ class ChangeLog:
             print(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
-    def get_repo_releases(self) -> List[GitRelease]:  # type: ignore
+    def get_repo_releases(self) -> list[GitRelease]:  # type: ignore[return]
         """Get info on all the releases from GitHub."""
         print("  [green]->[/green] Getting Releases ... ", end="")
         try:
@@ -365,7 +371,7 @@ class ChangeLog:
             print(f"[green]{repo_releases.totalCount} Found[/green]")
             return list(repo_releases)
 
-    def get_repo_data(self) -> Repository:  # type: ignore
+    def get_repo_data(self) -> Repository:  # type: ignore[return]
         """Read the repository data from GitHub."""
         print("  [green]->[/green] Getting Repository data ... ", end="")
         try:
@@ -378,7 +384,6 @@ class ChangeLog:
             print(self.done_str)
             print(
                 "  [green]->[/green] Repository : "
-                f"[bold]{repo_data.full_name}[/bold]"
+                f"[bold]{repo_data.full_name}[/bold]",
             )
-            return repo_data
             return repo_data

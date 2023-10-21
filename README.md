@@ -1,5 +1,10 @@
 # Markdown Changelog Generator <!-- omit in toc -->
 
+[![PyPI
+version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/pyproject-maker)
+![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)
+[![Ruff](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml)
+
 **Generate a Markdown changelog from a Github repository.**
 
     Note: This is pre-release documentation for the next version of this

@@ -1,8 +1,8 @@
 """Define constants used throughout the application."""
 from enum import IntEnum
-from typing import List, Tuple, TypeAlias, Union
+from typing import Union
 
-SectionHeadings: TypeAlias = Tuple[str, Union[str, None]]
+SectionHeadings = tuple[str, Union[str, None]]
 
 
 class ExitErrors(IntEnum):
@@ -18,7 +18,7 @@ class ExitErrors(IntEnum):
     INVALID_ACTION = 5
 
 
-SECTIONS: List[SectionHeadings] = [
+SECTIONS: list[SectionHeadings] = [
     ("Merged Pull Requests", None),
     ("Enhancements", "enhancement"),
     ("Bug Fixes", "bug"),
@@ -26,3 +26,5 @@ SECTIONS: List[SectionHeadings] = [
     ("Documentation", "documentation"),
     ("Dependency Updates", "dependencies"),
 ]
+
+CONFIG_FILE = ".changelog_generator.toml"
