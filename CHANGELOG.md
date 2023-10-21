@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.2.0](https://github.com/seapagan/github-changelog-md/tree/HEAD) (2023-10-21)
 
 **Closed Issues**
 
@@ -16,8 +16,17 @@ by [seapagan](https://github.com/seapagan)
 - Finish Documentation
 ([#30](https://github.com/seapagan/github-changelog-md/issues/30))
 by [seapagan](https://github.com/seapagan)
+- Add testing with Pytest
+([#29](https://github.com/seapagan/github-changelog-md/issues/29))
+by [seapagan](https://github.com/seapagan)
 - Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is.
 ([#22](https://github.com/seapagan/github-changelog-md/issues/22))
+by [seapagan](https://github.com/seapagan)
+
+**Merged Pull Requests**
+
+- Add Unit testing with pytest
+([#42](https://github.com/seapagan/github-changelog-md/pull/42))
 by [seapagan](https://github.com/seapagan)
 
 **Enhancements**
@@ -61,6 +70,12 @@ by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
+- Bump faker from 19.10.0 to 19.11.0
+([#41](https://github.com/seapagan/github-changelog-md/pull/41))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+- Bump mypy from 1.6.0 to 1.6.1
+([#40](https://github.com/seapagan/github-changelog-md/pull/40))
+by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump gitpython from 3.1.37 to 3.1.38
 ([#28](https://github.com/seapagan/github-changelog-md/pull/28))
 by [dependabot[bot]](https://github.com/apps/dependabot)
