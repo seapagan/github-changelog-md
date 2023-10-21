@@ -13,7 +13,7 @@ from github import Auth, Github, GithubException
 from github.GitRelease import GitRelease
 from rich import print
 
-from github_changelog_md.config import settings
+from github_changelog_md.config import get_settings
 from github_changelog_md.constants import SECTIONS, ExitErrors
 from github_changelog_md.helpers import header
 
@@ -48,7 +48,7 @@ class ChangeLog:
         next_release: str | None,
     ) -> None:
         """Initialize the class."""
-        self.auth = Auth.Token(settings.github_pat)
+        self.auth = Auth.Token(get_settings().github_pat)
         self.git = Github(auth=self.auth)
 
         self.repo_name: str = repo_name
