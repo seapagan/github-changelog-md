@@ -130,7 +130,10 @@ target-version = "py39"       # minimum python version supported
 convention = "google"
 
 [tool.ruff.extend-per-file-ignores]
-"tests/**/*.py" = ["S101"] # we can (and MUST!) use 'assert' in test files.
+"tests/**/*.py" = [
+  "S101",   # we can (and MUST!) use 'assert' in test files.
+  "ANN001", # annotations for fixtures are sometimes a pain for test files.
+]
 "github_changelog_md/main.py" = [
   "UP007",
 ] # Typer is not compatible with that syntax
