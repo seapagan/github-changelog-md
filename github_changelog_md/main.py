@@ -1,4 +1,6 @@
 """Entry point for the main application loop."""
+from __future__ import annotations
+
 from typing import Optional
 
 import typer
@@ -18,7 +20,10 @@ app = typer.Typer(
 @app.command()
 def main(
     version: Optional[bool] = typer.Option(
-        None, "-v", "--version", is_eager=True
+        None,
+        "-v",
+        "--version",
+        is_eager=True,
     ),
     repo: Optional[str] = typer.Option(
         None,
@@ -53,9 +58,9 @@ def main(
             "\n[green]Github Changelog Markdown - "
             "Generate your CHANGELOG file automatically."
             f"\n[/green]Version: {get_app_version()}; "
-            "\u00a9 Grant Ramsay 2023\n"
+            "\u00a9 Grant Ramsay 2023\n",
         )
-        raise typer.Exit()
+        raise typer.Exit
 
     if not repo:
         """Try to get the repo from the current directory."""
@@ -66,13 +71,9 @@ def main(
                 # cant find a local repo and none specified on the cmd line.
                 print(
                     "[red]  ->  Could not find a local repository, "
-                    "Please use the --repo option.\n"
+                    "Please use the --repo option.\n",
                 )
-                raise typer.Exit()
+                raise typer.Exit
 
     cl = ChangeLog(repo, user, next_release)
     cl.run()
-
-
-if __name__ == "__main__":
-    app()
