@@ -46,3 +46,12 @@ implemented but it's good to have a list of ideas.
   need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
+- Option to hide Dependabot PRs from the changelog? Mention there are some, but
+  point to the full changelog for details.
+- Add a 'breaking changes' section to the release, with an optional flag to only
+  show this section if there are breaking changes. This will need a specific
+  GitHub label to be set on the PRs that are breaking changes. Allow to add a
+  text block to this release section. Can be added to the config file, or more
+  usefully to a dedicated file linking releases to a text block.
+- Use the above secondary config file for every release to add a custom text
+  block to the release?
