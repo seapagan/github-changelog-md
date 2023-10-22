@@ -107,9 +107,13 @@ class ChangeLog:
                     if self.next_release
                     else ""
                 )
+                release_link = (
+                    "tree/HEAD"
+                    if not self.next_release
+                    else f"releases/tag/{self.next_release}"
+                )
                 f.write(
-                    f"## [{heading}]({self.repo_data.html_url}/tree/"
-                    f"{'HEAD' if not self.next_release else self.next_release})"
+                    f"## [{heading}]({self.repo_data.html_url}/{release_link}"
                     f"{release_date}\n\n",
                 )
 

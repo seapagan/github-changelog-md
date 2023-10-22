@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.1](https://github.com/seapagan/github-changelog-md/tree/0.2.1) (2023-10-22)
+## [0.2.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.1) (2023-10-22)
 
 **Merged Pull Requests**
 
