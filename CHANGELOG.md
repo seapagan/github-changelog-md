@@ -4,6 +4,9 @@
 
 **Merged Pull Requests**
 
+- Add a credit link to the end of the file
+([#46](https://github.com/seapagan/github-changelog-md/pull/46))
+by [seapagan](https://github.com/seapagan)
 - Set schema to version 1
 ([#45](https://github.com/seapagan/github-changelog-md/pull/45))
 by [seapagan](https://github.com/seapagan)
@@ -143,3 +146,6 @@ by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump pylint from 2.17.5 to 2.17.7
 ([#5](https://github.com/seapagan/github-changelog-md/pull/5))
 by [dependabot[bot]](https://github.com/apps/dependabot)
+
+---
+*This changelog was generated using [github-changelog-md](http://changelog.seapagan.net/) by [Seapagan](https://github.com/seapagan)*
