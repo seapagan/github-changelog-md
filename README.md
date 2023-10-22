@@ -18,8 +18,9 @@ Issues closed for each release.
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
 latest to oldest in this release.
 
-For an example of the output, see the [Changelog](CHANGELOG.md) for this
-project.
+For an example of the output, see the
+[CHANGELOG](https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md)
+for this project.
 
 **Full documentation is available at:** <https://changelog.seapagan.net>
 
