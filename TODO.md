@@ -34,7 +34,6 @@ implemented but it's good to have a list of ideas.
   for this, but if that is missing too we need to say something.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
-- delete extra line-breaks from end of generated file.
 - put the 'dependency'-tagged PR's in a collapsable list at the bottom of the
   release, to avoid cluttering the changelog with a bunch of Dependabot PRs.
   _**[`This would be very useful however it breaks loading the CHANGELOG directly
@@ -55,3 +54,7 @@ implemented but it's good to have a list of ideas.
   usefully to a dedicated file linking releases to a text block.
 - Use the above secondary config file for every release to add a custom text
   block to the release?
+- Add an option to add a custom text block to the top of the changelog, eg to
+  explain the version numbering scheme or other important information.
+- Add an option to hide any unreleased changes from the changelog, eg to only
+  show changes for the latest release.
