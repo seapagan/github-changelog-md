@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**Documentation**
+
+- docs: fix wrong project links in README and index
+([#52](https://github.com/seapagan/github-changelog-md/pull/52))
+by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...HEAD)
+
 ## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (2023-10-22)
 
 **Bug Fixes**
