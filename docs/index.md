@@ -3,7 +3,7 @@
 **Generate a Markdown changelog from your Github repository.**
 
 [![PyPI
-version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/pyproject-maker)&nbsp;
+version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/github-changelog-md)&nbsp;
 ![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)&nbsp;
 [![Ruff](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml)&nbsp;
 [![Tests](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml)&nbsp;
