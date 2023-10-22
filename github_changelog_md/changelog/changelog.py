@@ -113,7 +113,7 @@ class ChangeLog:
                     else f"releases/tag/{self.next_release}"
                 )
                 f.write(
-                    f"## [{heading}]({self.repo_data.html_url}/{release_link}"
+                    f"## [{heading}]({self.repo_data.html_url}/{release_link})"
                     f"{release_date}\n\n",
                 )
 
