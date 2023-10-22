@@ -11,6 +11,12 @@ by [seapagan](https://github.com/seapagan)
 ([#45](https://github.com/seapagan/github-changelog-md/pull/45))
 by [seapagan](https://github.com/seapagan)
 
+**Bug Fixes**
+
+- Fix bug in release links when 'next release' is specified
+([#47](https://github.com/seapagan/github-changelog-md/pull/47))
+by [seapagan](https://github.com/seapagan)
+
 **Dependency Updates**
 
 - Bump pytest-mock from 3.11.1 to 3.12.0
