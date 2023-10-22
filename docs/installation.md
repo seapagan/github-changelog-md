@@ -68,6 +68,16 @@ use this on private repositories).
 
 ## Create a config file
 
+!!! danger "Dont commit the config file to your project repository!"
+
+    The config file contains your GitHub PAT, so you should not commit it to
+    your repository. It is critical that you add it to your `.gitignore` file
+    when you are using this tool in a project.
+
+    If this does end up in a repository, GitHub will automatically revoke the
+    PAT and you will need to create a new one anyway, but there is a small
+    chance someone could use it to access your repositories.
+
 This tool will look for a config file `.changelog-generator.toml` in the
 location it is run from. The config file is a simple
 [TOML](https://toml.io/en/){:target="_blank"} file with the following format:
