@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (2023-10-22)
+
+**Bug Fixes**
+
+- fix another bug with 'next-release' links
+([#50](https://github.com/seapagan/github-changelog-md/pull/50))
+by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2)
+
 ## [0.2.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.1) (2023-10-22)
 
 **Merged Pull Requests**
