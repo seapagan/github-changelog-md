@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.2.1](https://github.com/seapagan/github-changelog-md/tree/HEAD) (2023-10-22)
+
+**Merged Pull Requests**
+
+- Set schema to version 1
+([#45](https://github.com/seapagan/github-changelog-md/pull/45))
+by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
