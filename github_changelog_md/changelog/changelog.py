@@ -251,7 +251,7 @@ class ChangeLog:
         the value a list of issues.
         """
         print(
-            "\n  [green]->[/green] Linking Closed Issues to their respective "
+            "  [green]->[/green] Linking Closed Issues to their respective "
             "Release ... ",
             end="",
         )
