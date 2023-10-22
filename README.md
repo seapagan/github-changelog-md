@@ -28,6 +28,7 @@ project.
 - [Setup a GitHub PAT](#setup-a-github-pat)
   - [PAT Permissions](#pat-permissions)
 - [Create a config file](#create-a-config-file)
+- [Add the config file to your .gitignore](#add-the-config-file-to-your-gitignore)
 - [Development setup](#development-setup)
 - [License](#license)
 - [Credits](#credits)
@@ -102,6 +103,13 @@ app will continue.
 ```console
 $ github-changelog-md
 ```
+
+## Add the config file to your .gitignore
+
+Make sure you add the config file to your `.gitignore` file so you don't
+accidentally commit your PAT to your repository. If this does happen, GitHub
+will automatically revoke the PAT and you will need to create a new one anyway,
+but there is a small chance someone could use it to access your repositories.
 
 ## Development setup
 

@@ -23,6 +23,7 @@ def get_settings_object() -> Settings:
         local_file=True,
         settings_file_name=CONFIG_FILE,
         auto_create=False,
+        schema_version="1",
     )
 
 
@@ -37,7 +38,7 @@ def get_pat_input() -> str:
 
 # not too happy with this method of doing it. Ideally I need to modify the
 # Settings class to allow for a default value of PAT to be set though the
-# constructor, then enable autosave again.
+# constructor, then enable autocreate again.
 def get_settings() -> Settings:
     """Actually return a settings object.
 
