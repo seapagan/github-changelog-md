@@ -108,8 +108,8 @@ class ChangeLog:
                     else ""
                 )
                 f.write(
-                    f"## [{heading}]({self.repo_data.html_url}"
-                    "/tree/HEAD)"
+                    f"## [{heading}]({self.repo_data.html_url}/tree/"
+                    f"{'HEAD' if not self.next_release else self.next_release})"
                     f"{release_date}\n\n",
                 )
 
@@ -194,6 +194,8 @@ class ChangeLog:
         """Generate a GitHub 3-dots link to the diff between two releases."""
         if isinstance(prev_release, GitRelease):
             prev_release = prev_release.tag_name
+        elif self.next_release:
+            prev_release = self.next_release
         f.write(
             f"[`Full Changelog`]"
             f"({self.repo_data.html_url}/compare/"
