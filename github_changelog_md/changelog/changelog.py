@@ -123,6 +123,14 @@ class ChangeLog:
                 self.process_release(f, prev_release, release)
                 prev_release = release
 
+            # add a link to this generator at the bottom of the changelog
+            f.write(
+                "---\n"
+                "*This changelog was generated using "
+                "[github-changelog-md](http://changelog.seapagan.net/) "
+                "by [Seapagan](https://github.com/seapagan)*\n",
+            )
+
         print(self.done_str)
         print(
             f"\n  [green]->[/green] Changelog generated to "
