@@ -96,36 +96,13 @@ class ChangeLog:
             encoding="utf-8",
         ) as f:
             f.write("# Changelog\n\n")
-            prev_release: GitRelease | (Literal["HEAD"] | None) = None
+            self.prev_release: GitRelease | (Literal["HEAD"] | None) = None
 
-            if len(self.unreleased) > 0:
-                heading = (
-                    self.next_release if self.next_release else "Unreleased"
-                )
-                release_date = (
-                    f" ({datetime.datetime.now(tz=datetime.timezone.utc).date()})"  # noqa: E501
-                    if self.next_release
-                    else ""
-                )
-                release_link = (
-                    "tree/HEAD"
-                    if not self.next_release
-                    else f"releases/tag/{self.next_release}"
-                )
-                f.write(
-                    f"## [{heading}]({self.repo_data.html_url}/{release_link})"
-                    f"{release_date}\n\n",
-                )
-
-                if len(self.unreleased_issues) > 0:
-                    self.print_issues(f, self.unreleased_issues)
-
-                self.print_prs(f, self.unreleased)
-                prev_release = "HEAD"
+            self.process_unreleased(f)
 
             for release in self.repo_releases:
-                self.process_release(f, prev_release, release)
-                prev_release = release
+                self.process_release(f, release)
+                self.prev_release = release
 
             # add a link to this generator at the bottom of the changelog
             f.write(
@@ -141,15 +118,39 @@ class ChangeLog:
             f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n",
         )
 
+    def process_unreleased(self, f: TextIOWrapper) -> None:
+        """Process the unreleased PRs and Issues into the changelog."""
+        if len(self.unreleased) > 0:
+            heading = self.next_release if self.next_release else "Unreleased"
+            release_date = (
+                f" ({datetime.datetime.now(tz=datetime.timezone.utc).date()})"
+                if self.next_release
+                else ""
+            )
+            release_link = (
+                "tree/HEAD"
+                if not self.next_release
+                else f"releases/tag/{self.next_release}"
+            )
+            f.write(
+                f"## [{heading}]({self.repo_data.html_url}/{release_link})"
+                f"{release_date}\n\n",
+            )
+
+            if len(self.unreleased_issues) > 0:
+                self.print_issues(f, self.unreleased_issues)
+
+            self.print_prs(f, self.unreleased)
+            self.prev_release = "HEAD"
+
     def process_release(
         self,
         f: TextIOWrapper,
-        prev_release: GitRelease | (Literal["HEAD"] | None),
         release: GitRelease,
     ) -> None:
         """Process a single release."""
-        if prev_release:
-            self.generate_diff_url(f, prev_release, release)
+        if self.prev_release:
+            self.generate_diff_url(f, self.prev_release, release)
         f.write(
             f"## [{release.tag_name}]({release.html_url}) "
             f"({release.created_at.date()})\n\n",
