@@ -143,3 +143,8 @@ known-local-folder = ["github_changelog_md"]
 
 [tool.ruff.pyupgrade]
 keep-runtime-typing = true
+
+
+[[tool.mypy.overrides]]
+disable_error_code = ["method-assign"]
+module = "tests.*"
