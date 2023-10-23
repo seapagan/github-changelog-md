@@ -37,7 +37,6 @@ build-backend = "poetry.core.masonry.api"
 black = "^23.7.0"
 isort = "^5.12.0"
 pre-commit = "^3.3.3"
-pydocstyle = "^6.3.0"
 pymarkdownlnt = "^0.9.12"
 mypy = "^1.4.1"
 ruff = "^0.1.1"
@@ -102,9 +101,6 @@ exclude = '''
 )/
 '''
 
-[tool.pydocstyle]
-add-ignore = ["D104"]
-
 [tool.pymarkdown]
 plugins.md014.enabled = false
 plugins.md036.enabled = false
@@ -126,6 +122,9 @@ ignore = ["ANN101", "PGH003"] # These rules are too strict even for us 😝
 src = ["github_changelog_md"]
 target-version = "py39"       # minimum python version supported
 
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
+
 [tool.ruff.pydocstyle]
 convention = "google"
 
@@ -143,3 +142,7 @@ known-local-folder = ["github_changelog_md"]
 
 [tool.ruff.pyupgrade]
 keep-runtime-typing = true
+
+[[tool.mypy.overrides]]
+disable_error_code = ["method-assign"]
+module = "tests.*"
