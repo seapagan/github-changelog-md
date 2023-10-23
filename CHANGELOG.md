@@ -8,6 +8,12 @@
 ([#52](https://github.com/seapagan/github-changelog-md/pull/52))
 by [seapagan](https://github.com/seapagan)
 
+**Dependency Updates**
+
+- Bump actions/checkout from 3 to 4
+([#53](https://github.com/seapagan/github-changelog-md/pull/53))
+by [dependabot[bot]](https://github.com/apps/dependabot)
+
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...HEAD)
 
 ## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (2023-10-22)
