@@ -7,7 +7,8 @@ implemented but it's good to have a list of ideas.
 - Allow custom sections in the output, set by `label` or a regex.
 - Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
-- Ability to only update changes and leave the rest of the file untouched
+- Ability to only update changes and leave the rest of the file untouched (ie do
+  not re-generate previous releases, only new ones or the unreleased section).
   (allows user customization to the CHANGELOG).
 - Ability to specify a custom CHANGELOG file (e.g. `HISTORY.md` or
   `CHANGES.md`).
