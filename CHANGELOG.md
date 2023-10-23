@@ -2,6 +2,12 @@
 
 ## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
 
+**Merged Pull Requests**
+
+- Minor code refactoring
+([#54](https://github.com/seapagan/github-changelog-md/pull/54))
+by [seapagan](https://github.com/seapagan)
+
 **Documentation**
 
 - docs: fix wrong project links in README and index
