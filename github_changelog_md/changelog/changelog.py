@@ -45,8 +45,7 @@ class ChangeLog:
         self,
         repo_name: str,
         user_name: Optional[str] = None,
-        next_release: Optional[str] = None,
-        unreleased: Optional[bool] = True,
+        options: dict[str, str | bool | None] = {},
     ) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(get_settings().github_pat)
@@ -54,8 +53,7 @@ class ChangeLog:
 
         self.repo_name: str = repo_name
         self.user: str | None = user_name
-        self.next_release: str | None = next_release
-        self.show_unreleased: bool | None = unreleased
+        self.options = options
 
         self.repo_data: Repository
         self.repo_releases: list[GitRelease]
@@ -100,7 +98,7 @@ class ChangeLog:
             f.write("# Changelog\n\n")
             self.prev_release: GitRelease | (Literal["HEAD"] | None) = None
 
-            if self.show_unreleased:
+            if self.options["show_unreleased"]:
                 self.process_unreleased(f)
 
             for release in self.repo_releases:

@@ -80,5 +80,10 @@ def main(
                 )
                 raise typer.Exit
 
-    cl = ChangeLog(repo, user, next_release, unreleased)
+    options: dict[str, str | bool | None] = {
+        "next_release": next_release,
+        "show_unreleased": unreleased,
+    }
+
+    cl = ChangeLog(repo, user, options)
     cl.run()
