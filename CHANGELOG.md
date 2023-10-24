@@ -1,16 +1,24 @@
 # Changelog
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**Enhancements**
+
+- Capitalize PR and Issues ([#59](https://github.com/seapagan/github-changelog-md/pull/59)) by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...HEAD)
+
 ## [0.2.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.3) (2023-10-24)
 
 **Merged Pull Requests**
 
-- stop splitting the individual PR/Issue lines ([#57](https://github.com/seapagan/github-changelog-md/pull/57)) by [seapagan](https://github.com/seapagan)
+- Stop splitting the individual PR/Issue lines ([#57](https://github.com/seapagan/github-changelog-md/pull/57)) by [seapagan](https://github.com/seapagan)
 - Trim PR and Issue titles in changelog ([#56](https://github.com/seapagan/github-changelog-md/pull/56)) by [seapagan](https://github.com/seapagan)
 - Minor code refactoring ([#54](https://github.com/seapagan/github-changelog-md/pull/54)) by [seapagan](https://github.com/seapagan)
 
 **Documentation**
 
-- docs: fix wrong project links in README and index ([#52](https://github.com/seapagan/github-changelog-md/pull/52)) by [seapagan](https://github.com/seapagan)
+- Docs: fix wrong project links in README and index ([#52](https://github.com/seapagan/github-changelog-md/pull/52)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
@@ -23,7 +31,7 @@
 
 **Bug Fixes**
 
-- fix another bug with 'next-release' links ([#50](https://github.com/seapagan/github-changelog-md/pull/50)) by [seapagan](https://github.com/seapagan)
+- Fix another bug with 'next-release' links ([#50](https://github.com/seapagan/github-changelog-md/pull/50)) by [seapagan](https://github.com/seapagan)
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2)
 
@@ -48,9 +56,9 @@
 
 **Closed Issues**
 
-- add a '--next-release' flag which will create a virtual release containing all PRs that have been merged since the last release. ([#35](https://github.com/seapagan/github-changelog-md/issues/35)) by [seapagan](https://github.com/seapagan)
+- Add a '--next-release' flag which will create a virtual release containing all PRs that have been merged since the last release. ([#35](https://github.com/seapagan/github-changelog-md/issues/35)) by [seapagan](https://github.com/seapagan)
 - Try to take repo name from the current folder if it is a git repo ([#34](https://github.com/seapagan/github-changelog-md/issues/34)) by [seapagan](https://github.com/seapagan)
-- include closed issues in the changelog, linked to the PR that closed them. ([#31](https://github.com/seapagan/github-changelog-md/issues/31)) by [seapagan](https://github.com/seapagan)
+- Include closed issues in the changelog, linked to the PR that closed them. ([#31](https://github.com/seapagan/github-changelog-md/issues/31)) by [seapagan](https://github.com/seapagan)
 - Finish Documentation ([#30](https://github.com/seapagan/github-changelog-md/issues/30)) by [seapagan](https://github.com/seapagan)
 - Add testing with Pytest ([#29](https://github.com/seapagan/github-changelog-md/issues/29)) by [seapagan](https://github.com/seapagan)
 - Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is. ([#22](https://github.com/seapagan/github-changelog-md/issues/22)) by [seapagan](https://github.com/seapagan)
@@ -71,7 +79,7 @@
 
 **Bug Fixes**
 
-- fix bug #22 ([#24](https://github.com/seapagan/github-changelog-md/pull/24)) by [seapagan](https://github.com/seapagan)
+- Fix bug #22 ([#24](https://github.com/seapagan/github-changelog-md/pull/24)) by [seapagan](https://github.com/seapagan)
 
 **Documentation**
 
