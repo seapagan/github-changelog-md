@@ -57,5 +57,3 @@ implemented but it's good to have a list of ideas.
   block to the release?
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
-- Add an option to hide any unreleased changes from the changelog, eg to only
-  show changes for the latest release.

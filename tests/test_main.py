@@ -36,7 +36,12 @@ class TestMain:
 
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo"])
-        mock_changelog.assert_called_once_with("test_repo", None, None)
+        mock_changelog.assert_called_once_with(
+            "test_repo",
+            None,
+            None,
+            True,
+        )
         mock_changelog_instance.run.assert_called_once()
 
     def test_main_with_repo_and_user(self, mock_changelog: MockType) -> None:
@@ -46,7 +51,12 @@ class TestMain:
 
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo", "--user", "test_user"])
-        mock_changelog.assert_called_once_with("test_repo", "test_user", None)
+        mock_changelog.assert_called_once_with(
+            "test_repo",
+            "test_user",
+            None,
+            True,
+        )
         mock_changelog_instance.run.assert_called_once()
 
     def test_main_with_repo_and_user_and_next_release(
@@ -69,7 +79,12 @@ class TestMain:
                 "v1.0",
             ],
         )
-        mock_changelog.assert_called_once_with("test_repo", "test_user", "v1.0")
+        mock_changelog.assert_called_once_with(
+            "test_repo",
+            "test_user",
+            "v1.0",
+            True,
+        )
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_get_from_local_repo(
@@ -91,7 +106,12 @@ class TestMain:
 
         runner = CliRunner()
         runner.invoke(app)
-        mock_changelog.assert_called_once_with("test_local_repo", None, None)
+        mock_changelog.assert_called_once_with(
+            "test_local_repo",
+            None,
+            None,
+            True,
+        )
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_and_no_local_repo_found(

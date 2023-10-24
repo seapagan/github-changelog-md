@@ -41,7 +41,7 @@ file will be created in the current folder if it does not already exist.
 
 There are some options you can use to customize the output of the tool.
 
-### `--next-release` \ `-n`
+### `--next-release` / `-n`
 
 This option allows you to specify the name of the next release. By default, any
 PRs that are merged after the last existing release will be added to the
@@ -55,8 +55,13 @@ Useful to prep for a release before it is actually released.
 $ github-changelog-md --next-release 1.2.3
 ```
 
+### `--released` / `--no-unreleased`
+
+Choose whether to include the `Unreleased` section in the changelog. By default
+the `Unreleased` section is included (`--released`), but you can use the
+`--no-unreleased` option to exclude it
+
 ## Future plans
 
-At this time the tool does not have many options or configuration, but in the
-future we plan to add a lot of options to customize the output. See the [Todo
-List](todo_list.md) for planned features.
+See the [Todo List](todo_list.md) for planned features. There are quite a few
+more options and customizations to come.
