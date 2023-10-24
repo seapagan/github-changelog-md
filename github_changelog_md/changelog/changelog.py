@@ -184,8 +184,8 @@ class ChangeLog:
         for issue in issue_list:
             escaped_title = issue.title.replace("__", "\\_\\_").strip()
             f.write(
-                f"- {escaped_title}\n"
-                f"([#{issue.number}]({issue.html_url}))\n"
+                f"- {escaped_title} "
+                f"([#{issue.number}]({issue.html_url})) "
                 f"by [{issue.user.login}]({issue.user.html_url})\n",
             )
         f.write("\n")
@@ -239,8 +239,8 @@ class ChangeLog:
                 for pr in prs[::-1]:
                     escaped_title = pr.title.replace("__", "\\_\\_").strip()
                     f.write(
-                        f"- {escaped_title}\n"
-                        f"([#{pr.number}]({pr.html_url}))\n"
+                        f"- {escaped_title} "
+                        f"([#{pr.number}]({pr.html_url})) "
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
