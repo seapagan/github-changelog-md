@@ -46,6 +46,11 @@ def main(
         help="Name of the next release to generate the changelog for.",
         show_default=False,
     ),
+    unreleased: Optional[bool] = typer.Option(
+        default=True,
+        help="Show unreleased changes in the changelog.",
+        show_default=True,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically.
 
@@ -75,5 +80,5 @@ def main(
                 )
                 raise typer.Exit
 
-    cl = ChangeLog(repo, user, next_release)
+    cl = ChangeLog(repo, user, next_release, unreleased)
     cl.run()
