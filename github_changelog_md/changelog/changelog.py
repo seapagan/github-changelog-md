@@ -156,7 +156,7 @@ class ChangeLog:
             f"({release.created_at.date()})\n\n",
         )
         if release.title != release.tag_name and release.title:
-            f.write(f"**_'{release.title.strip()}'_**\n\n")
+            f.write(f"**_'{release.title.strip().capitalize()}'_**\n\n")
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
         issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
@@ -182,7 +182,9 @@ class ChangeLog:
         """Print all the closed issues for a given release."""
         f.write("**Closed Issues**\n\n")
         for issue in issue_list:
-            escaped_title = issue.title.replace("__", "\\_\\_").strip()
+            escaped_title = (
+                issue.title.replace("__", "\\_\\_").strip().capitalize()
+            )
             f.write(
                 f"- {escaped_title} "
                 f"([#{issue.number}]({issue.html_url})) "
@@ -237,7 +239,9 @@ class ChangeLog:
             if len(prs) > 0:
                 f.write(f"**{heading}**\n\n")
                 for pr in prs[::-1]:
-                    escaped_title = pr.title.replace("__", "\\_\\_").strip()
+                    escaped_title = (
+                        pr.title.replace("__", "\\_\\_").strip().capitalize()
+                    )
                     f.write(
                         f"- {escaped_title} "
                         f"([#{pr.number}]({pr.html_url})) "
