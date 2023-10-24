@@ -132,6 +132,5 @@ This project is released under the terms of the [MIT license](LICENSE.txt).
 
 ## Credits
 
-The original Python boilerplate for this package was created using
-[Pymaker](https://github.com/seapagan/py-maker) by [Grant
-Ramsay](https://github.com/seapagan)
+The original Python boilerplate for this package was created using my
+[Pymaker](https://github.com/seapagan/py-maker) tool.
