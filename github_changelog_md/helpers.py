@@ -72,3 +72,12 @@ def get_repo_name() -> str | None:
                 if "url" in line:
                     repo_name = Path(line.split("=")[-1]).stem
     return repo_name
+
+
+def cap_first_letter(string: str) -> str:
+    """Capitalize the first letter of a string only.
+
+    Using the build in string method capitalize() will actually change any other
+    upper case letters to lower case, which is not what we want.
+    """
+    return string[:1].upper() + string[1:]
