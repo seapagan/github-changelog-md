@@ -83,7 +83,7 @@ def cap_first_letter(string: str) -> str:
     return string[:1].upper() + string[1:]
 
 
-def get_section_name(label: str) -> str | None:
+def get_section_name(label: str | None) -> str | None:
     """Gets a section title from a label."""
     for section in SECTIONS:
         if section[1] == label:

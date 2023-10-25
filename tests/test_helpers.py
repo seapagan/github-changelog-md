@@ -6,7 +6,13 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from github_changelog_md.constants import ExitErrors
-from github_changelog_md.helpers import get_app_version, get_repo_name, header
+from github_changelog_md.helpers import (
+    cap_first_letter,
+    get_app_version,
+    get_repo_name,
+    get_section_name,
+    header,
+)
 
 if TYPE_CHECKING:
     import pytest
@@ -112,3 +118,19 @@ class TestHelpers:
 
         assert get_app_version() is None
         assert mocked_exit.call_args[0][0] == ExitErrors.OS_ERROR
+
+    def test_cap_first_letter(self) -> None:
+        """Test cap_first_letter function."""
+        result = cap_first_letter("this IS a TeST strIng")
+        assert result == "This IS a TeST strIng"
+
+    def test_get_section_name(self) -> None:
+        """The the get_section_name function.
+
+        We just test a couple of the sections. This will break if we change any
+        of the section names, but that's what tests are for!
+        """
+        assert get_section_name("bug") == "Bug Fixes"
+        assert get_section_name("dependencies") == "Dependency Updates"
+        assert get_section_name("not_a_label") is None
+        assert get_section_name(None) == "Merged Pull Requests"
