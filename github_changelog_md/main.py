@@ -1,7 +1,7 @@
 """Entry point for the main application loop."""
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 import typer
 from rich import print  # pylint: disable=redefined-builtin
@@ -80,5 +80,11 @@ def main(
                 )
                 raise typer.Exit
 
-    cl = ChangeLog(repo, user, next_release, unreleased)
+    options: dict[str, Any] = {
+        "user_name": user,
+        "next_release": next_release,
+        "show_unreleased": unreleased,
+    }
+
+    cl = ChangeLog(repo, options)
     cl.run()

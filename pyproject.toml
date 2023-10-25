@@ -123,6 +123,7 @@ ignore = [
   "PGH003",
   "FBT002",
   "FBT003",
+  "B006",
 ] # These rules are too strict even for us 😝
 src = ["github_changelog_md"]
 target-version = "py39" # minimum python version supported

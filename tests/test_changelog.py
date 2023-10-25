@@ -191,7 +191,14 @@ class TestChangelog:
         mock_path.return_value.open.return_value.__enter__.return_value = (
             MagicMock()
         )
-        changelog = ChangeLog("repo", "user")
+        changelog = ChangeLog(
+            "repo",
+            {
+                "user_name": "user",
+                "next_release": None,
+                "show_unreleased": True,
+            },
+        )
         changelog.get_repo_data = MagicMock(return_value=mock_repo_data)
         changelog.get_closed_prs = MagicMock(
             return_value=mock_repo.get_pulls.return_value,
