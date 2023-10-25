@@ -57,3 +57,4 @@ implemented but it's good to have a list of ideas.
   block to the release?
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
+- investigate adding caching of the GitHub API calls to speed up the process.
