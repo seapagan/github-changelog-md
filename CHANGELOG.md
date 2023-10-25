@@ -4,7 +4,13 @@
 
 **Enhancements**
 
+- Add and implement '--unreleased' option ([#60](https://github.com/seapagan/github-changelog-md/pull/60)) by [seapagan](https://github.com/seapagan)
 - Capitalize PR and Issues ([#59](https://github.com/seapagan/github-changelog-md/pull/59)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Migrate to 'ruff format' from 'black' ([#65](https://github.com/seapagan/github-changelog-md/pull/65)) by [seapagan](https://github.com/seapagan)
+- Refactor the handling of options ([#64](https://github.com/seapagan/github-changelog-md/pull/64)) by [seapagan](https://github.com/seapagan)
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...HEAD)
 
@@ -14,6 +20,9 @@
 
 - Stop splitting the individual PR/Issue lines ([#57](https://github.com/seapagan/github-changelog-md/pull/57)) by [seapagan](https://github.com/seapagan)
 - Trim PR and Issue titles in changelog ([#56](https://github.com/seapagan/github-changelog-md/pull/56)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
 - Minor code refactoring ([#54](https://github.com/seapagan/github-changelog-md/pull/54)) by [seapagan](https://github.com/seapagan)
 
 **Documentation**
