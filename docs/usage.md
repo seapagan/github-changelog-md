@@ -61,6 +61,13 @@ Choose whether to include the `Unreleased` section in the changelog. By default
 the `Unreleased` section is included (`--released`), but you can use the
 `--no-unreleased` option to exclude it
 
+### `--depends` / `--no-depends`
+
+Choose whether to include the `Dependency Updates` section in the changelog. By
+default this will be shown (`--depends`), but you can use the `--no-depends` to
+hide them. Some releases have a lot of dependency updates, so this can be useful
+to keep the changelog more readable.
+
 ## Future plans
 
 See the [Todo List](todo_list.md) for planned features. There are quite a few

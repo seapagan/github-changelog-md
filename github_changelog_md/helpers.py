@@ -8,7 +8,7 @@ from pathlib import Path
 import rtoml
 from rich import print  # pylint: disable=redefined-builtin
 
-from github_changelog_md.constants import ExitErrors
+from github_changelog_md.constants import SECTIONS, ExitErrors
 
 
 def get_toml_path() -> Path:
@@ -81,3 +81,11 @@ def cap_first_letter(string: str) -> str:
     upper case letters to lower case, which is not what we want.
     """
     return string[:1].upper() + string[1:]
+
+
+def get_section_name(label: str | None) -> str | None:
+    """Gets a section title from a label."""
+    for section in SECTIONS:
+        if section[1] == label:
+            return section[0]
+    return None

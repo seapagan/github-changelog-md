@@ -29,7 +29,7 @@ def main(
         None,
         "--repo",
         "-r",
-        help="Name of the repository to generate the changelog for.",
+        help="Name of the repository to generate the Changelog for.",
         show_default=False,
     ),
     user: Optional[str] = typer.Option(
@@ -48,7 +48,12 @@ def main(
     ),
     unreleased: Optional[bool] = typer.Option(
         default=True,
-        help="Show unreleased changes in the changelog.",
+        help="Show unreleased changes in the Changelog.",
+        show_default=True,
+    ),
+    depends: Optional[bool] = typer.Option(
+        default=True,
+        help="Show dependency updates in the Changelog.",
         show_default=True,
     ),
 ) -> None:
@@ -83,6 +88,7 @@ def main(
         "user_name": user,
         "next_release": next_release,
         "show_unreleased": unreleased,
+        "show_depends": depends,
     }
 
     cl = ChangeLog(repo, options)

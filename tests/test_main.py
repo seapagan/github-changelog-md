@@ -42,6 +42,7 @@ class TestMain:
                 "user_name": None,
                 "next_release": None,
                 "show_unreleased": True,
+                "show_depends": True,
             },
         )
         mock_changelog_instance.run.assert_called_once()
@@ -59,6 +60,7 @@ class TestMain:
                 "user_name": "test_user",
                 "next_release": None,
                 "show_unreleased": True,
+                "show_depends": True,
             },
         )
         mock_changelog_instance.run.assert_called_once()
@@ -89,6 +91,7 @@ class TestMain:
                 "user_name": "test_user",
                 "next_release": "v1.0",
                 "show_unreleased": True,
+                "show_depends": True,
             },
         )
         mock_changelog_instance.run.assert_called_once()
@@ -118,6 +121,7 @@ class TestMain:
                 "user_name": None,
                 "next_release": None,
                 "show_unreleased": True,
+                "show_depends": True,
             },
         )
         mock_changelog_instance.run.assert_called_once()

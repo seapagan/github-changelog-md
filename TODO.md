@@ -46,9 +46,6 @@ implemented but it's good to have a list of ideas.
   don't need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
-- Option to hide Dependabot PRs (or more specifically any PR with the
-  'dependency' label) from the changelog? Mention there are some, but
-  point to the full changelog for details.
 - Add a 'breaking changes' section to the release, with an optional flag to only
   show this section if there are breaking changes. This will need a specific
   GitHub label to be set on the PRs that are breaking changes. Allow to add a
@@ -59,3 +56,10 @@ implemented but it's good to have a list of ideas.
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
 - investigate adding caching of the GitHub API calls to speed up the process.
+- check the closed issues logic - we don't want to list issues that were closed
+  unless it is linked to a merged PR. Some issues will be closed as wrong or not
+  relevant to a release etc, and we don't want to list those.
+- some version numbers in PRs (especially dependabot) get mis-identified as
+  emojis in the output, especially if the version number contains `<3` which
+  gives <3. This is very obvious for 'pip' version numbers. We need to escape
+  this particular pattern in the PR title.
