@@ -57,5 +57,6 @@
   "python.testing.unittestEnabled": false,
   "ruff.organizeImports": false,
   "ruff.fixAll": false,
-  "mypy-type-checker.args": ["--strict"]
+  "mypy-type-checker.args": ["--strict"],
+  "evenBetterToml.formatter.columnWidth": 80
 }
