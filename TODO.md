@@ -46,7 +46,8 @@ implemented but it's good to have a list of ideas.
   need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
-- Option to hide Dependabot PRs from the changelog? Mention there are some, but
+- Option to hide Dependabot PRs (or more specifically any PR with the
+  'dependency' label) from the changelog? Mention there are some, but
   point to the full changelog for details.
 - Add a 'breaking changes' section to the release, with an optional flag to only
   show this section if there are breaking changes. This will need a specific
