@@ -125,7 +125,7 @@ class ChangeLog:
 
     def process_unreleased(self, f: TextIOWrapper) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
-        if len(self.unreleased) > 0:
+        if len(self.unreleased) > 0 or len(self.unreleased_issues) > 0:
             heading = (
                 self.options["next_release"]
                 if self.options["next_release"]
@@ -146,10 +146,9 @@ class ChangeLog:
                 f"{release_date}\n\n",
             )
 
-            if len(self.unreleased_issues) > 0:
-                self.print_issues(f, self.unreleased_issues)
-
+            self.print_issues(f, self.unreleased_issues)
             self.print_prs(f, self.unreleased)
+
             self.prev_release = "HEAD"
 
     def process_release(
@@ -169,26 +168,34 @@ class ChangeLog:
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
         issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
-        if len(issue_list) > 0:
-            self.print_issues(f, issue_list)
-        if len(pr_list) > 0:
-            self.print_prs(f, pr_list)
-        else:
-            # first remove any existing diff links so we can add our
-            # own. The auto-generated release notes on GitHub will
-            # add a diff link to the release notes. We don't want that.
-            body_lines = release.body.split("\n")
-            for i, line in enumerate(body_lines):
-                if f"{self.repo_data.html_url}/compare/" in line:
-                    body_lines.pop(i)
-                    break
-            body = "\n".join(body_lines)
-            if body[-2] != "\n":
-                body += "\n"
-            f.write(body)
+        self.print_issues(f, issue_list)
+        self.print_prs(f, pr_list)
+
+        # if no closed releases or PR's then get the release body instead
+        if len(issue_list) == 0 and len(pr_list) == 0:
+            self.get_release_body(f, release)
+
+    def get_release_body(self, f: TextIOWrapper, release: GitRelease) -> None:
+        """Read the GitHub release body.
+
+        first remove any existing diff links so we can add our
+        own. The auto-generated release notes on GitHub will
+        add a diff link to the release notes. We don't want that.
+        """
+        body_lines = release.body.split("\n")
+        for i, line in enumerate(body_lines):
+            if f"{self.repo_data.html_url}/compare/" in line:
+                body_lines.pop(i)
+                break
+        body = "\n".join(body_lines)
+        if body[-2] != "\n":
+            body += "\n"
+        f.write(body)
 
     def print_issues(self, f: TextIOWrapper, issue_list: list[Issue]) -> None:
         """Print all the closed issues for a given release."""
+        if len(issue_list) == 0:
+            return
         f.write("**Closed Issues**\n\n")
         for issue in issue_list:
             escaped_title = cap_first_letter(
@@ -223,6 +230,9 @@ class ChangeLog:
 
         They are sorted into sections depending on the labels they have.
         """
+        if len(pr_list) == 0:
+            return
+
         release_sections = {
             heading: [
                 pr
