@@ -69,10 +69,10 @@ pygments = "^2.15.1"
 [tool.poe.tasks]
 pre = "pre-commit run --all-files"
 mypy = "mypy **/*.py --strict"
-# black = "black **/*.py"
 format = "ruff format ."
 markdown = "pymarkdown scan **/*.md"
 ruff = "ruff check ."
+test = "pytest"
 lint = ["format", "ruff", "mypy"]
 
 "docs:publish" = "mkdocs gh-deploy"
