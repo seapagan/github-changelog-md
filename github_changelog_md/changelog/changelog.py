@@ -100,6 +100,13 @@ class ChangeLog:
             encoding="utf-8",
         ) as f:
             f.write("# Changelog\n\n")
+
+            if not self.options["show_depends"]:
+                f.write(
+                    "*Dependency updates are excluded from this changelog, "
+                    "check each `Full Changelog` for details.*\n\n "
+                )
+
             self.prev_release: GitRelease | (Literal["HEAD"] | None) = None
 
             if self.options["show_unreleased"]:
