@@ -2,11 +2,12 @@
 
 This will encapsulate the logic for generating the changelog.
 """
+# mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 
 import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Optional
+from typing import TYPE_CHECKING, Any, Literal
 
 import typer  # pylint: disable=redefined-builtin
 from github import Auth, Github, GithubException
@@ -44,15 +45,14 @@ class ChangeLog:
     def __init__(
         self,
         repo_name: str,
-        user_name: Optional[str] = None,
-        options: dict[str, str | bool | None] = {},
+        options: dict[str, Any],
     ) -> None:
         """Initialize the class."""
         self.auth = Auth.Token(get_settings().github_pat)
         self.git = Github(auth=self.auth)
 
         self.repo_name: str = repo_name
-        self.user: str | None = user_name
+        self.user: str | None = options["user_name"]
         self.options = options
 
         self.repo_data: Repository
@@ -122,16 +122,20 @@ class ChangeLog:
     def process_unreleased(self, f: TextIOWrapper) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
         if len(self.unreleased) > 0:
-            heading = self.next_release if self.next_release else "Unreleased"
+            heading = (
+                self.options["next_release"]
+                if self.options["next_release"]
+                else "Unreleased"
+            )
             release_date = (
                 f" ({datetime.datetime.now(tz=datetime.timezone.utc).date()})"
-                if self.next_release
+                if self.options["next_release"]
                 else ""
             )
             release_link = (
                 "tree/HEAD"
-                if not self.next_release
-                else f"releases/tag/{self.next_release}"
+                if not self.options["next_release"]
+                else f'releases/tag/{self.options["next_release"]}'
             )
             f.write(
                 f"## [{heading}]({self.repo_data.html_url}/{release_link})"
@@ -202,8 +206,8 @@ class ChangeLog:
         """Generate a GitHub 3-dots link to the diff between two releases."""
         if isinstance(prev_release, GitRelease):
             prev_release = prev_release.tag_name
-        elif self.next_release:
-            prev_release = self.next_release
+        elif self.options["next_release"]:
+            prev_release = self.options["next_release"]
         f.write(
             f"[`Full Changelog`]"
             f"({self.repo_data.html_url}/compare/"
