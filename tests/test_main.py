@@ -38,9 +38,11 @@ class TestMain:
         runner.invoke(app, ["--repo", "test_repo"])
         mock_changelog.assert_called_once_with(
             "test_repo",
-            None,
-            None,
-            True,
+            {
+                "user_name": None,
+                "next_release": None,
+                "show_unreleased": True,
+            },
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -53,9 +55,11 @@ class TestMain:
         runner.invoke(app, ["--repo", "test_repo", "--user", "test_user"])
         mock_changelog.assert_called_once_with(
             "test_repo",
-            "test_user",
-            None,
-            True,
+            {
+                "user_name": "test_user",
+                "next_release": None,
+                "show_unreleased": True,
+            },
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -81,9 +85,11 @@ class TestMain:
         )
         mock_changelog.assert_called_once_with(
             "test_repo",
-            "test_user",
-            "v1.0",
-            True,
+            {
+                "user_name": "test_user",
+                "next_release": "v1.0",
+                "show_unreleased": True,
+            },
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -108,9 +114,11 @@ class TestMain:
         runner.invoke(app)
         mock_changelog.assert_called_once_with(
             "test_local_repo",
-            None,
-            None,
-            True,
+            {
+                "user_name": None,
+                "next_release": None,
+                "show_unreleased": True,
+            },
         )
         mock_changelog_instance.run.assert_called_once()
 

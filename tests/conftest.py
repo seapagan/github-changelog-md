@@ -1,4 +1,5 @@
 """Setup some fixtures for the tests."""
+# mypy: disable-error-code="no-untyped-def"
 import pytest
 
 from github_changelog_md.constants import CONFIG_FILE
