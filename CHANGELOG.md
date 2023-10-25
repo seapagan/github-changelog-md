@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (2023-10-25)
 
 **Enhancements**
 
@@ -18,7 +18,7 @@
 - Docs: add more badges to docs ([#67](https://github.com/seapagan/github-changelog-md/pull/67)) by [seapagan](https://github.com/seapagan)
 - Clarify some areas in the docs and update linting options, list tasks ([#66](https://github.com/seapagan/github-changelog-md/pull/66)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...HEAD)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0)
 
 ## [0.2.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.3) (2023-10-24)
 
