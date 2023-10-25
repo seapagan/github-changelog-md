@@ -9,10 +9,10 @@ import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
-import typer  # pylint: disable=redefined-builtin
+import typer
 from github import Auth, Github, GithubException
 from github.GitRelease import GitRelease
-from rich import print
+from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.config import get_settings
 from github_changelog_md.constants import SECTIONS, ExitErrors

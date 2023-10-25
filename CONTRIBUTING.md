@@ -92,26 +92,41 @@ poe pre
 
 We are using [pytest](https://docs.pytest.org/) for testing.
 
-At the moment the test framework is set up but we only about 50% coverage. We
-will be adding more tests as we go along - and most definitely welcome any
+At the moment the test framework is set up but we only have about 50% coverage.
+We will be adding more tests as we go along - and most definitely welcome any
 contributions to this area!
 
 If you add any new features, please add tests for them. This will help us to
 ensure that the code is working as expected and will prevent any regressions.
 *Currently we are not enforcing this until we have better coverage of the code.*
 
+There is a task set up to run tests:
+
+```console
+$ poe test
+```
+
+You can also run the tests manually using the following command:
+
+```console
+$ pytest
+```
+
+The task is set up so we can automatically add other options in the future.
+
 ## Changelog
 
 The changelog is automatically generated, using this project, so please do not
 edit it manually.
 
-There is a POE task that will run this and update the changelog file.
+For maintaniers, there is a POE task that will run this and update the changelog
+file.
 
 ```console
 $ poe changelog
 ```
 
-you also need to add a GitHub Personal Access Token to the config file. See the
+You also need to add a GitHub Personal Access Token to the config file. See the
 section in the
 [Documentation](https://changelog.seapagan.net/installation/#setup-a-github-pat)
 for information.
@@ -120,23 +135,74 @@ for information.
 Pull Requests. This will be handled by the maintainers when a new release is
 made.**
 
+## Convenience Tasks
+
+There are a few other convenience tasks that can be run using the `poe` command.
+These are defined in the `pyproject.toml` file.
+
+Each of these tasks can have extra options added which will be passed to the
+underlying tool.
+
+Run **`mypy`** on the code base inb strict mode:
+
+```console
+$ poe mypy
+```
+
+Format the code using **`ruff format`**:
+
+```console
+$ poe format
+```
+
+Lint the code using **`ruff`**:
+
+```console
+$ poe ruff
+```
+
+Check the **Markdown**:
+
+```console
+$ poe markdown
+```
+
+Run `ruff`, `mypy` and `format` at the same time:
+
+```console
+$ poe lint
+```
+
+## Documentation Tasks
+
+These are to help with developing and updating the documentation.
+
+- `poe docs:serve` - Serve the MkDocs locally for testing and development
+- `poe docs:serve:all` - Same as above, but opens to all interfaces so you can
+  view it on other devices on your network
+- `poe docs:build` - Build the MkDocs site into the `dist` folder
+- `poe docs:publish` - Publish the docs to your GitHub pages. **Note that only
+  those with write-access to this repo can do this**.
+
 ## Guidelines
 
 Here are some guidelines to follow when contributing to `github-changelog-md`:
 
 - Follow the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide. The
-  pre-commit hooks will check for this. [Black](https://black.readthedocs.io/)
-  is installed and this is the format we are using.
+  pre-commit hooks will check for this. We are using the [Ruff
+  Formatter](https://docs.astral.sh/ruff/formatter/).
 - Try to have no linting errors or warnings. The pre-commit hooks will check for
-  this also. [Flake8](https://flake8.pycqa.org/en/latest/) is installed and
-  there are a few other linters that are run as well.
+  this also. [Ruff](https://docs.astral.sh/ruff/) is installed and set to pretty
+  strict settings. Ruff now replaces all the original linters that were
+  installed. There is also a Markdown linter.
 - [MyPy](https://mypy.readthedocs.io/en/stable/) is installed and we are using
   type hints. Please try to add type hints to your code. If you see any areas of
   the code that are missing type hints, please feel free to open a PR and add
   them 😁!
 - Write clear and concise commit messages.
 - Write tests for your code.
-- Make sure your code passes all tests before submitting a pull request.
+- Make sure your code passes all existing and new tests before submitting a pull
+  request.
 - Document your code using
   [docstrings](https://www.python.org/dev/peps/pep-0257/).
 - If you add or change any functionality, please update the documentation

@@ -126,6 +126,9 @@ Then, activate the virtual environment:
 $ poetry shell
 ```
 
+See the [website](https://changelog.seapagan.net/contributing/) for more
+information on how to contribute to this project.
+
 ## License
 
 This project is released under the terms of the [MIT license](LICENSE.txt).
