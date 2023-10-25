@@ -59,3 +59,7 @@ implemented but it's good to have a list of ideas.
 - check the closed issues logic - we don't want to list issues that were closed
   unless it is linked to a merged PR. Some issues will be closed as wrong or not
   relevant to a release etc, and we don't want to list those.
+- some version numbers in PRs (especially dependabot) get mis-identified as
+  emojis in the output, especially if the version number contains `<3` which
+  gives <3. This is very obvious for 'pip' version numbers. We need to escape
+  this particular pattern in the PR title.
