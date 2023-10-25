@@ -37,13 +37,13 @@ implemented but it's good to have a list of ideas.
   instead of explicitly linking to the GitHub page.
 - put the 'dependency'-tagged PR's in a collapsable list at the bottom of the
   release, to avoid cluttering the changelog with a bunch of Dependabot PRs.
-  _**[`This would be very useful however it breaks loading the CHANGELOG directly
+  _**`This would be very useful however it breaks loading the CHANGELOG directly
   into MkDocs as it marks this up as a collapsable boxed section and mangles the
-  formatting.`]**_
-- offer the ability to collapse other sections (or all sections) too. _**[`See
-  Above`]**_
-- add a flag eg [no changelog] to PR titles to allow skipping of PRs that don't
-  need to be in the changelog.
+  formatting.`**_
+- offer the ability to collapse other sections (or all sections) too. _**`See
+  Above`**_
+- add a flag eg \[no changelog\] to PR titles to allow skipping of PRs that
+  don't need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
 - Option to hide Dependabot PRs (or more specifically any PR with the

@@ -68,17 +68,16 @@ def main(
         raise typer.Exit
 
     if not repo:
-        """Try to get the repo from the current directory."""
-        if not repo:
-            repo = get_repo_name()
+        # Try to get the repo from the current directory.
+        repo = get_repo_name()
 
-            if not repo:
-                # cant find a local repo and none specified on the cmd line.
-                print(
-                    "[red]  ->  Could not find a local repository, "
-                    "Please use the --repo option.\n",
-                )
-                raise typer.Exit
+        if not repo:
+            # cant find a local repo and none specified on the cmd line.
+            print(
+                "[red]  ->  Could not find a local repository, "
+                "Please use the --repo option.\n",
+            )
+            raise typer.Exit
 
     options: dict[str, Any] = {
         "user_name": user,
