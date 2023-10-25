@@ -34,7 +34,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 # linting, type-checking and security checks
-black = "^23.7.0"
 isort = "^5.12.0"
 pre-commit = "^3.3.3"
 pymarkdownlnt = "^0.9.12"
@@ -69,11 +68,12 @@ pygments = "^2.15.1"
 # setup PoeThePoet tasks
 [tool.poe.tasks]
 pre = "pre-commit run --all-files"
-mypy = "mypy **/*.py"
-black = "black **/*.py"
+mypy = "mypy **/*.py --strict"
+format = "ruff format ."
 markdown = "pymarkdown scan **/*.md"
 ruff = "ruff check ."
-lint = ["black", "ruff", "mypy"]
+test = "pytest"
+lint = ["format", "ruff", "mypy"]
 
 "docs:publish" = "mkdocs gh-deploy"
 "docs:build" = "mkdocs build"
@@ -125,8 +125,15 @@ ignore = [
   "FBT003",
   "B006",
 ] # These rules are too strict even for us 😝
+extend-ignore = [
+  "COM812",
+  "COM819",
+  "Q000",
+] # these are ignored for ruff formatting
+
 src = ["github_changelog_md"]
-target-version = "py39" # minimum python version supported
+target-version = "py39"       # minimum python version supported
+
 
 [tool.ruff.pep8-naming]
 classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
