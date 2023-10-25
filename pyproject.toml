@@ -149,7 +149,8 @@ convention = "google"
 ]
 "github_changelog_md/main.py" = [
   "UP007",
-] # Typer is not compatible with that syntax
+  "PLR0913",
+] # These cause issues in Typer Apps
 
 [tool.ruff.isort]
 known-local-folder = ["github_changelog_md"]

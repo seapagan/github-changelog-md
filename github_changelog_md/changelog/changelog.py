@@ -16,7 +16,11 @@ from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.config import get_settings
 from github_changelog_md.constants import SECTIONS, ExitErrors
-from github_changelog_md.helpers import cap_first_letter, header
+from github_changelog_md.helpers import (
+    cap_first_letter,
+    get_section_name,
+    header,
+)
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -241,6 +245,11 @@ class ChangeLog:
         ]
 
         for heading, prs in release_sections.items():
+            if (
+                heading == get_section_name("dependencies")
+                and not self.options["show_depends"]
+            ):
+                continue
             if len(prs) > 0:
                 f.write(f"**{heading}**\n\n")
                 for pr in prs[::-1]:
