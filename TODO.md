@@ -1,9 +1,10 @@
 # Planned features
 
-For now, just some notes to myself. Not all of these will (or should!) be
-implemented but it's good to have a list of ideas.
+Not all of these features/ideas will (or should!) be implemented but this is an
+idea of where I want to take the project in the future.
 
-- complete testing with `pytest` to 100% or as close as possible.
+## Features to Add
+
 - Allow custom sections in the output, set by `label` or a regex.
 - Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
@@ -30,18 +31,8 @@ implemented but it's good to have a list of ideas.
 - add ability to place a section between releases with custom markdown, eg to
   explain changes in the version numbering scheme or other important
   information.
-- if there are no PR for a specific release then say something to that effect
-  instead of just leaving the section empty. We already use the Release 'body'
-  for this, but if that is missing too we need to say something.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
-- put the 'dependency'-tagged PR's in a collapsable list at the bottom of the
-  release, to avoid cluttering the changelog with a bunch of Dependabot PRs.
-  _**`This would be very useful however it breaks loading the CHANGELOG directly
-  into MkDocs as it marks this up as a collapsable boxed section and mangles the
-  formatting.`**_
-- offer the ability to collapse other sections (or all sections) too. _**`See
-  Above`**_
 - add a flag eg \[no changelog\] to PR titles to allow skipping of PRs that
   don't need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
@@ -56,10 +47,31 @@ implemented but it's good to have a list of ideas.
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
 - investigate adding caching of the GitHub API calls to speed up the process.
+
+## Improve existing functionality
+
+- if there are no PR for a specific release then say something to that effect
+  instead of just leaving the section empty. We already use the Release 'body'
+  for this, but if that is missing too we need to say something.
 - check the closed issues logic - we don't want to list issues that were closed
   unless it is linked to a merged PR. Some issues will be closed as wrong or not
   relevant to a release etc, and we don't want to list those.
+
+## Known Issues
+
 - some version numbers in PRs (especially dependabot) get mis-identified as
   emojis in the output, especially if the version number contains `<3` which
   gives <3. This is very obvious for 'pip' version numbers. We need to escape
   this particular pattern in the PR title.
+
+## Documentation
+
+- set up versioned documentation on GitHub pages using 'mike' in conjunction with
+  MkDocs. I'd like to have an 'unreleased' branch to show ongoing docs for the
+  upcoming versions if possible. See the
+  [mkdocs-material versioning](https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/){:target="_blank"}
+  page on this subject.
+
+## Testing
+
+- complete testing with `pytest` to 100% or as close as possible.
