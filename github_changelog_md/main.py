@@ -7,6 +7,7 @@ import typer
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.changelog import ChangeLog
+from github_changelog_md.constants import OUTPUT_FILE
 from github_changelog_md.helpers import get_app_version, get_repo_name
 
 app = typer.Typer(
@@ -56,6 +57,13 @@ def main(
         help="Show dependency updates in the Changelog.",
         show_default=True,
     ),
+    output: Optional[str] = typer.Option(
+        OUTPUT_FILE,
+        "--output",
+        "-o",
+        help="Output file to write the Changelog to.",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically.
 
@@ -89,6 +97,7 @@ def main(
         "next_release": next_release,
         "show_unreleased": unreleased,
         "show_depends": depends,
+        "output_file": output,
     }
 
     cl = ChangeLog(repo, options)

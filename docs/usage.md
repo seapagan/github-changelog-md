@@ -41,6 +41,15 @@ file will be created in the current folder if it does not already exist.
 
 There are some options you can use to customize the output of the tool.
 
+### `--output` / `-o`
+
+By default the tool will create a `CHANGELOG.md` file in the current folder. You
+can specify a different filename using the `--output` or `-o` option.
+
+```console
+$ github-changelog-md --output HISTORY.md
+```
+
 ### `--next-release` / `-n`
 
 This option allows you to specify the name of the next release. By default, any
@@ -55,10 +64,10 @@ Useful to prep for a release before it is actually released.
 $ github-changelog-md --next-release 1.2.3
 ```
 
-### `--released` / `--no-unreleased`
+### `--unreleased` / `--no-unreleased`
 
 Choose whether to include the `Unreleased` section in the changelog. By default
-the `Unreleased` section is included (`--released`), but you can use the
+the `Unreleased` section is included (`--unreleased`), but you can use the
 `--no-unreleased` option to exclude it
 
 ### `--depends` / `--no-depends`

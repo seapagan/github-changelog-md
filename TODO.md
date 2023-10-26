@@ -11,8 +11,6 @@ idea of where I want to take the project in the future.
 - Ability to only update changes and leave the rest of the file untouched (ie do
   not re-generate previous releases, only new ones or the unreleased section).
   (allows user customization to the CHANGELOG).
-- Ability to specify a custom CHANGELOG file (e.g. `HISTORY.md` or
-  `CHANGES.md`).
 - Ability to specify a custom template layout.
 - Ability to upload the CHANGELOG to a remote server.
 - Allow filtering of commits based on commit message or other criteria.
@@ -60,6 +58,7 @@ idea of where I want to take the project in the future.
 - check the closed issues logic - we don't want to list issues that were closed
   unless it is linked to a merged PR. Some issues will be closed as wrong or not
   relevant to a release etc, and we don't want to list those.
+- add link targets to the release headers so they can be linked to directly.
 
 ## Known Issues
 
