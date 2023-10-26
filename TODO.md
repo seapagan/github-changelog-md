@@ -47,6 +47,10 @@ idea of where I want to take the project in the future.
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
 - investigate adding caching of the GitHub API calls to speed up the process.
+- Option to automatically add each contributor to a 'CONTRIBUTERS.md' file or
+  similar. Can use comment markers in the file to indicate where to add the
+  names. Provide a default file with the comment markers in it or just document
+  the process?
 
 ## Improve existing functionality
 
