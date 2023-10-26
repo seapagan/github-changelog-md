@@ -9,6 +9,9 @@ theme:
   features:
     - navigation.footer
     - navigation.expand
+  icon:
+    logo: material/history
+  favicon: images/favicon.ico
 extra:
   social:
     - icon: fontawesome/brands/github
