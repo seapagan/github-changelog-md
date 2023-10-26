@@ -47,6 +47,9 @@ idea of where I want to take the project in the future.
   similar. Can use comment markers in the file to indicate where to add the
   names. Provide a default file with the comment markers in it or just document
   the process?
+- If there is no local config file, check for a global config file in the user's
+  home directory. This would allow a user to set their GitHub PAT once and use
+  it for all projects.
 
 ## Improve existing functionality
 
