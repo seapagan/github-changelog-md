@@ -32,13 +32,13 @@ default_options = {
 class TestCLI:
     """Test class for the CLI functionality."""
 
-    def test_main_with_version(self) -> None:
+    def test_cli_with_version(self) -> None:
         """Test the main function with the version flag."""
         runner = CliRunner()
         result = runner.invoke(app, ["--version"])
         assert "Github Changelog Markdown" in result.output
 
-    def test_main_with_repo(self, mock_changelog: MockType) -> None:
+    def test_cli_with_repo(self, mock_changelog: MockType) -> None:
         """Test the main function with the repo flag."""
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
@@ -51,7 +51,40 @@ class TestCLI:
         )
         mock_changelog_instance.run.assert_called_once()
 
-    def test_main_with_repo_and_user(self, mock_changelog: MockType) -> None:
+    @pytest.mark.parametrize(
+        "cli_options",
+        [
+            (["--output", "custom_file"], {"output_file": "custom_file"}),
+            (["--next-release", "v1.0"], {"next_release": "v1.0"}),
+            (["--unreleased"], {"show_unreleased": True}),
+            (["--no-unreleased"], {"show_unreleased": False}),
+            (["--depends"], {"show_depends": True}),
+            (["--no-depends"], {"show_depends": False}),
+        ],
+    )
+    def test_different_cli_options(
+        self,
+        mock_changelog: MockType,
+        cli_options: tuple[list[str], dict[str, bool]],
+    ) -> None:
+        """Test that the CLI options are properly passed to ChangeLog().
+
+        We only test the optional flags here.
+        """
+        mock_changelog_instance = Mock()
+        mock_changelog.return_value = mock_changelog_instance
+
+        runner = CliRunner()
+        runner.invoke(app, ["--repo", "test_repo", *cli_options[0]])
+
+        expected_options = {**default_options, **cli_options[1]}
+        mock_changelog.assert_called_once_with(
+            "test_repo",
+            expected_options,
+        )
+        mock_changelog_instance.run.assert_called_once()
+
+    def test_cli_with_repo_and_user(self, mock_changelog: MockType) -> None:
         """Test the main function with the repo and user flags."""
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
@@ -66,7 +99,7 @@ class TestCLI:
         )
         mock_changelog_instance.run.assert_called_once()
 
-    def test_main_with_repo_and_user_and_next_release(
+    def test_cli_with_repo_and_user_and_next_release(
         self,
         mock_changelog: MockType,
     ) -> None:
