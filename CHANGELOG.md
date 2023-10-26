@@ -1,5 +1,23 @@
 # Changelog
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**Enhancements**
+
+- Don't list any PRs with specific flag in the PR title ([#74](https://github.com/seapagan/github-changelog-md/pull/74)) by [seapagan](https://github.com/seapagan)
+- Allow a custom output file name ([#72](https://github.com/seapagan/github-changelog-md/pull/72)) by [seapagan](https://github.com/seapagan)
+
+**Documentation**
+
+- Change the docs logo and favicon ([#73](https://github.com/seapagan/github-changelog-md/pull/73)) by [seapagan](https://github.com/seapagan)
+- Tweak the contributing info in docs a little ([#71](https://github.com/seapagan/github-changelog-md/pull/71)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Bump actions/checkout from 3 to 4 ([#70](https://github.com/seapagan/github-changelog-md/pull/70)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...HEAD)
+
 ## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (2023-10-25)
 
 **Enhancements**
