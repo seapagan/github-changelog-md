@@ -79,8 +79,8 @@ to keep the changelog more readable.
 
 ## Hide PR from the Changelog
 
-if there is a PR that you do **NOT** wish to include in the changelog for some
-reason, you can add `[no changelog]` anywhere in the PR title and it will be
+If there is a PR that you do **NOT** wish to include in the changelog for some
+reason, you can add `[no changelog]` anywhere in the PR title, and it will be
 excluded from the changelog. This is case-insensitive, so `[No Changelog]` or
 `[NO CHANGELOG]` will also work.
 
