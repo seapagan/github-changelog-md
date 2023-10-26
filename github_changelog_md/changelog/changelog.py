@@ -95,7 +95,7 @@ class ChangeLog:
         """Generate a markdown changelog using the data we have gererated."""
         print("\n  [green]->[/green] Generating Changelog ... ", end="")
 
-        with Path(Path.cwd() / "CHANGELOG.md").open(
+        with Path(Path.cwd() / self.options["output_file"]).open(
             mode="w",
             encoding="utf-8",
         ) as f:
@@ -127,7 +127,7 @@ class ChangeLog:
         print(self.done_str)
         print(
             f"\n  [green]->[/green] Changelog generated to "
-            f"[bold]{Path.cwd() / 'CHANGELOG.md'}[/bold]\n",
+            f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
 
     def process_unreleased(self, f: TextIOWrapper) -> None:

@@ -28,3 +28,4 @@ SECTIONS: list[SectionHeadings] = [
 ]
 
 CONFIG_FILE = ".changelog_generator.toml"
+OUTPUT_FILE = "CHANGELOG.md"
