@@ -20,8 +20,17 @@ def mock_changelog(mocker: MockerFixture) -> MockType:
     return mocker.patch("github_changelog_md.main.ChangeLog")
 
 
-class TestMain:
-    """Test class for the 'main' module."""
+default_options = {
+    "user_name": None,
+    "next_release": None,
+    "show_unreleased": True,
+    "show_depends": True,
+    "output_file": "CHANGELOG.md",
+}
+
+
+class TestCLI:
+    """Test class for the CLI functionality."""
 
     def test_main_with_version(self) -> None:
         """Test the main function with the version flag."""
@@ -38,12 +47,7 @@ class TestMain:
         runner.invoke(app, ["--repo", "test_repo"])
         mock_changelog.assert_called_once_with(
             "test_repo",
-            {
-                "user_name": None,
-                "next_release": None,
-                "show_unreleased": True,
-                "show_depends": True,
-            },
+            default_options,
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -54,14 +58,11 @@ class TestMain:
 
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo", "--user", "test_user"])
+
+        expected_options = {**default_options, "user_name": "test_user"}
         mock_changelog.assert_called_once_with(
             "test_repo",
-            {
-                "user_name": "test_user",
-                "next_release": None,
-                "show_unreleased": True,
-                "show_depends": True,
-            },
+            expected_options,
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -85,14 +86,15 @@ class TestMain:
                 "v1.0",
             ],
         )
+
+        expected_options = {
+            **default_options,
+            "user_name": "test_user",
+            "next_release": "v1.0",
+        }
         mock_changelog.assert_called_once_with(
             "test_repo",
-            {
-                "user_name": "test_user",
-                "next_release": "v1.0",
-                "show_unreleased": True,
-                "show_depends": True,
-            },
+            expected_options,
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -115,14 +117,10 @@ class TestMain:
 
         runner = CliRunner()
         runner.invoke(app)
+
         mock_changelog.assert_called_once_with(
             "test_local_repo",
-            {
-                "user_name": None,
-                "next_release": None,
-                "show_unreleased": True,
-                "show_depends": True,
-            },
+            default_options,
         )
         mock_changelog_instance.run.assert_called_once()
 
