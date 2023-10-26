@@ -134,6 +134,9 @@ extend-ignore = [
 src = ["github_changelog_md"]
 target-version = "py39"       # minimum python version supported
 
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
 
 [tool.ruff.pep8-naming]
 classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
