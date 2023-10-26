@@ -77,6 +77,13 @@ default this will be shown (`--depends`), but you can use the `--no-depends` to
 hide them. Some releases have a lot of dependency updates, so this can be useful
 to keep the changelog more readable.
 
+## Hide PR from the Changelog
+
+If there is a PR that you do **NOT** wish to include in the changelog for some
+reason, you can add `[no changelog]` anywhere in the PR title, and it will be
+excluded from the changelog. This is case-insensitive, so `[No Changelog]` or
+`[NO CHANGELOG]` will also work.
+
 ## Future plans
 
 See the [Todo List](todo_list.md) for planned features. There are quite a few

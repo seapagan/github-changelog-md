@@ -31,8 +31,6 @@ idea of where I want to take the project in the future.
   information.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
-- add a flag eg \[no changelog\] to PR titles to allow skipping of PRs that
-  don't need to be in the changelog.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
 - Add a 'breaking changes' section to the release, with an optional flag to only

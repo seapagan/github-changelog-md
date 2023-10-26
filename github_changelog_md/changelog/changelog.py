@@ -270,6 +270,8 @@ class ChangeLog:
             if len(prs) > 0:
                 f.write(f"**{heading}**\n\n")
                 for pr in prs[::-1]:
+                    if "[no changelog]" in pr.title.lower():
+                        continue
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
                     )
