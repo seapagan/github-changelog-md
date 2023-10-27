@@ -125,11 +125,7 @@ ignore = [
   "FBT003",
   "B006",
 ] # These rules are too strict even for us 😝
-extend-ignore = [
-  "COM812",
-  "COM819",
-  "Q000",
-] # these are ignored for ruff formatting
+extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
 
 src = ["github_changelog_md"]
 target-version = "py39"       # minimum python version supported
