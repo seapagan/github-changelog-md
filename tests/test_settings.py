@@ -3,7 +3,7 @@
 
 import pytest
 import pytest_mock
-from simple_toml_settings.exceptions import SettingsNotFound
+from simple_toml_settings.exceptions import SettingsNotFoundError
 
 from github_changelog_md.config.settings import (
     Settings,
@@ -24,7 +24,7 @@ class TestSettings:
         fs,  # noqa: ARG002
     ) -> None:
         """Test we can't get a settings object without file existing."""
-        with pytest.raises(SettingsNotFound) as exc:
+        with pytest.raises(SettingsNotFoundError) as exc:
             get_settings_object()
 
         assert (
