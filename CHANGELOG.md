@@ -9,6 +9,7 @@
 
 **Refactoring**
 
+- Use Ruff for import sorting ([#77](https://github.com/seapagan/github-changelog-md/pull/77)) by [seapagan](https://github.com/seapagan)
 - Update simple-toml-settings library to latest ([#76](https://github.com/seapagan/github-changelog-md/pull/76)) by [seapagan](https://github.com/seapagan)
 
 **Documentation**
