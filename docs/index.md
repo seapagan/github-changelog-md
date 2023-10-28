@@ -9,16 +9,16 @@ version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.i
 This project will automatically generate a Markdown-formatted changelog from a
 Github repository. It will automatically detect the latest release and generate
 a changelog based on the **merged** Pull Requests since that release along with
-a section for **unmerged** PRs at the top. It will also include a list of all
-Issues closed for each release.
+a section for **unreleased** PRs (those since the last release) at the top. It
+will also include a list of all Issues closed for each release.
 
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
 latest to oldest in this release.
 
 There is an option to tag all the Unreleased PRs (ie those closed after the
 previous release) with an upcoming release number to ease the process of
-creating a new release by having the changelog already up to date, or hide any
-unreleased PR's completely.
+creating a new release by having the changelog already up to date, *or hide any
+unreleased PR's completely*.
 
 While the project is written in Python, it is **NOT** limited to just generating
 a changelog for Python projects. It will work with **any Github repository** and
