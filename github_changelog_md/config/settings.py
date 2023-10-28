@@ -5,7 +5,7 @@ from pathlib import Path
 from rich import print  # pylint: disable=redefined-builtin
 from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
-from simple_toml_settings.exceptions import SettingsNotFound
+from simple_toml_settings.exceptions import SettingsNotFoundError
 
 from github_changelog_md.constants import CONFIG_FILE, ExitErrors
 
@@ -48,7 +48,7 @@ def get_settings() -> Settings:
     """
     try:
         settings = get_settings_object()
-    except SettingsNotFound:
+    except SettingsNotFoundError:
         try:
             get_pat = get_pat_input()
         except KeyboardInterrupt:
