@@ -60,6 +60,9 @@ idea of where I want to take the project in the future.
   unless it is linked to a merged PR. Some issues will be closed as wrong or not
   relevant to a release etc, and we don't want to list those.
 - add link targets to the release headers so they can be linked to directly.
+- make test for lables case insensitive.
+- allow multiple labels to be used for the same section, eg 'enhancement' and
+  'enhancements' both map to the 'Enhancements' section.
 
 ## Known Issues
 

@@ -1,11 +1,15 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (2023-10-28)
 
 **Enhancements**
 
 - Don't list any PRs with specific flag in the PR title ([#74](https://github.com/seapagan/github-changelog-md/pull/74)) by [seapagan](https://github.com/seapagan)
 - Allow a custom output file name ([#72](https://github.com/seapagan/github-changelog-md/pull/72)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Update simple-toml-settings library to latest ([#76](https://github.com/seapagan/github-changelog-md/pull/76)) by [seapagan](https://github.com/seapagan)
 
 **Documentation**
 
@@ -14,9 +18,10 @@
 
 **Dependency Updates**
 
+- Bump ruff from 0.1.2 to 0.1.3 ([#75](https://github.com/seapagan/github-changelog-md/pull/75)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump actions/checkout from 3 to 4 ([#70](https://github.com/seapagan/github-changelog-md/pull/70)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...HEAD)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0)
 
 ## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (2023-10-25)
 
