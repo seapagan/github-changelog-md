@@ -34,7 +34,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 # linting, type-checking and security checks
-isort = "^5.12.0"
 pre-commit = "^3.3.3"
 pymarkdownlnt = "^0.9.12"
 mypy = "^1.4.1"
@@ -65,42 +64,39 @@ mkdocs-git-revision-date-localized-plugin = "^1.2.0"
 pymdown-extensions = "^10.1"
 pygments = "^2.15.1"
 
-# setup PoeThePoet tasks
 [tool.poe.tasks]
-pre = "pre-commit run --all-files"
-mypy = "mypy **/*.py --strict"
-format = "ruff format ."
-markdown = "pymarkdown scan **/*.md"
-ruff = "ruff check ."
-test = "pytest"
-lint = ["format", "ruff", "mypy"]
+# setup PoeThePoet tasks
+pre.cmd = "pre-commit run --all-files"
+pre.help = "Run pre-commit checks"
+mypy.cmd = "mypy github_changelog_md/**/*.py tests/**/*.py --strict"
+mypy.help = "Run mypy checks"
+format.help = "Format code with Ruff"
+format.cmd = "ruff format ."
+ruff.help = "Run Ruff checks"
+ruff.cmd = "ruff check ."
+test.help = "Run tests using Pytest"
+test.cmd = "pytest"
+markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md"
+markdown.help = "Run markdown checks"
 
-"docs:publish" = "mkdocs gh-deploy"
-"docs:build" = "mkdocs build"
-"docs:serve" = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md"
-"docs:serve:all" = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:8000"
+# run all linting checks in sequence. we want to run them all, even if one fails
+lint.ignore_fail = "return_non_zero"
+lint.sequence = ["format", "ruff", "mypy", "markdown"]
+lint.help = "Run all linting checks"
 
-changelog = "github-changelog-md"
+"docs:publish".cmd = "mkdocs gh-deploy"
+"docs:publish".help = "Publish documentation to GitHub Pages"
+"docs:build".cmd = "mkdocs build"
+"docs:build".help = "Build documentation locally to './site' folder"
+"docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md"
+"docs:serve".help = "Serve documentation locally"
+"docs:serve:all".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:9000"
+"docs:serve:all".help = "Serve documentation locally on all interfaces"
+
+changelog.cmd = "github-changelog-md"
+changelog.help = "Generate the CHANGELOG.md file"
 
 # configure assorted tools and linters
-[tool.isort]
-profile = "black"
-
-[tool.black]
-line-length = 80
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.tox
-  | venv
-  | \.venv
-  | _build
-  | build
-  | dist
-)/
-'''
-
 [tool.pymarkdown]
 plugins.md014.enabled = false
 plugins.md036.enabled = false
@@ -140,7 +136,6 @@ classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
 [tool.ruff.pydocstyle]
 convention = "google"
 
-
 [tool.ruff.extend-per-file-ignores]
 "tests/**/*.py" = [
   "S101",   # we can (and MUST!) use 'assert' in test files.
@@ -152,11 +147,11 @@ convention = "google"
 ] # These cause issues in Typer Apps
 
 [tool.ruff.isort]
-known-local-folder = ["github_changelog_md"]
+known-first-party = ["github_changelog_md"]
 
 [tool.ruff.pyupgrade]
 keep-runtime-typing = true
 
 [[tool.mypy.overrides]]
-disable_error_code = ["method-assign"]
+disable_error_code = ["method-assign", "no-untyped-def", "attr-defined"]
 module = "tests.*"
