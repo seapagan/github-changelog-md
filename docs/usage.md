@@ -26,7 +26,7 @@ $ github-changelog-md --repo <repo-name>
 
 This works for any repository that is linked to your username (determined from
 the PAT), however if you want to generate a changelog for a repository that is
-not linked to your username, you can specify the repository owner using the
+**not** linked to your username, you can specify the repository owner using the
 `--user` or `-u` option.
 
 ```console
@@ -36,6 +36,34 @@ $ github-changelog-md --user <repo-owner> --repo <repo-name>
 As mentioned in the [Installation](installation.md) section, you will be
 prompted for your GitHub PAT the first time you run the tool, and a config
 file will be created in the current folder if it does not already exist.
+
+## Release Section Headers
+
+There are a few different section headers defined, which are used to group the
+PRs in the changelog for each release. These are taken from the GitHub `labels`
+applied to the PR. The default section headers are:
+
+| **Title**            | **Label**       | **Notes**             |
+|----------------------|-----------------|-----------------------|
+| Breaking Changes     |      _breaking_ |                       |
+| Merged Pull Requests |          _None_ | Any PR with NO labels |
+| Enhancements         |   _enhancement_ |                       |
+| Bug Fixes            |           _bug_ |                       |
+| Refactoring          |      _refactor_ |                       |
+| Documentation        | _documentation_ |                       |
+| Dependency Updates   |  _dependencies_ |                       |
+
+You can tag each of your PRs with any of these labels to group them in the
+changelog - If you are using `Dependabot`, by default it will add the
+`dependencies` label.
+
+!!! tip
+
+    For the moment, limit your PRs to a single label, as the tool will only
+    include the PR in the first section it finds a label for. This will be
+    improved in future versions, and you will also be able to customize the
+    section headers and add your own. I also plan to add the ability to use
+    multiple labels for the same section, eg `enhancement` and `enhancements`
 
 ## Advanced Usage
 
