@@ -28,5 +28,13 @@ SECTIONS: list[SectionHeadings] = [
     ("Dependency Updates", "dependencies"),
 ]
 
+IGNORED_LABELS: list[str] = [
+    "duplicate",
+    "invalid",
+    "question",
+    "wontfix",
+]
+
+
 CONFIG_FILE = ".changelog_generator.toml"
 OUTPUT_FILE = "CHANGELOG.md"
