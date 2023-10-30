@@ -37,6 +37,17 @@ repos:
             "requirements.txt",
             "-o",
             "requirements.txt",
+            "--without",
+            "dev",
+          ]
+      - id: poetry-export
+        args:
+          [
+            "--without-hashes",
+            "-f",
+            "requirements.txt",
+            "-o",
+            "requirements-dev.txt",
             "--with",
             "dev",
           ]
