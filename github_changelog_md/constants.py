@@ -19,6 +19,7 @@ class ExitErrors(IntEnum):
 
 
 SECTIONS: list[SectionHeadings] = [
+    ("Breaking Changes", "breaking"),
     ("Merged Pull Requests", None),
     ("Enhancements", "enhancement"),
     ("Bug Fixes", "bug"),
