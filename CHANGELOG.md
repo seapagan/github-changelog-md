@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**Enhancements**
+
+- Add a 'breaking changes' section ([#81](https://github.com/seapagan/github-changelog-md/pull/81)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Split requirements file into prod and dev ([#82](https://github.com/seapagan/github-changelog-md/pull/82)) by [seapagan](https://github.com/seapagan)
+
+**Documentation**
+
+- Fix bad wording in front page and readme ([#79](https://github.com/seapagan/github-changelog-md/pull/79)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Bump mkdocs-material from 9.4.6 to 9.4.7 ([#80](https://github.com/seapagan/github-changelog-md/pull/80)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...HEAD)
+
 ## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (2023-10-28)
 
 **Enhancements**
