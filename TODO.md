@@ -33,11 +33,9 @@ idea of where I want to take the project in the future.
   instead of explicitly linking to the GitHub page.
 - For using the tool in a CI/CD pipeline, allow setting the `GITHUB_PAT`
   environment variable instead of creating a config file.
-- Add a 'breaking changes' section to the release, with an optional flag to only
-  show this section if there are breaking changes. This will need a specific
-  GitHub label to be set on the PRs that are breaking changes. Allow to add a
-  text block to this release section. Can be added to the config file, or more
-  usefully to a dedicated file linking releases to a text block.
+- Allow to add a text block to the 'Breaking Changes' section. Can be added to
+  the config file, or more usefully to a dedicated file linking releases to a
+  text block.
 - Use the above secondary config file for every release to add a custom text
   block to the release?
 - Add an option to add a custom text block to the top of the changelog, eg to
@@ -50,6 +48,15 @@ idea of where I want to take the project in the future.
 - If there is no local config file, check for a global config file in the user's
   home directory. This would allow a user to set their GitHub PAT once and use
   it for all projects.
+- dump markdown code for a specific release to the terminal, so it can be copy /
+  pasted into other docs.
+- option to hide certain headers, or remove all headers and just have a list of
+  PRs.
+- change the order of PRs in the output - current is newest first, but we could
+  have oldest first or alphabetical by title or something.
+- make a list of labels that are ignored, so they don't show up in the output.
+  Decent default list would be "duplicate, question, invalid, wontfix, help".
+- add verbosity levels, or run quietly only showing errors.
 
 ## Improve existing functionality
 
@@ -60,7 +67,7 @@ idea of where I want to take the project in the future.
   unless it is linked to a merged PR. Some issues will be closed as wrong or not
   relevant to a release etc, and we don't want to list those.
 - add link targets to the release headers so they can be linked to directly.
-- make test for lables case insensitive.
+- make the label logic case insensitive.
 - allow multiple labels to be used for the same section, eg 'enhancement' and
   'enhancements' both map to the 'Enhancements' section.
 
