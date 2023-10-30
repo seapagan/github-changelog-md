@@ -18,6 +18,7 @@ class ExitErrors(IntEnum):
     INVALID_ACTION = 5
 
 
+# label names should be lowercase
 SECTIONS: list[SectionHeadings] = [
     ("Breaking Changes", "breaking"),
     ("Merged Pull Requests", None),
@@ -28,6 +29,7 @@ SECTIONS: list[SectionHeadings] = [
     ("Dependency Updates", "dependencies"),
 ]
 
+# label names should be lowercase
 IGNORED_LABELS: list[str] = [
     "duplicate",
     "invalid",

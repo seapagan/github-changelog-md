@@ -46,7 +46,7 @@ applied to the PR. The default section headers are:
 | **Title**            | **Label**       | **Notes**             |
 |----------------------|-----------------|-----------------------|
 | Breaking Changes     |      _breaking_ |                       |
-| Merged Pull Requests |          _None_ | Any PR with NO labels |
+| Merged Pull Requests |                 | Any PR with NO labels |
 | Enhancements         |   _enhancement_ |                       |
 | Bug Fixes            |           _bug_ |                       |
 | Refactoring          |      _refactor_ |                       |
@@ -56,6 +56,10 @@ applied to the PR. The default section headers are:
 You can tag each of your PRs with any of these labels to group them in the
 changelog - If you are using `Dependabot`, by default it will add the
 `dependencies` label.
+
+Labels are case-insensitive, so `bug` or `BUG` will both
+match "Bug Fixes". The above order is also the order that the sections will
+appear in the changelog.
 
 !!! tip
 

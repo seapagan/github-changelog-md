@@ -76,7 +76,6 @@ minor release (patch or bug-fixes are ok as needed).
   relevant to a release etc, and we don't want to list those. `This may be fixed
   by implementing the ignore-list above`
 - add link targets to the release headers so they can be linked to directly.
-- :fire: make the label logic case insensitive.
 - :fire: allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 

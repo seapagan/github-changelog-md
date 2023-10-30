@@ -252,10 +252,10 @@ class ChangeLog:
             heading: [
                 pr
                 for pr in pr_list
-                if label in [label.name for label in pr.labels]
+                if label in [label.name.lower() for label in pr.labels]
                 and not any(
                     label in IGNORED_LABELS
-                    for label in [label.name for label in pr.labels]
+                    for label in [label.name.lower() for label in pr.labels]
                 )
             ]
             for heading, label in SECTIONS
@@ -268,12 +268,12 @@ class ChangeLog:
             pr
             for pr in pr_list
             if not any(
-                label in [label.name for label in pr.labels]
+                label in [label.name.lower() for label in pr.labels]
                 for _, label in SECTIONS
             )
             and not any(
                 label in IGNORED_LABELS
-                for label in [label.name for label in pr.labels]
+                for label in [label.name.lower() for label in pr.labels]
             )
         ]
 
