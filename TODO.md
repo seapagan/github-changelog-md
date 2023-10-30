@@ -55,9 +55,6 @@ minor release (patch or bug-fixes are ok as needed).
   PRs.
 - :fire: change the order of PRs in the output - current is newest first, but we
   could have oldest first or alphabetical by title or something.
-- :fire: make a list of labels that are ignored, so they don't show up in the
-  output. Decent default list would be "duplicate, question, invalid, wontfix,
-  help".
 - :fire: add verbosity levels, or at least a quiet mode so it doesn't print
   anything unless there are errors.
 - :fire: add more config file options to handle some of the existing command line
@@ -65,6 +62,9 @@ minor release (patch or bug-fixes are ok as needed).
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
+- :fire: option to skip certain releases, eg if there is a release that has been
+  yanked, we can skip it and not include it in the output.
+- :fire: option to start at a specific release, ignoring all previous releases.
 
 ## Improve existing functionality
 
