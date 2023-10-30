@@ -65,6 +65,22 @@ changelog - If you are using `Dependabot`, by default it will add the
     section headers and add your own. I also plan to add the ability to use
     multiple labels for the same section, eg `enhancement` and `enhancements`
 
+## Ignored Labels
+
+There are a few labels that are ignored by default, as they should not be
+included in the changelog. These are:
+
+- `duplicate`
+- `invalid`
+- `question`
+- `wontfix`
+
+These are ignored for both PRs and Issues.
+
+!!! tip
+
+    This list of ignored labels will be customizable in future versions.
+
 ## Advanced Usage
 
 There are some options you can use to customize the output of the tool.

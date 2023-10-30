@@ -15,7 +15,7 @@ from github.GitRelease import GitRelease
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.config import get_settings
-from github_changelog_md.constants import SECTIONS, ExitErrors
+from github_changelog_md.constants import IGNORED_LABELS, SECTIONS, ExitErrors
 from github_changelog_md.helpers import (
     cap_first_letter,
     get_section_name,
@@ -205,6 +205,14 @@ class ChangeLog:
             return
         f.write("**Closed Issues**\n\n")
         for issue in issue_list:
+            if (
+                any(
+                    label.name.lower() in IGNORED_LABELS
+                    for label in issue.labels
+                )
+                or "[no changelog]" in issue.title.lower()
+            ):
+                continue
             escaped_title = cap_first_letter(
                 issue.title.replace("__", "\\_\\_").strip(),
             )
@@ -245,6 +253,10 @@ class ChangeLog:
                 pr
                 for pr in pr_list
                 if label in [label.name for label in pr.labels]
+                and not any(
+                    label in IGNORED_LABELS
+                    for label in [label.name for label in pr.labels]
+                )
             ]
             for heading, label in SECTIONS
         }
@@ -258,6 +270,10 @@ class ChangeLog:
             if not any(
                 label in [label.name for label in pr.labels]
                 for _, label in SECTIONS
+            )
+            and not any(
+                label in IGNORED_LABELS
+                for label in [label.name for label in pr.labels]
             )
         ]
 
