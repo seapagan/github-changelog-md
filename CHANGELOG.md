@@ -4,6 +4,8 @@
 
 **Enhancements**
 
+- Implement quiet mode ([#86](https://github.com/seapagan/github-changelog-md/pull/86)) by [seapagan](https://github.com/seapagan)
+- Implement creating a CONTRIBUTORS file ([#85](https://github.com/seapagan/github-changelog-md/pull/85)) by [seapagan](https://github.com/seapagan)
 - Add list of ignored labels ([#83](https://github.com/seapagan/github-changelog-md/pull/83)) by [seapagan](https://github.com/seapagan)
 - Add a 'breaking changes' section ([#81](https://github.com/seapagan/github-changelog-md/pull/81)) by [seapagan](https://github.com/seapagan)
 
