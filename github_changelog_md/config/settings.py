@@ -7,13 +7,18 @@ from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
 from simple_toml_settings.exceptions import SettingsNotFoundError
 
-from github_changelog_md.constants import CONFIG_FILE, ExitErrors
+from github_changelog_md.constants import CONFIG_FILE, OUTPUT_FILE, ExitErrors
 
 
 class Settings(TOMLSettings):
     """Define the settings for the project."""
 
     github_pat: str
+    output_file: str = OUTPUT_FILE
+    unreleased: bool = True
+    quiet: bool = False
+    depends: bool = True
+    contrib: bool = False
 
 
 def get_settings_object() -> Settings:
