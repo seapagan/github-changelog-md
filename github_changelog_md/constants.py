@@ -37,6 +37,12 @@ IGNORED_LABELS: list[str] = [
     "wontfix",
 ]
 
+IGNORED_CONTRIBUTORS: list[str] = [
+    "dependabot[bot]",
+    "pre-commit-ci[bot]",
+    "dependabot-preview[bot]",
+]
 
-CONFIG_FILE = ".changelog_generator.toml"
-OUTPUT_FILE = "CHANGELOG.md"
+CONFIG_FILE: str = ".changelog_generator.toml"
+OUTPUT_FILE: str = "CHANGELOG.md"
+CONTRIBUTORS_FILE: str = "CONTRIBUTORS.md"
