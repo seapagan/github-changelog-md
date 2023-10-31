@@ -101,3 +101,5 @@ in the next release.
 ## Testing
 
 - complete testing with `pytest` to 100% or as close as possible.
+- the whole `test_changelog.py` file needs to be re-written and find a better
+  way to deal with missing options.
