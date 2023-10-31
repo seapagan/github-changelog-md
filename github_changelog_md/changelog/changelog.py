@@ -6,6 +6,8 @@ This will encapsulate the logic for generating the changelog.
 from __future__ import annotations
 
 import datetime
+import os
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -44,6 +46,7 @@ def git_error(exc: GithubException) -> None:
     print(
         f"\n[red]  X  Error {exc.status} while getting the "
         f"Repo : {exc.data.get('message')}\n",
+        file=sys.stderr,
     )
     raise typer.Exit(ExitErrors.GIT_ERROR)
 
@@ -83,6 +86,11 @@ class ChangeLog:
         Each individual step is a method that will be called in order, and
         contains it's own error handling.
         """
+        if self.options["quiet"]:
+            orig_stdout = sys.stdout
+            out = open(os.devnull, "w")  # noqa: SIM115, PTH123
+            sys.stdout = out
+
         header()
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -103,6 +111,10 @@ class ChangeLog:
         if self.options["contributors"]:
             self.contributors = self.get_contributors()
             self.update_contributors()
+
+        if self.options["quiet"]:
+            sys.stdout = orig_stdout
+            out.close()
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.

@@ -27,6 +27,7 @@ default_options = {
     "show_depends": True,
     "output_file": "CHANGELOG.md",
     "contributors": False,
+    "quiet": None,
 }
 
 
@@ -61,6 +62,9 @@ class TestCLI:
             (["--no-unreleased"], {"show_unreleased": False}),
             (["--depends"], {"show_depends": True}),
             (["--no-depends"], {"show_depends": False}),
+            (["--contrib"], {"contributors": True}),
+            (["--no-contrib"], {"contributors": False}),
+            (["--quiet"], {"quiet": True}),
         ],
     )
     def test_different_cli_options(

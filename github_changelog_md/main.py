@@ -1,6 +1,7 @@
 """Entry point for the main application loop."""
 from __future__ import annotations
 
+import sys
 from typing import Any, Optional
 
 import typer
@@ -69,6 +70,13 @@ def main(
         help="Output file to write the Changelog to.",
         show_default=False,
     ),
+    quiet: Optional[bool] = typer.Option(
+        None,
+        "--quiet",
+        "-q",
+        help="Suppress all output except errors.",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically.
 
@@ -94,6 +102,7 @@ def main(
             print(
                 "[red]  ->  Could not find a local repository, "
                 "Please use the --repo option.\n",
+                file=sys.stderr,
             )
             raise typer.Exit
 
@@ -104,6 +113,7 @@ def main(
         "show_depends": depends,
         "output_file": output,
         "contributors": contrib,
+        "quiet": quiet,
     }
 
     cl = ChangeLog(repo, options)

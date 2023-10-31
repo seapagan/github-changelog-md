@@ -142,6 +142,12 @@ Choose whether to create the `CONTRIBUTORS.md` file. By default this will be
     In future versions I will add the ability to cache the contributors list,
     which should speed things up a lot
 
+### `--quiet` / `-q`
+
+By default the tool will output some information about what it is doing, and
+some stats about the PRs and Issues it has found. You can use the `--quiet` or
+`-q` option to suppress this output.
+
 ## Hide PR from the Changelog
 
 If there is a PR that you do **NOT** wish to include in the changelog for some
