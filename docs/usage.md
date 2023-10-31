@@ -104,6 +104,9 @@ setting. The other settings are optional, and can be set on the command line
 (see the next section) instead of in the config file. Any settings in the
 config file will be overridden by the command line options.
 
+The config file is in [TOML](https://toml.io/en/){:target="_blank"} format, and
+can be edited manually.
+
 Current available options are:
 
 | **Setting**       | **Description**                    | **Default** |
@@ -114,6 +117,7 @@ Current available options are:
 | `depends`         | Include dependency updates section | `True`      |
 | `contrib`         | Create CONTRIBUTORS.md file        | `False`     |
 | `quiet`           | Suppress output                    | `False`     |
+| `skip_releases`   | List of releases to skip           | `[]`        |
 | _`schema_version`_| _Configuration schema version_     | _`1`_       |
 
 !!! tip "Config file schema version"
@@ -122,7 +126,27 @@ Current available options are:
     to be updated. If you have an older version of the config file, it may have
     some settings that are renamed or no longer used. If this is the case, the
     tool will mention this and point to the documentation so you can update your
-    config file. You should never change this setting manually.
+    config file.
+
+    You should never change this setting manually unless you are
+    updating the config file to an official newer version.
+
+### Example Configuration File
+
+```toml
+[changelog_generator]
+github_pat = "123456"
+schema_version = "1"
+unreleased = true
+quiet = false
+depends = true
+contrib = false
+skip_releases = ["1.2.3", "1.2.4"]
+```
+
+As mentioned above, the only required setting is the `github_pat` setting. The
+other settings can be left out, and the tool will use the default values (or the
+values specified on the command line).
 
 ## Advanced Usage
 
@@ -186,6 +210,19 @@ Choose whether to create the `CONTRIBUTORS.md` file. By default this will be
 By default the tool will output some information about what it is doing, and
 some stats about the PRs and Issues it has found. You can use the `--quiet` or
 `-q` option to suppress this output.
+
+### `--skip` / `-s`
+
+This option allows you to skip a release. You can specify this option multiple
+times to skip multiple releases. This is useful if you have a release that you
+do not want to include in the changelog for some reason.
+
+```console
+$ github-changelog-md --skip-release 1.2.3 --skip-release 1.2.4
+```
+
+The string specified here is the actual release **`tag`** for that release, not
+the release **`name`**.
 
 ## Hide PR from the Changelog
 
