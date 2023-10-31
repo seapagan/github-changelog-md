@@ -15,7 +15,13 @@ from github.GitRelease import GitRelease
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.config import get_settings
-from github_changelog_md.constants import IGNORED_LABELS, SECTIONS, ExitErrors
+from github_changelog_md.constants import (
+    CONTRIBUTORS_FILE,
+    IGNORED_CONTRIBUTORS,
+    IGNORED_LABELS,
+    SECTIONS,
+    ExitErrors,
+)
 from github_changelog_md.helpers import (
     cap_first_letter,
     get_section_name,
@@ -27,6 +33,7 @@ if TYPE_CHECKING:
 
     from github.Commit import Commit
     from github.Issue import Issue
+    from github.NamedUser import NamedUser
     from github.PaginatedList import PaginatedList
     from github.PullRequest import PullRequest
     from github.Repository import Repository
@@ -68,6 +75,7 @@ class ChangeLog:
         self.filtered_repo_issues: list[Issue]
         self.unreleased: list[PullRequest]
         self.unreleased_issues: list[Issue]
+        self.contributors: list[NamedUser]
 
     def run(self) -> None:
         """Run the changelog.
@@ -90,6 +98,54 @@ class ChangeLog:
         # actually generate the changelog file from all the data we have
         # collected.
         self.generate_changelog()
+
+        # update the CONTRIBUTORS.md file if requested
+        if self.options["contributors"]:
+            self.contributors = self.get_contributors()
+            self.update_contributors()
+
+    def get_contributors(self) -> list[NamedUser]:
+        """This will get all the contributors to the repo.
+
+        It will return a list of NamedUser objects, getting these from the list
+        of PRs and Issues, removing any duplicates
+        """
+        user_list: list[NamedUser] = []
+        print("  [green]->[/green] Getting Contributors ... ", end="")
+        for pr in self.repo_prs:
+            if pr.user not in user_list:
+                user_list.append(pr.user)
+        print(self.done_str)
+
+        print("  [green]->[/green] Sorting Contributors ... ", end="")
+        user_list.sort(key=lambda x: x.name if x.name else x.login)
+        print(self.done_str)
+
+        return user_list
+
+    def update_contributors(self) -> None:
+        """Update the CONTRIBUTORS.md file."""
+        print("  [green]->[/green] Updating CONTRIBUTORS.md ... ", end="")
+        with Path(Path.cwd() / CONTRIBUTORS_FILE).open(
+            mode="w",
+            encoding="utf-8",
+        ) as f:
+            f.write("# Contributors\n\n")
+            f.write(
+                "The following people have contributed to the development "
+                f"of {self.repo_data.name}:\n\n"
+            )
+            for contributor in self.contributors:
+                if contributor.login in IGNORED_CONTRIBUTORS:
+                    continue
+                name = (
+                    contributor.name if contributor.name else contributor.login
+                ).capitalize()
+                f.write(
+                    f"- {name} "
+                    f"([@{contributor.login}]({contributor.html_url}))\n",
+                )
+        print(self.done_str, "\n")
 
     def generate_changelog(self) -> None:
         """Generate a markdown changelog using the data we have gererated."""
@@ -126,7 +182,7 @@ class ChangeLog:
 
         print(self.done_str)
         print(
-            f"\n  [green]->[/green] Changelog generated to "
+            f"  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
 
