@@ -125,6 +125,23 @@ default this will be shown (`--depends`), but you can use the `--no-depends` to
 hide them. Some releases have a lot of dependency updates, so this can be useful
 to keep the changelog more readable.
 
+### `--contrib` / `--no-contrib`
+
+Choose whether to create the `CONTRIBUTORS.md` file. By default this will be
+`False` (`--no-contrib`), but you can use the `--contrib` option to enable it.
+
+!!! warning "Possibly LONG operation"
+
+    This can take a while to run, as it has to query the GitHub API for each
+    contributor. If you have a lot of contributors or many PR's, it can take a
+    few minutes to complete.
+
+    In this case it is recommended to only run this option when you are ready to
+    release a new version, and not every time you run the tool.
+
+    In future versions I will add the ability to cache the contributors list,
+    which should speed things up a lot
+
 ## Hide PR from the Changelog
 
 If there is a PR that you do **NOT** wish to include in the changelog for some

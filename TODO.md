@@ -3,8 +3,12 @@
 Not all of these features/ideas will (or should!) be implemented but this is an
 idea of where I want to take the project in the future.
 
-Items marked with ':fire:' should be implemented as a priority before the next
-minor release (patch or bug-fixes are ok as needed).
+Items marked with:
+
+- ':fire:' Should be implemented as a priority before the next minor release
+(patch or bug-fixes are ok as needed).
+- ':rocket:` Have been already implemented in the main repo and will be included
+in the next release.
 
 ## Features to Add
 
@@ -42,7 +46,7 @@ minor release (patch or bug-fixes are ok as needed).
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
 - investigate adding caching of the GitHub API calls to speed up the process.
-- :fire: Option to automatically add each contributor to a 'CONTRIBUTERS.md'
+- :rocket: Option to automatically add each contributor to a 'CONTRIBUTERS.md'
   file or similar. Can use comment markers in the file to indicate where to add
   the names. Provide a default file with the comment markers in it or just
   document the process?
