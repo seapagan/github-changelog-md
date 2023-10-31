@@ -38,6 +38,8 @@ in the next release.
   information.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
+- :rocket: implement a 'Breaking Changes' section that contains any PR with the
+  'breaking' label. This should be the first section in the changelog.
 - Allow to add a text block to the 'Breaking Changes' section. Can be added to
   the config file, or more usefully to a dedicated file linking releases to a
   text block.
@@ -61,7 +63,7 @@ in the next release.
   could have oldest first or alphabetical by title or something.
 - :rocket: add  a quiet mode so it doesn't print anything unless there are
   errors.
-- :fire: add more config file options to handle some of the existing command line
+- :rocket: add more config file options to handle some of the existing command line
   options, eg `--unreleased` and `--output`.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
@@ -69,6 +71,8 @@ in the next release.
 - :fire: option to skip certain releases, eg if there is a release that has been
   yanked, we can skip it and not include it in the output.
 - :fire: option to start at a specific release, ignoring all previous releases.
+- :rocket: add a default list of ignored labels, eg 'duplicate', 'invalid',
+  'question', 'wontfix', etc.
 
 ## Improve existing functionality
 
@@ -80,6 +84,8 @@ in the next release.
   relevant to a release etc, and we don't want to list those. `This may be fixed
   by implementing the ignore-list above`
 - add link targets to the release headers so they can be linked to directly.
+- :rocket: make labels case-insensitive, so 'enhancement' and 'Enhancement' are
+  the same.
 - :fire: allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 

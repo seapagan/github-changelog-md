@@ -1,5 +1,14 @@
 # Usage
 
+!!! tip
+
+    Read this section through to the end to learn how to configure and use the
+    tool, and to see what configuration options are available.
+
+    There are several ways to customize the output of the tool using command
+    line options, the configuration file, and by using labels or naming on your
+    PRs.
+
 ## Basic Usage
 
 Simply run the tool in the folder of a git repository and it will generate a
@@ -84,6 +93,36 @@ These are ignored for both PRs and Issues.
 !!! tip
 
     This list of ignored labels will be customizable in future versions.
+
+## Configuration File
+
+As mentioned in the [Installation](installation.md) section, this tool uses a
+configuration file to store your GitHub PAT and other settings. This file is
+created in the current folder the first time you run the tool, and is named
+`.changelog-generator.toml`. The only required setting is the **`github_pat`**
+setting. The other settings are optional, and can be set on the command line
+(see the next section) instead of in the config file. Any settings in the
+config file will be overridden by the command line options.
+
+Current available options are:
+
+| **Setting**       | **Description**                    | **Default** |
+|-------------------|------------------------------------|-------------|
+| **`github_pat`**  | Your GitHub PAT                    |             |
+| `output_file`     | Output filename                    |CHANGELOG.md |
+| `unreleased`      | Include unreleased section         | `True`      |
+| `depends`         | Include dependency updates section | `True`      |
+| `contrib`         | Create CONTRIBUTORS.md file        | `False`     |
+| `quiet`           | Suppress output                    | `False`     |
+| _`schema_version`_| _Configuration schema version_     | _`1`_       |
+
+!!! tip "Config file schema version"
+
+    The `schema_version` setting is used to determine if the config file needs
+    to be updated. If you have an older version of the config file, it may have
+    some settings that are renamed or no longer used. If this is the case, the
+    tool will mention this and point to the documentation so you can update your
+    config file. You should never change this setting manually.
 
 ## Advanced Usage
 

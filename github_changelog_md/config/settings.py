@@ -16,9 +16,9 @@ class Settings(TOMLSettings):
     github_pat: str
     output_file: str = OUTPUT_FILE
     unreleased: bool = True
-    quiet: bool = False
     depends: bool = True
     contrib: bool = False
+    quiet: bool = False
 
 
 def get_settings_object() -> Settings:
