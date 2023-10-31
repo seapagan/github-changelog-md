@@ -8,13 +8,13 @@ import typer
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.changelog import ChangeLog
-from github_changelog_md.constants import OUTPUT_FILE
+from github_changelog_md.config import get_settings
 from github_changelog_md.helpers import get_app_version, get_repo_name
 
 app = typer.Typer(
     pretty_exceptions_show_locals=False,
     add_completion=False,
-    no_args_is_help=True,
+    no_args_is_help=False,
     rich_markup_mode="rich",
 )
 
@@ -49,22 +49,22 @@ def main(
         show_default=False,
     ),
     unreleased: Optional[bool] = typer.Option(
-        default=True,
-        help="Show unreleased changes in the Changelog.",
-        show_default=True,
+        default=None,
+        help="Show unreleased changes in the Changelog, defaults to True.",
+        show_default=False,
     ),
     contrib: Optional[bool] = typer.Option(
-        default=False,
-        help="Update CONTRIBUTORS.md.",
-        show_default=True,
+        default=None,
+        help="Update CONTRIBUTORS.md, defaults to False.",
+        show_default=False,
     ),
     depends: Optional[bool] = typer.Option(
-        default=True,
-        help="Show dependency updates in the Changelog.",
-        show_default=True,
+        default=None,
+        help="Show dependency updates in the Changelog, defaults to True.",
+        show_default=False,
     ),
     output: Optional[str] = typer.Option(
-        OUTPUT_FILE,
+        None,
         "--output",
         "-o",
         help="Output file to write the Changelog to.",
@@ -106,14 +106,18 @@ def main(
             )
             raise typer.Exit
 
+    settings = get_settings()
+
     options: dict[str, Any] = {
         "user_name": user,
         "next_release": next_release,
-        "show_unreleased": unreleased,
-        "show_depends": depends,
-        "output_file": output,
-        "contributors": contrib,
-        "quiet": quiet,
+        "show_unreleased": (
+            settings.unreleased if unreleased is None else unreleased
+        ),
+        "show_depends": settings.depends if depends is None else depends,
+        "output_file": settings.output_file if output is None else output,
+        "contributors": settings.contrib if contrib is None else contrib,
+        "quiet": settings.quiet if quiet is None else quiet,
     }
 
     cl = ChangeLog(repo, options)

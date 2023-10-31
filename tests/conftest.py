@@ -10,5 +10,13 @@ def config_file(fs) -> None:  # noqa: PT004
     """Create a fake config file."""
     fs.create_file(
         CONFIG_FILE,
-        contents="[changelog_generator]\ngithub_pat = '1234'\n",
+        contents="""
+        [changelog_generator]
+        github_pat = '1234'
+        schema_version = '1'
+        unreleased = true
+        quiet = false
+        depends = true
+        contrib = false
+        """,
     )
