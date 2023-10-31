@@ -52,6 +52,11 @@ def main(
         help="Show unreleased changes in the Changelog.",
         show_default=True,
     ),
+    contrib: Optional[bool] = typer.Option(
+        default=False,
+        help="Update CONTRIBUTORS.md.",
+        show_default=True,
+    ),
     depends: Optional[bool] = typer.Option(
         default=True,
         help="Show dependency updates in the Changelog.",
@@ -98,6 +103,7 @@ def main(
         "show_unreleased": unreleased,
         "show_depends": depends,
         "output_file": output,
+        "contributors": contrib,
     }
 
     cl = ChangeLog(repo, options)

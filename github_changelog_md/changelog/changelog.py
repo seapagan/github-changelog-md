@@ -99,9 +99,10 @@ class ChangeLog:
         # collected.
         self.generate_changelog()
 
-        # update the CONTRIBUTORS.md file
-        self.contributors = self.get_contributors()
-        self.update_contributors()
+        # update the CONTRIBUTORS.md file if requested
+        if self.options["contributors"]:
+            self.contributors = self.get_contributors()
+            self.update_contributors()
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.
@@ -181,7 +182,7 @@ class ChangeLog:
 
         print(self.done_str)
         print(
-            f"\n  [green]->[/green] Changelog generated to "
+            f"  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
 
