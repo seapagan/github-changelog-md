@@ -59,7 +59,7 @@ in the next release.
   pasted into other docs.
 - option to hide certain headers, or remove all headers and just have a list of
   PRs.
-- :fire: change the order of PRs in the output - current is newest first, but we
+- change the order of PRs in the output - current is newest first, but we
   could have oldest first or alphabetical by title or something.
 - :rocket: add  a quiet mode so it doesn't print anything unless there are
   errors.
@@ -68,9 +68,11 @@ in the next release.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
-- :fire: option to skip certain releases, eg if there is a release that has been
-  yanked, we can skip it and not include it in the output.
-- :fire: option to start at a specific release, ignoring all previous releases.
+- :rocket: option to skip certain releases, eg if there is a release that has been
+  yanked, we can skip it and not include it in the output. This can be specified
+  in the config file as a list of release tags, or on the command line,
+  specified as many times as needed.
+- option to start at a specific release, ignoring all previous releases.
 - :rocket: add a default list of ignored labels, eg 'duplicate', 'invalid',
   'question', 'wontfix', etc.
 
@@ -79,14 +81,10 @@ in the next release.
 - if there are no PR for a specific release then say something to that effect
   instead of just leaving the section empty. We already use the Release 'body'
   for this, but if that is missing too we need to say something.
-- check the closed issues logic - we don't want to list issues that were closed
-  unless it is linked to a merged PR. Some issues will be closed as wrong or not
-  relevant to a release etc, and we don't want to list those. `This may be fixed
-  by implementing the ignore-list above`
 - add link targets to the release headers so they can be linked to directly.
 - :rocket: make labels case-insensitive, so 'enhancement' and 'Enhancement' are
   the same.
-- :fire: allow multiple labels to be used for the same section, eg 'enhancement'
+- allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 
 ## Known Issues
@@ -95,6 +93,9 @@ in the next release.
   emojis in the output, especially if the version number contains `<3` which
   gives <3. This is very obvious for 'pip' version numbers. We need to escape
   this particular pattern in the PR title.
+- The table styling under mobile looks a bit squashed due to setting the width
+  to 100% for better desktop display. Need to add a media query to set the width
+  better for mobile.
 
 ## Documentation
 

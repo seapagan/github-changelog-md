@@ -92,6 +92,7 @@ class ChangeLog:
             sys.stdout = out
 
         header()
+
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
         self.repo_prs = self.get_closed_prs()
@@ -161,7 +162,13 @@ class ChangeLog:
 
     def generate_changelog(self) -> None:
         """Generate a markdown changelog using the data we have gererated."""
-        print("\n  [green]->[/green] Generating Changelog ... ", end="")
+        if self.options["skip_releases"]:
+            print(
+                "\n  [green]->[/green] Skipping releases: "
+                f"{', '.join(self.options['skip_releases'])}",
+            )
+
+        print("  [green]->[/green] Generating Changelog ... ", end="")
 
         with Path(Path.cwd() / self.options["output_file"]).open(
             mode="w",
@@ -232,6 +239,11 @@ class ChangeLog:
         release: GitRelease,
     ) -> None:
         """Process a single release."""
+        if (
+            self.options["skip_releases"]
+            and release.tag_name.strip() in self.options["skip_releases"]
+        ):
+            return
         if self.prev_release:
             self.generate_diff_url(f, self.prev_release, release)
         f.write(

@@ -1,6 +1,7 @@
 """Handle the settings for the project."""
 import sys
 from pathlib import Path
+from typing import ClassVar
 
 from rich import print  # pylint: disable=redefined-builtin
 from rich.prompt import Prompt
@@ -19,6 +20,7 @@ class Settings(TOMLSettings):
     depends: bool = True
     contrib: bool = False
     quiet: bool = False
+    skip_releases: ClassVar[list[str]] = []
 
 
 def get_settings_object() -> Settings:
@@ -71,4 +73,5 @@ def get_settings() -> Settings:
                 "you have write-access to.[/red]",
             )
             sys.exit(ExitErrors.PERMISSION_DENIED)
+
     return settings

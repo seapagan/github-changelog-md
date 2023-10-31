@@ -77,6 +77,13 @@ def main(
         help="Suppress all output except errors.",
         show_default=False,
     ),
+    skip: Optional[list[str]] = typer.Option(  # noqa: B008
+        [],
+        "--skip",
+        "-s",
+        help="Skip the suplied tag. Can be specified multiple times",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically.
 
@@ -118,7 +125,8 @@ def main(
         "output_file": settings.output_file if output is None else output,
         "contributors": settings.contrib if contrib is None else contrib,
         "quiet": settings.quiet if quiet is None else quiet,
+        "skip_releases": settings.skip_releases if skip == [] else skip,
     }
 
-    cl = ChangeLog(repo, options)
-    cl.run()
+    changelog = ChangeLog(repo, options)
+    changelog.run()
