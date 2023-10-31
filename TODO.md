@@ -59,8 +59,8 @@ in the next release.
   PRs.
 - :fire: change the order of PRs in the output - current is newest first, but we
   could have oldest first or alphabetical by title or something.
-- :fire: add verbosity levels, or at least a quiet mode so it doesn't print
-  anything unless there are errors.
+- :rocket: add  a quiet mode so it doesn't print anything unless there are
+  errors.
 - :fire: add more config file options to handle some of the existing command line
   options, eg `--unreleased` and `--output`.
 - Add settings to run this as a GitHub action, so it can be run automatically
