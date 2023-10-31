@@ -26,6 +26,7 @@ default_options = {
     "show_unreleased": True,
     "show_depends": True,
     "output_file": "CHANGELOG.md",
+    "contributors": False,
 }
 
 

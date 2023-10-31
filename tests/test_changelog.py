@@ -197,6 +197,7 @@ class TestChangelog:
                 "user_name": "user",
                 "next_release": None,
                 "show_unreleased": True,
+                "contributors": False,
             },
         )
         changelog.get_repo_data = MagicMock(return_value=mock_repo_data)
