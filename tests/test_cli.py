@@ -27,7 +27,7 @@ default_options = {
     "show_depends": True,
     "output_file": "CHANGELOG.md",
     "contributors": False,
-    "quiet": None,
+    "quiet": False,
 }
 
 
