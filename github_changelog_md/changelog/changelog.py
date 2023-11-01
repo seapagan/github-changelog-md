@@ -242,10 +242,13 @@ class ChangeLog:
                 if self.options["next_release"]
                 else "Unreleased"
             )
+            text_date = (
+                datetime.datetime.now(tz=datetime.timezone.utc)
+                .date()
+                .strftime(self.settings.date_format)
+            )
             release_date = (
-                f" ({datetime.datetime.now(tz=datetime.timezone.utc).date()})"
-                if self.options["next_release"]
-                else ""
+                f" ({text_date})" if self.options["next_release"] else ""
             )
             release_link = (
                 "tree/HEAD"
@@ -275,9 +278,13 @@ class ChangeLog:
             return
         if self.prev_release:
             self.generate_diff_url(f, self.prev_release, release)
+
+        text_date = release.created_at.date().strftime(
+            self.settings.date_format
+        )
         f.write(
             f"## [{release.tag_name}]({release.html_url}) "
-            f"({release.created_at.date().strftime(self.settings.date_format)})\n\n",
+            f"({text_date})\n\n",
         )
         if release.title != release.tag_name and release.title:
             f.write(f"**_'{cap_first_letter(release.title.strip())}'_**\n\n")
