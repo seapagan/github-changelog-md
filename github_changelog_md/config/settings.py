@@ -26,6 +26,7 @@ class Settings(TOMLSettings):
     quiet: bool = False
     skip_releases: ClassVar[list[str]] = []
     extend_sections: ClassVar[list[dict[str, str]]] = []
+    date_format: str = "%Y-%m-%d"
 
 
 def get_settings_object() -> Settings:

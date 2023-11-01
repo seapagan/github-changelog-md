@@ -158,6 +158,7 @@ Current available options are:
 | `quiet`           | Suppress output                    | `False`     |
 | `skip_releases`   | List of releases to skip           | `[]`        |
 | `extend_sections` | Add custom sections                | `[]`        |
+| `date_format`     | Date format for release dates      | `%Y-%m-%d`  |
 | _`schema_version`_| _Configuration schema version_     | _`1`_       |
 
 !!! tip "Config file schema version"
@@ -185,11 +186,27 @@ skip_releases = ["1.2.3", "1.2.4"]
 extend_sections = [
   { title = "Automatic Testing", label = "testing" },
 ]
+date_format = "%d %B %Y"
 ```
 
 As mentioned above, the only required setting is the `github_pat` setting. The
 other settings can be left out, and the tool will use the default values (or the
 values specified on the command line).
+
+!!! info "Custom Date Format"
+
+    The `date_format` setting allows you to specify a custom date format for the
+    release dates. The default is "`%Y-%m-%d`" (`Year-month-day`) which will
+    give you dates like `2023-10-01`. You can use any of the normal Python
+    [strftime](https://strftime.org/){:target="_blank"} options to customize the
+    date format. This is a full timestamp, so you can include the time as well
+    if you want (though that is probably a bit overkill for a changelog).
+
+    I quite like "`%B %d, %Y`" (`month day, year`) which will give you dates like
+    `November 01, 2023`.
+
+    There is no CLI option for this setting, so you will need to edit the config
+    file manually if you want to change it.
 
 ## Command Line Options
 
@@ -200,7 +217,7 @@ There are some options you can use to customize the output of the tool.
 By default the tool will create a `CHANGELOG.md` file in the current folder. You
 can specify a different filename using the `--output` or `-o` option.
 
-```console
+```terminal
 $ github-changelog-md --output HISTORY.md
 ```
 
@@ -214,7 +231,7 @@ that section instead.
 
 Useful to prep for a release before it is actually released.
 
-```console
+```terminal
 $ github-changelog-md --next-release 1.2.3
 ```
 
@@ -260,8 +277,8 @@ This option allows you to skip a release. You can specify this option multiple
 times to skip multiple releases. This is useful if you have a release that you
 do not want to include in the changelog for some reason.
 
-```console
-$ github-changelog-md --skip-release 1.2.3 --skip-release 1.2.4
+```terminal
+$ github-changelog-md --skip 1.2.3 --skip 1.3-beta1
 ```
 
 The string specified here is the actual release **`tag`** for that release, not
