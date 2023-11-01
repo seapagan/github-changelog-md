@@ -99,6 +99,5 @@ def get_index_of_tuple(
         if t[index] == value:
             return pos
 
-    # Matches behavior of list.index
-    error_msg = "list.index(x): x not in list"
+    error_msg = f"'{value}' is not in the supplied list of Tuples"
     raise ValueError(error_msg)
