@@ -23,9 +23,11 @@ from github_changelog_md.constants import (
     IGNORED_LABELS,
     SECTIONS,
     ExitErrors,
+    SectionHeadings,
 )
 from github_changelog_md.helpers import (
     cap_first_letter,
+    get_index_of_tuple,
     get_section_name,
     header,
 )
@@ -101,11 +103,7 @@ class ChangeLog:
 
         header()
 
-        extend_sections = [
-            (section["title"], section["label"])
-            for section in self.settings.extend_sections
-        ]
-        self.sections = SECTIONS + extend_sections
+        self.sections: list[SectionHeadings] = self.extend_sections()
 
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -130,6 +128,15 @@ class ChangeLog:
         if self.options["quiet"]:
             sys.stdout = orig_stdout
             out.close()
+
+    def extend_sections(self) -> list[SectionHeadings]:
+        """Extend the default sections with any user defined ones."""
+        extend_sections = [
+            (section["title"], section["label"])
+            for section in self.settings.extend_sections
+        ]
+        deps_index = get_index_of_tuple(SECTIONS, 1, "dependencies")
+        return SECTIONS[:deps_index] + extend_sections + SECTIONS[deps_index:]
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.
