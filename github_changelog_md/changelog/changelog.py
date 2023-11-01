@@ -255,7 +255,7 @@ class ChangeLog:
             self.generate_diff_url(f, self.prev_release, release)
         f.write(
             f"## [{release.tag_name}]({release.html_url}) "
-            f"({release.created_at.date()})\n\n",
+            f"({release.created_at.date().strftime(self.settings.date_format)})\n\n",
         )
         if release.title != release.tag_name and release.title:
             f.write(f"**_'{cap_first_letter(release.title.strip())}'_**\n\n")
