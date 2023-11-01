@@ -128,6 +128,16 @@ Then, activate the virtual environment:
 $ poetry shell
 ```
 
+If you don't want to use Poetry, you can create a virtual environment yourself
+then install the dependencies using pip:
+
+```console
+$ pip install -r requirements-dev.txt
+```
+
+Note however that Poetry will be installed anyway as a dependency of the
+project, so you may as well take the time to learn and use it! :grin:
+
 See the [Contributing](https://changelog.seapagan.net/contributing/) section in
 the documentation for more information on how to contribute to this project.
 

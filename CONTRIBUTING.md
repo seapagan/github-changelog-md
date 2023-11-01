@@ -200,7 +200,7 @@ Check the **Markdown**:
 $ poe markdown
 ```
 
-Run `ruff`, `mypy` and `format` at the same time:
+Run `ruff`, `mypy`, `format` and `markdown` at the same time:
 
 ```console
 $ poe lint
