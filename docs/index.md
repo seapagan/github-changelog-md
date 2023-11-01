@@ -13,7 +13,7 @@ a section for **unreleased** PRs (those since the last release) at the top. It
 will also include a list of all Issues closed for each release.
 
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
-latest to oldest in this release.
+latest to oldest in this release. You can add a custom section to the list too.
 
 There is an option to tag all the Unreleased PRs (ie those closed after the
 previous release) with an upcoming release number to ease the process of
@@ -24,7 +24,7 @@ While the project is written in Python, it is **NOT** limited to just generating
 a changelog for Python projects. It will work with **any Github repository** and
 therefore **any coding language**. In this case a
 [global](installation.md#globally) installation is recommended. Most linux-based
-systems will already have Python installed, but if not it is easy to install.
+systems will already have Python installed, but if not, it is easy to install.
 Windows and the latest releases of MacOS will need Python to be installed, see
 the [Python documentation](https://www.python.org/downloads/){:target="_blank"}
 for details.

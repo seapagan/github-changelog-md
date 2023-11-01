@@ -66,16 +66,51 @@ You can tag each of your PRs with any of these labels to group them in the
 changelog - If you are using `Dependabot`, by default it will add the
 `dependencies` label.
 
-Labels are case-insensitive, so `bug` or `BUG` will both
-match "Bug Fixes". The above order is also the order that the sections will
-appear in the changelog.
+Labels are **case-insensitive**, so `bug` or `BUG` will both match "Bug Fixes".
+The above order is also the order that the sections will appear in the
+changelog, again this order will be customizable in future versions.
+
+### Custom Sections
+
+You can also **add** your own custom section headers, by adding a `label` to
+your PRs that matches the `label` you specify in the config file. For example,
+if you add the following to your config file:
+
+```toml
+extend_sections = [
+  { title = "Automatic Testing", label = "testing" },
+  { title = "Security", label = "security" },
+]
+```
+
+Now, any PRs that have the `testing` label will be added to a section called
+`Automatic Testing`, and `security` will be in `Security`. At the moment these
+are added at the end of the release section, future versions will allow you to
+specify the order of the sections. There is no limit to the number of custom
+sections you can add.
+
+The format for this option is an [array of
+tables](https://toml.io/en/v1.0.0#array-of-tables){:target="_blank}, with each
+table containing a `title` and a `label`. The above example uses an `inline TOML
+array of tables` but the normal fomat will also work:
+
+```toml
+[[extend_sections]]
+title = "Automatic Testing"
+label = "testing"
+
+[[extend_sections]]
+title = "Security"
+label = "security"
+```
+
+Inline arrays as in the first example are just a bit easier to read.
 
 !!! tip
 
-    For the moment, limit your PRs to a single label, as the tool will only
-    include the PR in the first section it finds a label for. This will be
-    improved in future versions, and you will also be able to customize the
-    section headers and add your own. I also plan to add the ability to use
+    For the moment, limit your PRs to a single label, as otherwise the tool will
+    include the PR in each section it finds a label for. This will be improved
+    in future versions. I also plan to add the ability to use
     multiple labels for the same section, eg `enhancement` and `enhancements`
 
 ## Ignored Labels
@@ -92,7 +127,10 @@ These are ignored for both PRs and Issues.
 
 !!! tip
 
-    This list of ignored labels will be customizable in future versions.
+    This list of ignored labels will be customizable in future versions using a
+    combination of `extend_ignored_labels` and `ignored_labels`. There will
+    probably also be an `allowed_labels` option, so you can specify which of the
+    default ignored labels you want to include in the changelog.
 
 ## Configuration File
 
@@ -105,7 +143,8 @@ setting. The other settings are optional, and can be set on the command line
 config file will be overridden by the command line options.
 
 The config file is in [TOML](https://toml.io/en/){:target="_blank"} format, and
-can be edited manually.
+can be edited manually. All settings are under the `[changelog_generator]`
+section, and any other sections will be ignored.
 
 Current available options are:
 
@@ -118,6 +157,7 @@ Current available options are:
 | `contrib`         | Create CONTRIBUTORS.md file        | `False`     |
 | `quiet`           | Suppress output                    | `False`     |
 | `skip_releases`   | List of releases to skip           | `[]`        |
+| `extend_sections` | Add custom sections                | `[]`        |
 | _`schema_version`_| _Configuration schema version_     | _`1`_       |
 
 !!! tip "Config file schema version"
@@ -142,13 +182,16 @@ quiet = false
 depends = true
 contrib = false
 skip_releases = ["1.2.3", "1.2.4"]
+extend_sections = [
+  { title = "Automatic Testing", label = "testing" },
+]
 ```
 
 As mentioned above, the only required setting is the `github_pat` setting. The
 other settings can be left out, and the tool will use the default values (or the
 values specified on the command line).
 
-## Advanced Usage
+## Command Line Options
 
 There are some options you can use to customize the output of the tool.
 

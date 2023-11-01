@@ -33,6 +33,7 @@
   "git.enableCommitSigning": true,
   "html.format.indentHandlebars": true,
   "html.format.templating": true,
+  "markdownlint.ignore": ["CHANGELOG.md"],
   "material-icon-theme.languages.associations": {
     "jinja-html": "django"
   },

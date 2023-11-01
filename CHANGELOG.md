@@ -4,6 +4,7 @@
 
 **Enhancements**
 
+- Skip release(s) through CLI option or in settings ([#88](https://github.com/seapagan/github-changelog-md/pull/88)) by [seapagan](https://github.com/seapagan)
 - Implement getting settings from the config file ([#87](https://github.com/seapagan/github-changelog-md/pull/87)) by [seapagan](https://github.com/seapagan)
 - Implement quiet mode ([#86](https://github.com/seapagan/github-changelog-md/pull/86)) by [seapagan](https://github.com/seapagan)
 - Implement creating a CONTRIBUTORS file ([#85](https://github.com/seapagan/github-changelog-md/pull/85)) by [seapagan](https://github.com/seapagan)
