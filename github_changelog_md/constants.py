@@ -16,6 +16,7 @@ class ExitErrors(IntEnum):
     USER_ABORT = 3
     OS_ERROR = 4
     INVALID_ACTION = 5
+    NO_PAT = 6
 
 
 # label names should be lowercase
