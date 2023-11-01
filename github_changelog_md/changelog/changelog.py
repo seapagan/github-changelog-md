@@ -135,8 +135,16 @@ class ChangeLog:
             (section["title"], section["label"])
             for section in self.settings.extend_sections
         ]
-        deps_index = get_index_of_tuple(SECTIONS, 1, "dependencies")
-        return SECTIONS[:deps_index] + extend_sections + SECTIONS[deps_index:]
+
+        insert_index = (
+            self.settings.extend_sections_index
+            if self.settings.extend_sections_index
+            else get_index_of_tuple(SECTIONS, 1, "dependencies")
+        )
+
+        return (
+            SECTIONS[:insert_index] + extend_sections + SECTIONS[insert_index:]
+        )
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.
