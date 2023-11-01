@@ -12,24 +12,21 @@ in the next release.
 
 ## Features to Add
 
-- :rocket: Allow custom sections in the output, set by `label`.
 - allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
-- Allow custom ordering of sections.
+- :fire: Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
 - Ability to only update changes and leave the rest of the file untouched (ie do
   not re-generate previous releases, only new ones or the unreleased section).
   (allows user customization to the CHANGELOG).
 - Ability to specify a custom template layout.
-- Ability to upload the CHANGELOG to a remote server.
 - Allow filtering of commits based on commit message or other criteria.
 - Allow customization of the commit message format in the changelog.
-- :rocket: Allow customization of the date format in the changelog.
 - Add support for generating changelogs for specific time periods (e.g. last
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- add ability to create a new release on GitHub with the latest changelog
+- :fire: add ability to create a new release on GitHub with the latest changelog
   text as the body.
 - add some form of text or even block to the oldest release that says something
   like "First release" or "Initial release" or "Initial commit" or something
@@ -40,8 +37,6 @@ in the next release.
   information.
 - option to change PR/Issue/Commit links to use the GitHub autolink syntax
   instead of explicitly linking to the GitHub page.
-- :rocket: implement a 'Breaking Changes' section that contains any PR with the
-  'breaking' label. This should be the first section in the changelog.
 - Allow to add a text block to the 'Breaking Changes' section. Can be added to
   the config file, or more usefully to a dedicated file linking releases to a
   text block.
@@ -50,38 +45,28 @@ in the next release.
 - Add an option to add a custom text block to the top of the changelog, eg to
   explain the version numbering scheme or other important information.
 - investigate adding caching of the GitHub API calls to speed up the process.
-- :rocket: Option to automatically add each contributor to a 'CONTRIBUTERS.md'
-  file or similar. Can use comment markers in the file to indicate where to add
-  the names. Provide a default file with the comment markers in it or just
-  document the process?
-- If there is no local config file, check for a global config file in the
+- for the `--contrib` option, allow to use an existing file with comment markers
+  in the file to indicate where to add the names. Provide a default file with
+  the comment markers in it or just document the process?
+- :fire: If there is no local config file, check for a global config file in the
   user's home directory. This would allow a user to set their GitHub PAT once
   and use it for all projects.
 - dump markdown code for a specific release to the terminal, so it can be copy /
   pasted into other docs.
 - option to hide certain headers, or remove all headers and just have a list of
   PRs.
-- change the order of PRs in the output - current is newest first, but we
+- :fire: change the order of PRs in the output - current is newest first, but we
   could have oldest first or alphabetical by title or something.
-- :rocket: add  a quiet mode so it doesn't print anything unless there are
-  errors.
-- :rocket: add more config file options to handle some of the existing command line
-  options, eg `--unreleased` and `--output`.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
-- :rocket: option to skip certain releases, eg if there is a release that has been
-  yanked, we can skip it and not include it in the output. This can be specified
-  in the config file as a list of release tags, or on the command line,
-  specified as many times as needed.
 - option to start at a specific release, ignoring all previous releases.
-- :rocket: add a default list of ignored labels, eg 'duplicate', 'invalid',
-  'question', 'wontfix', etc.
-- add `extend_ignored_labels` option to add to the default list of ignored
+- :fire: add `extend_ignored_labels` option to add to the default list of
+  ignored labels.
+- :fire: add `ignored_labels` option to override the default list of ignored
   labels.
-- add `ignored_labels` option to override the default list of ignored labels.
-- add `allowed_labels` option to specify which of the default ignored labels you
-  want to include in the changelog.
+- :fire: add `allowed_labels` option to specify which of the default ignored
+  labels you want to include in the changelog.
 - once the common config file functionality is implemented, add the ability to
   read the config from a `pyproject.toml` file if it exists in the current
   directory. This will allow one less config file. Note that the PAT will still
@@ -96,21 +81,17 @@ in the next release.
 
 ## Improve existing functionality
 
-- if there are no PR for a specific release then say something to that effect
-  instead of just leaving the section empty. We already use the Release 'body'
-  for this, but if that is missing too we need to say something.
+- :fire: if there are no PR for a specific release then say something to that
+  effect instead of just leaving the section empty. We already use the Release
+  'body' for this, but if that is missing too we need to say something.
 - add link targets to the release headers so they can be linked to directly.
-- :rocket: make labels case-insensitive, so 'enhancement' and 'Enhancement' are
-  the same.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
-- :rocket: for custom sections, put it before the 'Depencency Updates' section
-  instead of at the end. The Deps section is usualy last, so this will allow
-  custom sections to be placed before it. Don't rely on deps being last though,
-  since this may change, use it's index to find it then insert before.
-- :rocket: allow the user to specfiy the index of the custom section, so it can
-  be placed anywhere in the output.
-- hide the closed issues section on demand.
+- :fire: hide the closed issues section on demand.
+- :fire: allow to hide PR's from the output by their number.
+- :fire: if the tool is run in a local repo, use that for the `--contrib` functionality
+  instead of the GitHub API. This should be an order of magnitude faster. Have
+  an opt-out option to use the GitHub API instead.
 
 ## Known Issues
 
@@ -135,3 +116,10 @@ in the next release.
 - complete testing with `pytest` to 100% or as close as possible.
 - the whole `test_changelog.py` file needs to be re-written and find a better
   way to deal with missing options.
+
+## Other
+
+- break out the `--contrib` option into a separate standalone project that can
+  be used to generate a list of contributors for any project directly from a
+  local repository. This will be useful for projects that don't use GitHub. Can
+  be made into a GitHub action too.

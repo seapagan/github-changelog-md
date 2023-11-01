@@ -1,9 +1,10 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023)
 
 **Enhancements**
 
+- Change default location of custom sections and allow custom location ([#94](https://github.com/seapagan/github-changelog-md/pull/94)) by [seapagan](https://github.com/seapagan)
 - Allow a custom date format ([#92](https://github.com/seapagan/github-changelog-md/pull/92)) by [seapagan](https://github.com/seapagan)
 - Implement custom sections in a release ([#91](https://github.com/seapagan/github-changelog-md/pull/91)) by [seapagan](https://github.com/seapagan)
 - Skip release(s) through CLI option or in settings ([#88](https://github.com/seapagan/github-changelog-md/pull/88)) by [seapagan](https://github.com/seapagan)
@@ -15,6 +16,7 @@
 
 **Bug Fixes**
 
+- Bug: unrelerased section not using date format when `--next-release` specified ([#95](https://github.com/seapagan/github-changelog-md/pull/95)) by [seapagan](https://github.com/seapagan)
 - Bug - missing GitHub PAT causes crash ([#93](https://github.com/seapagan/github-changelog-md/pull/93)) by [seapagan](https://github.com/seapagan)
 - Label matching should be case insensitive ([#84](https://github.com/seapagan/github-changelog-md/pull/84)) by [seapagan](https://github.com/seapagan)
 
@@ -32,7 +34,7 @@
 - Bump pymarkdownlnt from 0.9.13.4 to 0.9.14 ([#89](https://github.com/seapagan/github-changelog-md/pull/89)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump mkdocs-material from 9.4.6 to 9.4.7 ([#80](https://github.com/seapagan/github-changelog-md/pull/80)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...HEAD)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...0.5.0)
 
 ## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (October 28, 2023)
 
@@ -136,10 +138,6 @@
 - Add testing with Pytest ([#29](https://github.com/seapagan/github-changelog-md/issues/29)) by [seapagan](https://github.com/seapagan)
 - Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is. ([#22](https://github.com/seapagan/github-changelog-md/issues/22)) by [seapagan](https://github.com/seapagan)
 
-**Merged Pull Requests**
-
-- Add Unit testing with pytest ([#42](https://github.com/seapagan/github-changelog-md/pull/42)) by [seapagan](https://github.com/seapagan)
-
 **Enhancements**
 
 - List closed issues ([#38](https://github.com/seapagan/github-changelog-md/pull/38)) by [seapagan](https://github.com/seapagan)
@@ -158,6 +156,10 @@
 
 - Create release docs ([#32](https://github.com/seapagan/github-changelog-md/pull/32)) by [seapagan](https://github.com/seapagan)
 - Start working on docs ([#17](https://github.com/seapagan/github-changelog-md/pull/17)) by [seapagan](https://github.com/seapagan)
+
+**Automatic Testing**
+
+- Add Unit testing with pytest ([#42](https://github.com/seapagan/github-changelog-md/pull/42)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
