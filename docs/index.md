@@ -13,7 +13,7 @@ a section for **unreleased** PRs (those since the last release) at the top. It
 will also include a list of all Issues closed for each release.
 
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
-latest to oldest in this release. You can add a custom section to the list too.
+latest to oldest in this release. You can add custom sections to the list too.
 
 There is an option to tag all the Unreleased PRs (ie those closed after the
 previous release) with an upcoming release number to ease the process of

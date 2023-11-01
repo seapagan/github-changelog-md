@@ -84,10 +84,27 @@ extend_sections = [
 ```
 
 Now, any PRs that have the `testing` label will be added to a section called
-`Automatic Testing`, and `security` will be in `Security`. At the moment these
-are added at the end of the release section, future versions will allow you to
-specify the order of the sections. There is no limit to the number of custom
-sections you can add.
+`Automatic Testing`, and `security` labels will be in `Security`. By default
+these are inserted just before the `Dependency Updates` section, but you can
+specify the `extend_sections_index` value in the config file to change the index
+at which they they are inserted.
+
+!!! warning "Be Aware of the Index!"
+
+    The value of `extend_sections_index` is the **index** of the section, not
+    the **position**. The first section has an index of `0`, the second has an
+    index of `1`, etc. So if you want your custom sections to appear after the
+    `Enhancements` section, you would set the `extend_sections_index` to `3`
+    (the index of the next section, `Bug Fixes`)
+
+    **HOWEVER** this index is the index of the **default** sections (listed
+    above) that you want to insert BEFORE, even if those sections are not
+    displayed. So an index of 0 to 2 could still be before the `Enhancements`
+    section, if the `Breaking Changes` or `Merged Pull Requests` sections are
+    not displayed. Play with the value to get the desired result :grin:.
+
+    Finally, the `Closed Issues` section is separate and always displayed first
+    regardless of the `extend_sections_index` value.
 
 The format for this option is an [array of
 tables](https://toml.io/en/v1.0.0#array-of-tables){:target="_blank}, with each
@@ -149,18 +166,19 @@ section, and any other sections will be ignored.
 
 Current available options are:
 
-| **Setting**       | **Description**                    | **Default** |
-|-------------------|------------------------------------|-------------|
-| **`github_pat`**  | Your GitHub PAT                    |             |
-| `output_file`     | Output filename                    |CHANGELOG.md |
-| `unreleased`      | Include unreleased section         | `True`      |
-| `depends`         | Include dependency updates section | `True`      |
-| `contrib`         | Create CONTRIBUTORS.md file        | `False`     |
-| `quiet`           | Suppress output                    | `False`     |
-| `skip_releases`   | List of releases to skip           | `[]`        |
-| `extend_sections` | Add custom sections                | `[]`        |
-| `date_format`     | Date format for release dates      | `%Y-%m-%d`  |
-| _`schema_version`_| _Configuration schema version_     | _`1`_       |
+| **Setting**             | **Description**                    | **Default** |
+|-------------------------|------------------------------------|-------------|
+| **`github_pat`**        | Your GitHub PAT                    |             |
+| `output_file`           | Output filename                    |CHANGELOG.md |
+| `unreleased`            | Include unreleased section         | `True`      |
+| `depends`               | Include dependency updates section | `True`      |
+| `contrib`               | Create CONTRIBUTORS.md file        | `False`     |
+| `quiet`                 | Suppress output                    | `False`     |
+| `skip_releases`         | List of releases to skip           | `[]`        |
+| `extend_sections`       | Add custom sections                | `[]`        |
+| `extend_sections_index` | Index to insert custom sections    | dynamic[^1] |
+| `date_format`           | Date format for release dates      | `%Y-%m-%d`  |
+| _`schema_version`_      | _Configuration schema version_     | _`1`_       |
 
 !!! tip "Config file schema version"
 
@@ -187,6 +205,7 @@ skip_releases = ["1.2.3", "1.2.4"]
 extend_sections = [
   { title = "Automatic Testing", label = "testing" },
 ]
+extend_sections_index = 2
 date_format = "%d %B %Y"
 ```
 
@@ -296,3 +315,9 @@ excluded from the changelog. This is case-insensitive, so `[No Changelog]` or
 
 See the [Todo List](todo_list.md) for planned features. There are quite a few
 more options and customizations to come.
+
+[^1]:
+    The default setting is to insert your custom sections just before the
+    `Dependency Updates` section, but you can change this by setting the
+    `extend_sections_index` value. See the [Custom Sections](#custom-sections)
+    section for more details.

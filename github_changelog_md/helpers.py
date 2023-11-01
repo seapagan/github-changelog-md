@@ -8,7 +8,7 @@ from pathlib import Path
 import rtoml
 from rich import print  # pylint: disable=redefined-builtin
 
-from github_changelog_md.constants import SECTIONS, ExitErrors
+from github_changelog_md.constants import SECTIONS, ExitErrors, SectionHeadings
 
 
 def get_toml_path() -> Path:
@@ -89,3 +89,15 @@ def get_section_name(label: str | None) -> str | None:
         if section[1] == label:
             return section[0]
     return None
+
+
+def get_index_of_tuple(
+    tuple_list: list[SectionHeadings], index: int, value: str
+) -> int:
+    """Return the index of a tuple in a list."""
+    for pos, t in enumerate(tuple_list):
+        if t[index] == value:
+            return pos
+
+    error_msg = f"'{value}' is not in the supplied list of Tuples"
+    raise ValueError(error_msg)
