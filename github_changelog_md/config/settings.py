@@ -8,7 +8,11 @@ from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
 from simple_toml_settings.exceptions import SettingsNotFoundError
 
-from github_changelog_md.constants import CONFIG_FILE, OUTPUT_FILE, ExitErrors
+from github_changelog_md.constants import (
+    CONFIG_FILE,
+    OUTPUT_FILE,
+    ExitErrors,
+)
 
 
 class Settings(TOMLSettings):
@@ -21,6 +25,7 @@ class Settings(TOMLSettings):
     contrib: bool = False
     quiet: bool = False
     skip_releases: ClassVar[list[str]] = []
+    extend_sections: ClassVar[list[dict[str, str]]] = []
 
 
 def get_settings_object() -> Settings:

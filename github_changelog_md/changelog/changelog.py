@@ -68,6 +68,7 @@ class ChangeLog:
         self.repo_name: str = repo_name
         self.user: str | None = options["user_name"]
         self.options = options
+        self.settings = get_settings()
 
         self.repo_data: Repository
         self.repo_releases: list[GitRelease]
@@ -92,6 +93,12 @@ class ChangeLog:
             sys.stdout = out
 
         header()
+
+        extend_sections = [
+            (section["title"], section["label"])
+            for section in self.settings.extend_sections
+        ]
+        self.sections = SECTIONS + extend_sections
 
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -328,18 +335,7 @@ class ChangeLog:
         if len(pr_list) == 0:
             return
 
-        release_sections = {
-            heading: [
-                pr
-                for pr in pr_list
-                if label in [label.name.lower() for label in pr.labels]
-                and not any(
-                    label in IGNORED_LABELS
-                    for label in [label.name.lower() for label in pr.labels]
-                )
-            ]
-            for heading, label in SECTIONS
-        }
+        release_sections = self.get_release_sections(pr_list)
 
         # default section for PRs that don't have any of the specific labels we
         # have defined for section headings. This may be able to be merged with
@@ -349,7 +345,7 @@ class ChangeLog:
             for pr in pr_list
             if not any(
                 label in [label.name.lower() for label in pr.labels]
-                for _, label in SECTIONS
+                for _, label in self.sections
             )
             and not any(
                 label in IGNORED_LABELS
@@ -377,6 +373,27 @@ class ChangeLog:
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
+
+    def get_release_sections(
+        self, pr_list: list[PullRequest]
+    ) -> dict[str, list[PullRequest]]:
+        """Return a dictionary of PRs sorted into sections.
+
+        This handles the PRs that have a lable, we handle the PRs that don't
+        have a label separately.
+        """
+        return {
+            heading: [
+                pr
+                for pr in pr_list
+                if label in [label.name.lower() for label in pr.labels]
+                and not any(
+                    label in IGNORED_LABELS
+                    for label in [label.name.lower() for label in pr.labels]
+                )
+            ]
+            for heading, label in self.sections
+        }
 
     def link_issues(self) -> dict[int, list[Issue]]:
         """Link Issues to their respective Release.

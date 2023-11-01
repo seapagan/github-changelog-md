@@ -100,6 +100,7 @@ changelog.help = "Generate the CHANGELOG.md file"
 [tool.pymarkdown]
 plugins.md014.enabled = false
 plugins.md036.enabled = false
+plugins.md046.enabled = false
 
 [tool.pytest.ini_options]
 addopts = ["--cov", "--cov-report", "term-missing", "--cov-report", "html"]

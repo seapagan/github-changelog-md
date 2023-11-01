@@ -12,7 +12,9 @@ in the next release.
 
 ## Features to Add
 
-- :fire: Allow custom sections in the output, set by `label` or a regex.
+- :rocket: Allow custom sections in the output, set by `label`.
+- allow the `extend_sections` option to use a regex on the PR title in addition
+  to just matching on the label.
 - Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
 - Ability to only update changes and leave the rest of the file untouched (ie do
@@ -27,7 +29,7 @@ in the next release.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- :fire: add ability to create a new release on GitHub with the latest changelog
+- add ability to create a new release on GitHub with the latest changelog
   text as the body.
 - add some form of text or even block to the oldest release that says something
   like "First release" or "Initial release" or "Initial commit" or something
@@ -52,7 +54,7 @@ in the next release.
   file or similar. Can use comment markers in the file to indicate where to add
   the names. Provide a default file with the comment markers in it or just
   document the process?
-- :fire: If there is no local config file, check for a global config file in the
+- If there is no local config file, check for a global config file in the
   user's home directory. This would allow a user to set their GitHub PAT once
   and use it for all projects.
 - dump markdown code for a specific release to the terminal, so it can be copy /
@@ -75,6 +77,19 @@ in the next release.
 - option to start at a specific release, ignoring all previous releases.
 - :rocket: add a default list of ignored labels, eg 'duplicate', 'invalid',
   'question', 'wontfix', etc.
+- add `extend_ignored_labels` option to add to the default list of ignored
+  labels.
+- add `ignored_labels` option to override the default list of ignored labels.
+- add `allowed_labels` option to specify which of the default ignored labels you
+  want to include in the changelog.
+- once the common config file functionality is implemented, add the ability to
+  read the config from a `pyproject.toml` file if it exists in the current
+  directory. This will allow one less config file. Note that the PAT will still
+  need to be set manually in the local or global config file.
+- :fire: add option to specify the GitHub PAT from the command line, eg `--token
+  <PAT>`. This will override any PAT set in the config file. **Note that this
+  can be a security risk if the PAT is visible in the command history, so it
+  should be used with caution.**
 
 ## Improve existing functionality
 
