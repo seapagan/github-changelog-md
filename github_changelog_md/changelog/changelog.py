@@ -62,8 +62,15 @@ class ChangeLog:
         options: dict[str, Any],
     ) -> None:
         """Initialize the class."""
-        self.auth = Auth.Token(get_settings().github_pat)
-        self.git = Github(auth=self.auth)
+        try:
+            self.auth = Auth.Token(get_settings().github_pat)
+            self.git = Github(auth=self.auth)
+        except AttributeError as exc:
+            print(
+                "\n[red]  X  Error: No GitHub PAT found in settings file\n",
+                file=sys.stderr,
+            )
+            raise typer.Exit(ExitErrors.NO_PAT) from exc
 
         self.repo_name: str = repo_name
         self.user: str | None = options["user_name"]
