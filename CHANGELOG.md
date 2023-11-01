@@ -4,6 +4,7 @@
 
 **Enhancements**
 
+- Allow a custom date format ([#92](https://github.com/seapagan/github-changelog-md/pull/92)) by [seapagan](https://github.com/seapagan)
 - Implement custom sections in a release ([#91](https://github.com/seapagan/github-changelog-md/pull/91)) by [seapagan](https://github.com/seapagan)
 - Skip release(s) through CLI option or in settings ([#88](https://github.com/seapagan/github-changelog-md/pull/88)) by [seapagan](https://github.com/seapagan)
 - Implement getting settings from the config file ([#87](https://github.com/seapagan/github-changelog-md/pull/87)) by [seapagan](https://github.com/seapagan)
@@ -14,6 +15,7 @@
 
 **Bug Fixes**
 
+- Bug - missing GitHub PAT causes crash ([#93](https://github.com/seapagan/github-changelog-md/pull/93)) by [seapagan](https://github.com/seapagan)
 - Label matching should be case insensitive ([#84](https://github.com/seapagan/github-changelog-md/pull/84)) by [seapagan](https://github.com/seapagan)
 
 **Refactoring**
@@ -32,7 +34,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...HEAD)
 
-## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (2023-10-28)
+## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (October 28, 2023)
 
 **Enhancements**
 
@@ -56,7 +58,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0)
 
-## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (2023-10-25)
+## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (October 25, 2023)
 
 **Enhancements**
 
@@ -76,7 +78,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0)
 
-## [0.2.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.3) (2023-10-24)
+## [0.2.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.3) (October 24, 2023)
 
 **Merged Pull Requests**
 
@@ -98,7 +100,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...0.2.3)
 
-## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (2023-10-22)
+## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (October 22, 2023)
 
 **Bug Fixes**
 
@@ -106,7 +108,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2)
 
-## [0.2.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.1) (2023-10-22)
+## [0.2.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.1) (October 22, 2023)
 
 **Merged Pull Requests**
 
@@ -123,7 +125,7 @@
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...0.2.1)
 
-## [0.2.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.0) (2023-10-21)
+## [0.2.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.0) (October 21, 2023)
 
 **Closed Issues**
 

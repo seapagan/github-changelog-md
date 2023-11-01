@@ -92,7 +92,7 @@ sections you can add.
 The format for this option is an [array of
 tables](https://toml.io/en/v1.0.0#array-of-tables){:target="_blank}, with each
 table containing a `title` and a `label`. The above example uses an `inline TOML
-array of tables` but the normal fomat will also work:
+array of tables` but the more verbose format will also work:
 
 ```toml
 [[extend_sections]]
@@ -104,7 +104,8 @@ title = "Security"
 label = "security"
 ```
 
-Inline arrays as in the first example are just a bit easier to read.
+Note the **double square brackets!**. Inline arrays as in the first example are
+just a bit easier to read and IMHO look nicer.
 
 !!! tip
 
