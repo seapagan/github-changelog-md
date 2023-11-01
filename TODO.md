@@ -104,10 +104,13 @@ in the next release.
   the same.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
-- :fire: for custom sections, put it before the 'Depencency Updates' section
+- :rocket: for custom sections, put it before the 'Depencency Updates' section
   instead of at the end. The Deps section is usualy last, so this will allow
   custom sections to be placed before it. Don't rely on deps being last though,
   since this may change, use it's index to find it then insert before.
+- :rocket: allow the user to specfiy the index of the custom section, so it can
+  be placed anywhere in the output.
+- hide the closed issues section on demand.
 
 ## Known Issues
 

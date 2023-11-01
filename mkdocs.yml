@@ -39,6 +39,7 @@ repo_name: github-changelog-md
 # edit these MARKDOWN extensions to your liking
 markdown_extensions:
   - admonition
+  - footnotes
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.highlight:
