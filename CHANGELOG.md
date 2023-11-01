@@ -4,6 +4,7 @@
 
 **Enhancements**
 
+- Implement custom sections in a release ([#91](https://github.com/seapagan/github-changelog-md/pull/91)) by [seapagan](https://github.com/seapagan)
 - Skip release(s) through CLI option or in settings ([#88](https://github.com/seapagan/github-changelog-md/pull/88)) by [seapagan](https://github.com/seapagan)
 - Implement getting settings from the config file ([#87](https://github.com/seapagan/github-changelog-md/pull/87)) by [seapagan](https://github.com/seapagan)
 - Implement quiet mode ([#86](https://github.com/seapagan/github-changelog-md/pull/86)) by [seapagan](https://github.com/seapagan)
@@ -25,6 +26,8 @@
 
 **Dependency Updates**
 
+- Bump faker from 19.12.0 to 19.12.1 ([#90](https://github.com/seapagan/github-changelog-md/pull/90)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Bump pymarkdownlnt from 0.9.13.4 to 0.9.14 ([#89](https://github.com/seapagan/github-changelog-md/pull/89)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump mkdocs-material from 9.4.6 to 9.4.7 ([#80](https://github.com/seapagan/github-changelog-md/pull/80)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...HEAD)
