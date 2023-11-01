@@ -24,7 +24,7 @@ in the next release.
 - Ability to upload the CHANGELOG to a remote server.
 - Allow filtering of commits based on commit message or other criteria.
 - Allow customization of the commit message format in the changelog.
-- :fire: Allow customization of the date format in the changelog.
+- :rocket: Allow customization of the date format in the changelog.
 - Add support for generating changelogs for specific time periods (e.g. last
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
@@ -86,10 +86,13 @@ in the next release.
   read the config from a `pyproject.toml` file if it exists in the current
   directory. This will allow one less config file. Note that the PAT will still
   need to be set manually in the local or global config file.
-- :fire: add option to specify the GitHub PAT from the command line, eg `--token
+- add option to specify the GitHub PAT from the command line, eg `--token
   <PAT>`. This will override any PAT set in the config file. **Note that this
   can be a security risk if the PAT is visible in the command history, so it
-  should be used with caution.**
+  should be used with caution.** `This needs the settings logic to be refactored
+  first, the way it is done at the moment it will still ask for the PAT if it is
+  not set in the config file, even if it is set on the command line, since this
+  is a side-effect of importing the settings library.`
 
 ## Improve existing functionality
 
@@ -101,6 +104,10 @@ in the next release.
   the same.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
+- :fire: for custom sections, put it before the 'Depencency Updates' section
+  instead of at the end. The Deps section is usualy last, so this will allow
+  custom sections to be placed before it. Don't rely on deps being last though,
+  since this may change, use it's index to find it then insert before.
 
 ## Known Issues
 
