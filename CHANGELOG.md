@@ -1,10 +1,26 @@
 # Changelog
 
+## [0.5.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.1) (November 02, 2023)
+
+**Closed Issues**
+
+- Crash with `TypeError` when new config created ([#99](https://github.com/seapagan/github-changelog-md/issues/99)) by [seapagan](https://github.com/seapagan)
+
+**Bug Fixes**
+
+- Fix Crash with writing/reading `None` values ([#100](https://github.com/seapagan/github-changelog-md/pull/100)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Bump faker from 19.12.1 to 19.13.0 ([#98](https://github.com/seapagan/github-changelog-md/pull/98)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1)
+
 ## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023)
 
 **Enhancements**
 
-- Change default location of custom sections and allow custom location ([#94](https://github.com/seapagan/github-changelog-md/pull/94)) by [seapagan](https://github.com/seapagan)
+- Change the default position of custom sections and allow custom position ([#94](https://github.com/seapagan/github-changelog-md/pull/94)) by [seapagan](https://github.com/seapagan)
 - Allow a custom date format ([#92](https://github.com/seapagan/github-changelog-md/pull/92)) by [seapagan](https://github.com/seapagan)
 - Implement custom sections in a release ([#91](https://github.com/seapagan/github-changelog-md/pull/91)) by [seapagan](https://github.com/seapagan)
 - Skip release(s) through CLI option or in settings ([#88](https://github.com/seapagan/github-changelog-md/pull/88)) by [seapagan](https://github.com/seapagan)
@@ -16,7 +32,7 @@
 
 **Bug Fixes**
 
-- Bug: unrelerased section not using date format when `--next-release` specified ([#95](https://github.com/seapagan/github-changelog-md/pull/95)) by [seapagan](https://github.com/seapagan)
+- Bug: unreleased section not using date format when `--next-release` specified ([#95](https://github.com/seapagan/github-changelog-md/pull/95)) by [seapagan](https://github.com/seapagan)
 - Bug - missing GitHub PAT causes crash ([#93](https://github.com/seapagan/github-changelog-md/pull/93)) by [seapagan](https://github.com/seapagan)
 - Label matching should be case insensitive ([#84](https://github.com/seapagan/github-changelog-md/pull/84)) by [seapagan](https://github.com/seapagan)
 
@@ -148,6 +164,10 @@
 - Tweak release layout ([#21](https://github.com/seapagan/github-changelog-md/pull/21)) by [seapagan](https://github.com/seapagan)
 - Use local config file ([#20](https://github.com/seapagan/github-changelog-md/pull/20)) by [seapagan](https://github.com/seapagan)
 
+**Automatic Testing**
+
+- Add Unit testing with pytest ([#42](https://github.com/seapagan/github-changelog-md/pull/42)) by [seapagan](https://github.com/seapagan)
+
 **Bug Fixes**
 
 - Fix bug #22 ([#24](https://github.com/seapagan/github-changelog-md/pull/24)) by [seapagan](https://github.com/seapagan)
@@ -156,10 +176,6 @@
 
 - Create release docs ([#32](https://github.com/seapagan/github-changelog-md/pull/32)) by [seapagan](https://github.com/seapagan)
 - Start working on docs ([#17](https://github.com/seapagan/github-changelog-md/pull/17)) by [seapagan](https://github.com/seapagan)
-
-**Automatic Testing**
-
-- Add Unit testing with pytest ([#42](https://github.com/seapagan/github-changelog-md/pull/42)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
