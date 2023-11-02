@@ -1,5 +1,5 @@
 site_name: Markdown Changelog Generator
-site_url: "https://changelog.seapagan.net/"
+site_url: https://changelog.seapagan.net
 
 theme:
   name: material
@@ -55,7 +55,7 @@ extra_css:
   - css/extra.css
 
 nav:
-  - Home: index.md
+  - Introduction: index.md
   - Installation: installation.md
   - Usage: usage.md
   - Todo List: todo_list.md
