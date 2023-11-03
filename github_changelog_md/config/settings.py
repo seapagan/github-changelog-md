@@ -28,6 +28,7 @@ class Settings(TOMLSettings):
     extend_sections: ClassVar[list[dict[str, str]]] = []
     extend_sections_index: Optional[int] = None
     date_format: str = "%Y-%m-%d"
+    show_issues: bool = True
 
 
 def get_settings_object() -> Settings:
