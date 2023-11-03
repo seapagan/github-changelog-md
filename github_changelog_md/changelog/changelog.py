@@ -313,15 +313,22 @@ class ChangeLog:
         own. The auto-generated release notes on GitHub will
         add a diff link to the release notes. We don't want that.
         """
-        body_lines = release.body.split("\n")
-        for i, line in enumerate(body_lines):
-            if f"{self.repo_data.html_url}/compare/" in line:
-                body_lines.pop(i)
-                break
-        body = "\n".join(body_lines)
-        if body[-2] != "\n":
-            body += "\n"
-        f.write(body)
+        if release.body:
+            body_lines = release.body.split("\n")
+            for i, line in enumerate(body_lines):
+                if f"{self.repo_data.html_url}/compare/" in line:
+                    body_lines.pop(i)
+                    break
+            body = "\n".join(body_lines)
+            if body.strip() and body[-2] != "\n":
+                body += "\n"
+            f.write(body)
+        else:
+            f.write(
+                "There were no merged pull requests or closed issues "
+                "for this release.\n\n"
+                "See the Full Changelog below for details.\n\n"
+            )
 
     def print_issues(
         self,
