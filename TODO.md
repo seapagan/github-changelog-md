@@ -53,8 +53,10 @@ in the next release.
   pasted into other docs.
 - option to hide certain headers, or remove all headers and just have a list of
   PRs.
-- :fire: change the order of PRs in the output - current is newest first, but we
-  could have oldest first or alphabetical by title or something.
+- :fire: change the order of PRs and Issues in the output - current is newest
+  first, but we could have oldest first or alphabetical by title or something.
+  Add a setting `item_order` with options `newest_first` (default),
+  `oldest_first` and `alphabetical`.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
@@ -90,10 +92,13 @@ in the next release.
 - :fire: if the tool is run in a local repo, use that for the `--contrib` functionality
   instead of the GitHub API. This should be an order of magnitude faster. Have
   an opt-out option to use the GitHub API instead.
-- :fire: don't dump all possible setting options to the config file when we
+- :rocket: don't dump all possible setting options to the config file when we
   create it. The only time we should write to the config is when setting the PAT
   for a missing file. The settings package `save()` always writes all settings
   to the file, so we need to just manually create the file the first time.
+- update the format for custom sections to allow each section to have it's own
+  insertion index. This will be a breaking change in the config file format so
+  require a `schema_version` bump.
 
 ## Known Issues
 
