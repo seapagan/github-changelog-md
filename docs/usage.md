@@ -172,20 +172,21 @@ section, and any other sections will be ignored.
 
 Current available options are:
 
-| **Setting**             | **Description**                    | **Default** |
-|-------------------------|------------------------------------|-------------|
-| **`github_pat`**        | Your GitHub PAT                    |             |
-| `output_file`           | Output filename                    |CHANGELOG.md |
-| `unreleased`            | Include unreleased section         | `True`      |
-| `depends`               | Include dependency updates section | `True`      |
-| `contrib`               | Create CONTRIBUTORS.md file        | `False`     |
-| `quiet`                 | Suppress output                    | `False`     |
-| `skip_releases`         | List of releases to skip           | `[]`        |
-| `show_issues`           | Show closed issues                 | `True`      |
-| `extend_sections`       | A list of custom sections          | `[]`        |
-| `extend_sections_index` | Index to insert custom sections    | dynamic [^1]|
-| `date_format`           | Date format for release dates      | `%Y-%m-%d`  |
-| _`schema_version`_      | _Configuration schema version_     | _`1`_       |
+| **Setting**             | **Description**                    | **Default**   |
+|-------------------------|------------------------------------|---------------|
+| **`github_pat`**        | Your GitHub PAT                    |               |
+| `output_file`           | Output filename                    |CHANGELOG.md   |
+| `unreleased`            | Include unreleased section         | `True`        |
+| `depends`               | Include dependency updates section | `True`        |
+| `contrib`               | Create CONTRIBUTORS.md file        | `False`       |
+| `quiet`                 | Suppress output                    | `False`       |
+| `skip_releases`         | List of releases to skip           | `[]`          |
+| `show_issues`           | Show closed issues                 | `True`        |
+| `extend_sections`       | A list of custom sections          | `[]`          |
+| `extend_sections_index` | Index to insert custom sections    | dynamic [^1]  |
+| `date_format`           | Date format for release dates      | `%Y-%m-%d`    |
+| `item_order`            | Order of PR/Issues in each section | `newest_first`|
+| _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
 
@@ -213,6 +214,7 @@ extend_sections = [
 ]
 extend_sections_index = 2
 date_format = "%d %B %Y" # (2)!
+item_order = "oldest_first"
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
@@ -358,6 +360,16 @@ the release **`name`**.
 
     :sparkles: Equivalent to the `skip_releases` setting in the config file.
 ---
+
+### `--item-order` / `-i`
+
+This option allows you to specify the order of the PRs and Issues in each
+section. By default the order is `newest_first`, but you can use the
+`--item-order` or `-i` option to change this to `oldest_first`.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `item_order` setting in the config file.
 
 ## Hide PR from the Changelog
 

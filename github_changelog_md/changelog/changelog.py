@@ -320,7 +320,7 @@ class ChangeLog:
         if len(issue_list) == 0 or not self.options["show_issues"]:
             return
         f.write("**Closed Issues**\n\n")
-        for issue in issue_list:
+        for issue in self.get_sorted_items(issue_list):
             if (
                 any(
                     label.name.lower() in IGNORED_LABELS
@@ -390,7 +390,8 @@ class ChangeLog:
                 continue
             if len(prs) > 0:
                 f.write(f"**{heading}**\n\n")
-                for pr in prs[::-1]:
+                # for pr in prs[::-1]:
+                for pr in self.get_sorted_items(prs):
                     if "[no changelog]" in pr.title.lower():
                         continue
                     escaped_title = cap_first_letter(
@@ -402,6 +403,15 @@ class ChangeLog:
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
+
+    def get_sorted_items(self, items: list[Any]) -> list[Any]:
+        """Sort the PRs or Issues into the required order."""
+        if self.options["item_order"] == "newest-first":
+            return sorted(items, key=lambda x: x.number, reverse=True)
+        if self.options["item_order"] == "oldest-first":
+            return sorted(items, key=lambda x: x.number)
+        # any other value will be ignored and the default order will be used
+        return items
 
     def get_release_sections(
         self, pr_list: list[PullRequest]

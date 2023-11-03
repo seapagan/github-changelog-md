@@ -50,17 +50,23 @@ def main(
     ),
     unreleased: Optional[bool] = typer.Option(
         default=None,
-        help="Show unreleased changes in the Changelog, defaults to True.",
+        help=(
+            "Show unreleased changes in the Changelog, defaults to [bold]True"
+            "[/bold]."
+        ),
         show_default=False,
     ),
     contrib: Optional[bool] = typer.Option(
         default=None,
-        help="Update CONTRIBUTORS.md, defaults to False.",
+        help="Update the CONTRIBUTORS.md file, defaults to [bold]False[/bold].",
         show_default=False,
     ),
     depends: Optional[bool] = typer.Option(
         default=None,
-        help="Show dependency updates in the Changelog, defaults to True.",
+        help=(
+            "Show dependency updates in the Changelog, defaults to [bold]True"
+            "[/bold]."
+        ),
         show_default=False,
     ),
     output: Optional[str] = typer.Option(
@@ -86,16 +92,25 @@ def main(
     ),
     issues: Optional[bool] = typer.Option(
         default=None,
-        help="Show CLOSED issues in the Changelog, defaults to True.",
+        help=(
+            "Show CLOSED issues in the Changelog, defaults to [bold]True"
+            "[/bold]."
+        ),
+        show_default=False,
+    ),
+    item_order: Optional[str] = typer.Option(
+        None,
+        "--item-order",
+        "-i",
+        help=(
+            "Order of PRs and Issues in a release section. "
+            "Valid options are [bold]'newest-first'[/bold] or [bold]'oldest-"
+            "first'[/bold]. Defaults to [bold]'newest-first'[/bold]."
+        ),
         show_default=False,
     ),
 ) -> None:
-    """Generate your CHANGELOG file Automatically.
-
-    If you don't specify a repository name, the application will try to
-    get the repository name from the current directory (assuming it is a git
-    repository).
-    """
+    """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
         print(
             "\n[green]Github Changelog Markdown - "
@@ -132,6 +147,7 @@ def main(
         "quiet": settings.quiet if quiet is None else quiet,
         "skip_releases": settings.skip_releases if skip == [] else skip,
         "show_issues": settings.show_issues if issues is None else issues,
+        "item_order": settings.item_order if item_order is None else item_order,
     }
 
     changelog = ChangeLog(repo, options)
