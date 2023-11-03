@@ -109,6 +109,16 @@ def main(
         ),
         show_default=False,
     ),
+    hide: Optional[list[int]] = typer.Option(  # noqa: B008
+        [],
+        "--hide",
+        "-h",
+        help=(
+            "Hide the supplied PR or Issue by its number. Can be specified "
+            "multiple times."
+        ),
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
@@ -148,6 +158,7 @@ def main(
         "skip_releases": settings.skip_releases if skip == [] else skip,
         "show_issues": settings.show_issues if issues is None else issues,
         "item_order": settings.item_order if item_order is None else item_order,
+        "hide_items": settings.hide_items if hide == [] else hide,
     }
 
     changelog = ChangeLog(repo, options)

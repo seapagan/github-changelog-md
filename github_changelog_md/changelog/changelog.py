@@ -429,7 +429,7 @@ class ChangeLog:
         return [
             item
             for item in items
-            if item.number not in self.settings.hide_items
+            if item.number not in self.options["hide_items"]
             and "[no changelog]" not in item.title.lower()
         ]
 
