@@ -18,7 +18,7 @@ managing your project dependencies if you don't already have a preference:
 $ poetry add github-changelog-md --group dev
 ```
 
-or
+or, from inside a virtual environment:
 
 ```console
 $ pip install github-changelog-md
@@ -99,7 +99,8 @@ $ github-changelog-md
 !!! info "Note"
 
     Future versions of this tool may require a newer schema version, so it is
-    recommended to always use the latest version.
+    recommended to always use the latest version. At this time, the schema
+    version is not used for anything.
 
     It is also planned to have a global config file in the user's home folder,
     with the settings from the local config file being merged with the global
