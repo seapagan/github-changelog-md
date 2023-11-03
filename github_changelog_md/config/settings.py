@@ -29,6 +29,7 @@ class Settings(TOMLSettings):
     extend_sections_index: Optional[int] = None
     date_format: str = "%Y-%m-%d"
     show_issues: bool = True
+    item_order: str = "newest-first"
 
 
 def get_settings_object() -> Settings:
