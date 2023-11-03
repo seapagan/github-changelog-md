@@ -53,10 +53,8 @@ in the next release.
   pasted into other docs.
 - option to hide certain headers, or remove all headers and just have a list of
   PRs.
-- :fire: change the order of PRs and Issues in the output - current is newest
-  first, but we could have oldest first or alphabetical by title or something.
-  Add a setting `item_order` with options `newest_first` (default),
-  `oldest_first` and `alphabetical`.
+- :rocket: change the order of PRs and Issues in the output - option to sort by
+  `newest-first` (default), or `oldest-first`.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
