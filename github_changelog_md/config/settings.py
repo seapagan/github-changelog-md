@@ -30,6 +30,7 @@ class Settings(TOMLSettings):
     date_format: str = "%Y-%m-%d"
     show_issues: bool = True
     item_order: str = "newest-first"
+    hide_items: ClassVar[list[int]] = []
 
 
 def get_settings_object() -> Settings:
