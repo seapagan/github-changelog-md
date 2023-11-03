@@ -329,7 +329,7 @@ class ChangeLog:
         issue_list: list[Issue],
     ) -> None:
         """Print all the closed issues for a given release."""
-        visible_issues = self.hide_items(issue_list)
+        visible_issues = self.ignore_items(issue_list)
         if len(visible_issues) == 0 or not self.options["show_issues"]:
             return
 
@@ -407,7 +407,7 @@ class ChangeLog:
             ):
                 continue
 
-            visible_prs = self.hide_items(prs)
+            visible_prs = self.ignore_items(prs)
 
             if len(visible_prs) > 0:
                 f.write(f"**{heading}**\n\n")
@@ -422,14 +422,14 @@ class ChangeLog:
                     )
                 f.write("\n")
 
-    def hide_items(
+    def ignore_items(
         self, items: Sequence[PullRequest | Issue]
     ) -> list[PullRequest | Issue]:
-        """Hide any PRs or Issues that have been marked as hidden."""
+        """Ignore any PRs or Issues that have been marked as hidden."""
         return [
             item
             for item in items
-            if item.number not in self.options["hide_items"]
+            if item.number not in self.options["ignore_items"]
             and "[no changelog]" not in item.title.lower()
         ]
 
@@ -447,7 +447,7 @@ class ChangeLog:
     ) -> dict[str, list[PullRequest]]:
         """Return a dictionary of PRs sorted into sections.
 
-        This handles the PRs that have a lable, we handle the PRs that don't
+        This handles the PRs that have a label, we handle the PRs that don't
         have a label separately.
         """
         return {
