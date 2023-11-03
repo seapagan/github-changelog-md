@@ -215,8 +215,8 @@ extend_sections_index = 2
 date_format = "%d %B %Y" # (2)!
 ```
 
-1. This is the only required setting, the others are optional.
-2. This setting uses the `strftime` format, see the block below for more
+1. :bulb: This is the only required setting, the others are optional.
+2. :bulb: This setting uses the `strftime` format, see the block below for more
    details.
 
 As mentioned above, the only required setting is the `github_pat` setting. The
