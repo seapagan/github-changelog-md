@@ -33,6 +33,7 @@ from github_changelog_md.helpers import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from io import TextIOWrapper
 
     from github.Commit import Commit
@@ -234,7 +235,10 @@ class ChangeLog:
             f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
 
-    def process_unreleased(self, f: TextIOWrapper) -> None:
+    def process_unreleased(
+        self,
+        f: TextIOWrapper,
+    ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
         if len(self.unreleased) > 0 or len(self.unreleased_issues) > 0:
             heading = (
@@ -298,7 +302,11 @@ class ChangeLog:
         if len(issue_list) == 0 and len(pr_list) == 0:
             self.get_release_body(f, release)
 
-    def get_release_body(self, f: TextIOWrapper, release: GitRelease) -> None:
+    def get_release_body(
+        self,
+        f: TextIOWrapper,
+        release: GitRelease,
+    ) -> None:
         """Read the GitHub release body.
 
         first remove any existing diff links so we can add our
@@ -315,12 +323,18 @@ class ChangeLog:
             body += "\n"
         f.write(body)
 
-    def print_issues(self, f: TextIOWrapper, issue_list: list[Issue]) -> None:
+    def print_issues(
+        self,
+        f: TextIOWrapper,
+        issue_list: list[Issue],
+    ) -> None:
         """Print all the closed issues for a given release."""
-        if len(issue_list) == 0 or not self.options["show_issues"]:
+        visible_issues = self.ignore_items(issue_list)
+        if len(visible_issues) == 0 or not self.options["show_issues"]:
             return
+
         f.write("**Closed Issues**\n\n")
-        for issue in self.get_sorted_items(issue_list):
+        for issue in self.get_sorted_items(visible_issues):
             if (
                 any(
                     label.name.lower() in IGNORED_LABELS
@@ -356,7 +370,11 @@ class ChangeLog:
             f"{release_tag.tag_name}...{prev_release})\n\n",
         )
 
-    def print_prs(self, f: TextIOWrapper, pr_list: list[PullRequest]) -> None:
+    def print_prs(
+        self,
+        f: TextIOWrapper,
+        pr_list: list[PullRequest],
+    ) -> None:
         """Print all the PRs for a given release.
 
         They are sorted into sections depending on the labels they have.
@@ -388,12 +406,12 @@ class ChangeLog:
                 and not self.options["show_depends"]
             ):
                 continue
-            if len(prs) > 0:
+
+            visible_prs = self.ignore_items(prs)
+
+            if len(visible_prs) > 0:
                 f.write(f"**{heading}**\n\n")
-                # for pr in prs[::-1]:
-                for pr in self.get_sorted_items(prs):
-                    if "[no changelog]" in pr.title.lower():
-                        continue
+                for pr in self.get_sorted_items(visible_prs):
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
                     )
@@ -403,6 +421,17 @@ class ChangeLog:
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
+
+    def ignore_items(
+        self, items: Sequence[PullRequest | Issue]
+    ) -> list[PullRequest | Issue]:
+        """Ignore any PRs or Issues that have been marked as hidden."""
+        return [
+            item
+            for item in items
+            if item.number not in self.options["ignore_items"]
+            and "[no changelog]" not in item.title.lower()
+        ]
 
     def get_sorted_items(self, items: list[Any]) -> list[Any]:
         """Sort the PRs or Issues into the required order."""
@@ -418,7 +447,7 @@ class ChangeLog:
     ) -> dict[str, list[PullRequest]]:
         """Return a dictionary of PRs sorted into sections.
 
-        This handles the PRs that have a lable, we handle the PRs that don't
+        This handles the PRs that have a label, we handle the PRs that don't
         have a label separately.
         """
         return {

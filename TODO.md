@@ -76,6 +76,8 @@ in the next release.
   refactored first, the way it is done at the moment it will still ask for the
   PAT if it is not set in the config file, even if it is set on the command
   line, since this is a side-effect of importing the settings library.`\]
+- offer to create any missing GitHub labels for the repo. This will prob require
+  adding extra permissions to the PAT.
 
 ## Improve existing functionality
 
@@ -86,7 +88,7 @@ in the next release.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 - :rocket: hide the closed issues section on demand.
-- :fire: allow to hide PR's or issues from the output by their number.
+- :rocket: allow to hide PR's or issues from the output by their number.
 - if the tool is run in a local repo, use that for the `--contrib` functionality
   instead of the GitHub API. This should be an order of magnitude faster. Have
   an opt-out option to use the GitHub API instead.

@@ -22,7 +22,7 @@ tags to determine each release.
     `CHANGELOG.md` file up to GitHub, to give users an idea of what is coming
     in the next release.
 
-    Since the CHANGELOG uses the **Pull Request or Issue Title** for each
+    The generated CHANGELOG uses the **Pull Request or Issue Title** for each
     item, it is recommended that you use clear and descriptive titles for your
     PRs. This will make the changelog much more useful and readable. It is
     always possible to edit the titles of your PRs after they have been merged,
@@ -89,6 +89,15 @@ changelog - If you are using `Dependabot`, by default it will add the
 Labels are **case-insensitive**, so `bug` or `BUG` will both match "Bug Fixes".
 The above order is also the order that the sections will appear in the
 changelog, again this order will be customizable in future versions.
+
+!!! tip "Custom GitHub Labels"
+
+    GitHub provides a few default labels, but you can also create your own
+    custom labels and then add them to the `extend_sections` option in the
+    config file. See [Custom Sections](#custom-sections) for more details.
+
+    For example, the `breaking` and `refactor` labels are not default GitHub
+    labels, but are ones I add to all my projects personally.
 
 ### Custom Sections
 
@@ -206,6 +215,7 @@ Current available options are:
 | `extend_sections_index` | Index to insert custom sections    | dynamic [^1]  |
 | `date_format`           | Date format for release dates      | `%Y-%m-%d`    |
 | `item_order`            | Order of PR/Issues in each section | `newest_first`|
+| `ignore_items`          | List of PRs/Issues to ignore       | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -230,16 +240,21 @@ depends = true
 contrib = false
 skip_releases = ["1.2.3", "1.2.4"]
 extend_sections = [
-  { title = "Automatic Testing", label = "testing" },
+  { title = "Testing", label = "testing" },
+  { title = "Security", label = "security" },
 ]
-extend_sections_index = 2
+extend_sections_index = 3
 date_format = "%d %B %Y" # (2)!
 item_order = "oldest_first"
+ignore_items = [123, 456] # (3)!
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
 2. :bulb: This setting uses the `strftime` format, see the block below for more
    details.
+3. :bulb: You can also add `[no changelog]` anywhere in the PR or Issue title,
+   and it will be excluded from the changelog. This is case-insensitive, so `[No
+   Changelog]` or `[NO CHANGELOG]` will also work.
 
 As mentioned above, the only required setting is the `github_pat` setting. The
 other settings can be left out, and the tool will use the default values (or the
@@ -376,9 +391,27 @@ $ github-changelog-md --skip 1.2.3 --skip 1.3-beta1
 The string specified here is the actual release **`tag`** for that release, not
 the release **`name`**.
 
+### `--ignore` / `-e`
+
+Ignore a PR or Issue. You can specify this option multiple times to ignore
+multiple PRs or Issues. This is useful if you have a PR or Issue that you do not
+want to include in the changelog for some reason.
+
+The integer specified here is the actual PR or Issue **`number`** on GitHub.
+
+```terminal
+$ github-changelog-md --ignore 123 --ignore 456
+```
+
+!!! tip "Tip"
+
+    You can also add `[no changelog]` anywhere in the PR title, and it will be
+    excluded from the changelog. This is case-insensitive, so `[No Changelog]`
+    or `[NO CHANGELOG]` will also work.
+
 !!! tip ""
 
-    :sparkles: Equivalent to the `skip_releases` setting in the config file.
+    :sparkles: Equivalent to the `ignore_items` setting in the config file.
 ---
 
 ### `--item-order` / `-i`
@@ -390,13 +423,6 @@ section. By default the order is `newest_first`, but you can use the
 !!! tip ""
 
     :sparkles: Equivalent to the `item_order` setting in the config file.
-
-## Hide PR from the Changelog
-
-If there is a PR that you do **NOT** wish to include in the changelog for some
-reason, you can add `[no changelog]` anywhere in the PR title, and it will be
-excluded from the changelog. This is case-insensitive, so `[No Changelog]` or
-`[NO CHANGELOG]` will also work.
 
 ## Future plans
 
