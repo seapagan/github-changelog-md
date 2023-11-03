@@ -26,7 +26,7 @@ in the next release.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- :fire: add ability to create a new draft release on GitHub with the latest
+- add ability to create a new draft release on GitHub with the latest
   changelog text as the body.
 - add some form of text or even block to the oldest release that says something
   like "First release" or "Initial release" or "Initial commit" or something
@@ -81,7 +81,7 @@ in the next release.
 
 ## Improve existing functionality
 
-- :fire: if there are no PR for a specific release then say something to that
+- :rocket: if there are no PR for a specific release then say something to that
   effect instead of just leaving the section empty. We already use the Release
   'body' for this, but if that is missing too we need to say something.
 - add link targets to the release headers so they can be linked to directly.
