@@ -73,8 +73,9 @@ def get_settings() -> Settings:
         try:
             with Path(CONFIG_FILE).open("w") as f:
                 f.write(f"[changelog_generator]\ngithub_pat = '{get_pat}'\n")
-            settings = get_settings_object()
-            settings.save()
+                f.flush()
+                settings = get_settings_object()
+                f.write(f"schema_version = '{settings.schema_version}'\n")
         except PermissionError:
             print(
                 "\n[red]Permission denied. Please run the command in a folder "
