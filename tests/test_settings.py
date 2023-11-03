@@ -114,7 +114,7 @@ class TestSettings:
         """Test settings error if we dont have write permission."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "1234")
         mocker.patch(
-            "simple_toml_settings.settings.TOMLSettings.save",
+            "pathlib.Path.open",
             side_effect=PermissionError,
         )
         with pytest.raises(SystemExit) as exc:
