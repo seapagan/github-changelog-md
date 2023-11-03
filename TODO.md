@@ -86,8 +86,8 @@ in the next release.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 - :rocket: hide the closed issues section on demand.
-- :fire: allow to hide PR's from the output by their number.
-- :fire: if the tool is run in a local repo, use that for the `--contrib` functionality
+- :fire: allow to hide PR's or issues from the output by their number.
+- if the tool is run in a local repo, use that for the `--contrib` functionality
   instead of the GitHub API. This should be an order of magnitude faster. Have
   an opt-out option to use the GitHub API instead.
 - :rocket: don't dump all possible setting options to the config file when we
@@ -129,3 +129,7 @@ in the next release.
   be used to generate a list of contributors for any project directly from a
   local repository. This will be useful for projects that don't use GitHub. Can
   be made into a GitHub action too.
+- Offer standalone binaries for Windows, MacOS and Linux. This will allow users
+  to install the tool without having to install Python first. This will be
+  especially useful for Windows users. This will require using `pyinstaller` or
+  similar to create the binaries. Can probably be done with GitHub actions.

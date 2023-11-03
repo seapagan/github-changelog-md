@@ -22,6 +22,15 @@ I you would like to contribute to the code, but find the requirements below a
 bit daunting, please feel free to open a discussion and I can help you get
 started, or even pair on a PR.
 
+Currently, development is done primary on **Linux**, but I will also try to test
+on **Windows** and **Mac OS X** when possible. If you are using a different
+platform and find any issues, please let me know. I welcome any contributions,
+on any platform!
+
+If you have any issues developing on a particular platform, please let me know
+and I will try to help you out. I am also open to suggestions for improving the
+development process and documentation.
+
 ## Prerequisites
 
 Since this is a [Python](https://www.python.org/) project, you will need to

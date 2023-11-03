@@ -1,16 +1,16 @@
 # Markdown Changelog Generator
 
-**Generate a Markdown changelog from your Github repository.**
+**Generate a Markdown Changelog from your Github repository.**
 
 [![PyPI
 version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/github-changelog-md)&nbsp;
 ![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)&nbsp;
 
-This project will generate a Markdown-formatted changelog from a Github
+This project will generate a Markdown-formatted Changelog from a Github
 repository. It will detect all GitHub releases and generate a changelog based on
 the **merged** Pull Requests for each release along with a section for
-**unreleased** PRs (those since the last release) at the top. It will also
-include a list of all Issues closed for each release.
+**unreleased** PRs (those merged since the last release) at the top. It will
+also include a list of all Issues closed for each release.
 
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
 latest to oldest in this release. You can add custom sections to the list too.
@@ -19,6 +19,9 @@ There is an option to tag all the Unreleased PRs (ie those closed after the
 previous release) with an upcoming release number to ease the process of
 creating a new release by having the changelog already up to date, *or hide any
 unreleased PR's completely*.
+
+There is much more this app can do, see the [Usage](usage.md) page for more
+details.
 
 While the project is written in Python, it is **NOT** limited to just generating
 a changelog for Python projects. It will work with **any Github repository** and
