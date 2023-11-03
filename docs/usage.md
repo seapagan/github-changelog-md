@@ -22,7 +22,7 @@ tags to determine each release.
     `CHANGELOG.md` file up to GitHub, to give users an idea of what is coming
     in the next release.
 
-    Since the CHANGELOG uses the **Pull Request or Issue Title** for each
+    The generated CHANGELOG uses the **Pull Request or Issue Title** for each
     item, it is recommended that you use clear and descriptive titles for your
     PRs. This will make the changelog much more useful and readable. It is
     always possible to edit the titles of your PRs after they have been merged,
@@ -89,6 +89,15 @@ changelog - If you are using `Dependabot`, by default it will add the
 Labels are **case-insensitive**, so `bug` or `BUG` will both match "Bug Fixes".
 The above order is also the order that the sections will appear in the
 changelog, again this order will be customizable in future versions.
+
+!!! tip "Custom GitHub Labels"
+
+    GitHub provides a few default labels, but you can also create your own
+    custom labels and then add them to the `extend_sections` option in the
+    config file. See [Custom Sections](#custom-sections) for more details.
+
+    For example, the `breaking` and `refactor` labels are not default GitHub
+    labels, but are ones I add to all my projects personally.
 
 ### Custom Sections
 
