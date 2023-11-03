@@ -26,8 +26,8 @@ in the next release.
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
   teams.
-- :fire: add ability to create a new release on GitHub with the latest changelog
-  text as the body.
+- :fire: add ability to create a new draft release on GitHub with the latest
+  changelog text as the body.
 - add some form of text or even block to the oldest release that says something
   like "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
@@ -35,22 +35,20 @@ in the next release.
 - add ability to place a section between releases with custom markdown, eg to
   explain changes in the version numbering scheme or other important
   information.
-- option to change PR/Issue/Commit links to use the GitHub autolink syntax
-  instead of explicitly linking to the GitHub page.
-- Allow to add a text block to the 'Breaking Changes' section. Can be added to
-  the config file, or more usefully to a dedicated file linking releases to a
-  text block.
-- Use the above secondary config file for every release to add a custom text
-  block to the release?
-- Add an option to add a custom text block to the top of the changelog, eg to
-  explain the version numbering scheme or other important information.
+- :fire: option to change PR/Issue/Commit links to use the GitHub autolink
+  syntax instead of explicitly linking to the GitHub page.
+- Allow to add a text block to the 'Breaking Changes' section. Should be added
+  to the config file.
+- Add config option to add a custom text block to specfic releases.
+- Add an option to add a custom text block to the top of the changelog.
 - investigate adding caching of the GitHub API calls to speed up the process.
 - for the `--contrib` option, allow to use an existing file with comment markers
   in the file to indicate where to add the names. Provide a default file with
   the comment markers in it or just document the process?
-- :fire: If there is no local config file, check for a global config file in the
+- If there is no local config file, check for a global config file in the
   user's home directory. This would allow a user to set their GitHub PAT once
-  and use it for all projects.
+  and use it for all projects. \[`Probably needs to be done in the settings
+  package`\]
 - dump markdown code for a specific release to the terminal, so it can be copy /
   pasted into other docs.
 - option to hide certain headers, or remove all headers and just have a list of
@@ -74,10 +72,10 @@ in the next release.
 - add option to specify the GitHub PAT from the command line, eg `--token
   <PAT>`. This will override any PAT set in the config file. **Note that this
   can be a security risk if the PAT is visible in the command history, so it
-  should be used with caution.** `This needs the settings logic to be refactored
-  first, the way it is done at the moment it will still ask for the PAT if it is
-  not set in the config file, even if it is set on the command line, since this
-  is a side-effect of importing the settings library.`
+  should be used with caution.** \[`This needs the settings logic to be
+  refactored first, the way it is done at the moment it will still ask for the
+  PAT if it is not set in the config file, even if it is set on the command
+  line, since this is a side-effect of importing the settings library.`\]
 
 ## Improve existing functionality
 
@@ -87,18 +85,23 @@ in the next release.
 - add link targets to the release headers so they can be linked to directly.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
-- :fire: hide the closed issues section on demand.
+- :rocket: hide the closed issues section on demand.
 - :fire: allow to hide PR's from the output by their number.
 - :fire: if the tool is run in a local repo, use that for the `--contrib` functionality
   instead of the GitHub API. This should be an order of magnitude faster. Have
   an opt-out option to use the GitHub API instead.
+- :fire: don't dump all possible setting options to the config file when we
+  create it. The only time we should write to the config is when setting the PAT
+  for a missing file. The settings package `save()` always writes all settings
+  to the file, so we need to just manually create the file the first time.
 
 ## Known Issues
 
 - some version numbers in PRs (especially dependabot) get mis-identified as
   emojis in the output, especially if the version number contains `<3` which
-  gives <3. This is very obvious for 'pip' version numbers. We need to escape
-  this particular pattern in the PR title.
+  gives :heart: in certain viewers (**though this does NOT happen in GitHub or
+  MkDocs at least**). This is very obvious for 'pip' version numbers. It's not a
+  priority to fix this for it's intended usage, but just for completeness.
 - The table styling under mobile looks a bit squashed due to setting the width
   to 100% for better desktop display. Need to add a media query to set the width
   better for mobile.

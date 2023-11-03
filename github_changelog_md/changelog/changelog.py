@@ -317,7 +317,7 @@ class ChangeLog:
 
     def print_issues(self, f: TextIOWrapper, issue_list: list[Issue]) -> None:
         """Print all the closed issues for a given release."""
-        if len(issue_list) == 0:
+        if len(issue_list) == 0 or not self.options["show_issues"]:
             return
         f.write("**Closed Issues**\n\n")
         for issue in issue_list:

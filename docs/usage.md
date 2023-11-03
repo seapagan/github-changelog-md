@@ -164,6 +164,12 @@ The config file is in [TOML](https://toml.io/en/){:target="_blank"} format, and
 can be edited manually. All settings are under the `[changelog_generator]`
 section, and any other sections will be ignored.
 
+!!! danger "Add to .gitignore"
+
+    As mentioned in the [Installation](installation.md) section, the config file
+    contains your GitHub PAT, so you should **NOT** commit this file to your
+    repository. Add it to your `.gitignore` file to prevent it being committed.
+
 Current available options are:
 
 | **Setting**             | **Description**                    | **Default** |
@@ -175,8 +181,9 @@ Current available options are:
 | `contrib`               | Create CONTRIBUTORS.md file        | `False`     |
 | `quiet`                 | Suppress output                    | `False`     |
 | `skip_releases`         | List of releases to skip           | `[]`        |
-| `extend_sections`       | Add custom sections                | `[]`        |
-| `extend_sections_index` | Index to insert custom sections    | dynamic[^1] |
+| `show_issues`           | Show closed issues                 | `True`      |
+| `extend_sections`       | A list of custom sections          | `[]`        |
+| `extend_sections_index` | Index to insert custom sections    | dynamic [^1]|
 | `date_format`           | Date format for release dates      | `%Y-%m-%d`  |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_       |
 
@@ -193,9 +200,8 @@ Current available options are:
 
 ### Example Configuration File
 
-```toml
-[changelog_generator]
-github_pat = "123456"
+```toml hl_lines="1" title="changelog_generator.toml"
+github_pat = "1234567890" # (1)!
 schema_version = "1"
 unreleased = true
 quiet = false
@@ -206,8 +212,12 @@ extend_sections = [
   { title = "Automatic Testing", label = "testing" },
 ]
 extend_sections_index = 2
-date_format = "%d %B %Y"
+date_format = "%d %B %Y" # (2)!
 ```
+
+1. This is the only required setting, the others are optional.
+2. This setting uses the `strftime` format, see the block below for more
+   details.
 
 As mentioned above, the only required setting is the `github_pat` setting. The
 other settings can be left out, and the tool will use the default values (or the
@@ -241,6 +251,11 @@ can specify a different filename using the `--output` or `-o` option.
 $ github-changelog-md --output HISTORY.md
 ```
 
+!!! tip ""
+
+    :sparkles: Equivalent to the `output_file` setting in the config file.
+---
+
 ### `--next-release` / `-n`
 
 This option allows you to specify the name of the next release. By default, any
@@ -255,11 +270,21 @@ Useful to prep for a release before it is actually released.
 $ github-changelog-md --next-release 1.2.3
 ```
 
+!!! tip ""
+
+    :sparkles: There is no equivalent setting in the config file.
+---
+
 ### `--unreleased` / `--no-unreleased`
 
 Choose whether to include the `Unreleased` section in the changelog. By default
 the `Unreleased` section is included (`--unreleased`), but you can use the
 `--no-unreleased` option to exclude it
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `unreleased` setting in the config file.
+---
 
 ### `--depends` / `--no-depends`
 
@@ -267,6 +292,21 @@ Choose whether to include the `Dependency Updates` section in the changelog. By
 default this will be shown (`--depends`), but you can use the `--no-depends` to
 hide them. Some releases have a lot of dependency updates, so this can be useful
 to keep the changelog more readable.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `depends` setting in the config file.
+---
+
+### `--issues` / `--no-issues`
+
+Hide the `Closed Issues` section. By default this section is shown, but you can
+use the `--no-issues` option to hide it.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `show_issues` setting in the config file.
+---
 
 ### `--contrib` / `--no-contrib`
 
@@ -285,11 +325,21 @@ Choose whether to create the `CONTRIBUTORS.md` file. By default this will be
     In future versions I will add the ability to cache the contributors list,
     which should speed things up a lot
 
+!!! tip ""
+
+    :sparkles: Equivalent to the `contrib` setting in the config file.
+---
+
 ### `--quiet` / `-q`
 
 By default the tool will output some information about what it is doing, and
 some stats about the PRs and Issues it has found. You can use the `--quiet` or
 `-q` option to suppress this output.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `quiet` setting in the config file.
+---
 
 ### `--skip` / `-s`
 
@@ -303,6 +353,11 @@ $ github-changelog-md --skip 1.2.3 --skip 1.3-beta1
 
 The string specified here is the actual release **`tag`** for that release, not
 the release **`name`**.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `skip_releases` setting in the config file.
+---
 
 ## Hide PR from the Changelog
 

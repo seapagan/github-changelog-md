@@ -84,6 +84,11 @@ def main(
         help="Skip the suplied tag. Can be specified multiple times",
         show_default=False,
     ),
+    issues: Optional[bool] = typer.Option(
+        default=None,
+        help="Show CLOSED issues in the Changelog, defaults to True.",
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically.
 
@@ -126,6 +131,7 @@ def main(
         "contributors": settings.contrib if contrib is None else contrib,
         "quiet": settings.quiet if quiet is None else quiet,
         "skip_releases": settings.skip_releases if skip == [] else skip,
+        "show_issues": settings.show_issues if issues is None else issues,
     }
 
     changelog = ChangeLog(repo, options)
