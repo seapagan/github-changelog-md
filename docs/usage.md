@@ -263,7 +263,7 @@ extend_sections = [
   { title = "Security", label = "security" },
 ]
 extend_sections_index = 3
-rename_sections = [{ label = "enhancements", title = "New Features" }]
+rename_sections = [{ old = "Enhancements", new = "New Features" }]
 date_format = "%d %B %Y" # (2)!
 item_order = "oldest_first"
 ignore_items = [123, 456] # (3)!
