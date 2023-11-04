@@ -4,6 +4,7 @@
 
 **Enhancements**
 
+- Handle missing release body ([#106](https://github.com/seapagan/github-changelog-md/pull/106)) by [seapagan](https://github.com/seapagan)
 - Hide PRs or Issues by their GitHub number ([#105](https://github.com/seapagan/github-changelog-md/pull/105)) by [seapagan](https://github.com/seapagan)
 - Allow sorting PRs and Issues within each section of a release ([#104](https://github.com/seapagan/github-changelog-md/pull/104)) by [seapagan](https://github.com/seapagan)
 - Implement '--no-issues' flag to hide closed issues from the generated changelog ([#102](https://github.com/seapagan/github-changelog-md/pull/102)) by [seapagan](https://github.com/seapagan)
