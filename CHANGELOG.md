@@ -1,9 +1,11 @@
 # Changelog
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.6.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.6.0) (November 04, 2023)
 
-**Enhancements**
+**New Features**
 
+- Make the list of ignored labels customizable ([#109](https://github.com/seapagan/github-changelog-md/pull/109)) by [seapagan](https://github.com/seapagan)
+- Implement renaming default section headers ([#108](https://github.com/seapagan/github-changelog-md/pull/108)) by [seapagan](https://github.com/seapagan)
 - Handle missing release body ([#106](https://github.com/seapagan/github-changelog-md/pull/106)) by [seapagan](https://github.com/seapagan)
 - Hide PRs or Issues by their GitHub number ([#105](https://github.com/seapagan/github-changelog-md/pull/105)) by [seapagan](https://github.com/seapagan)
 - Allow sorting PRs and Issues within each section of a release ([#104](https://github.com/seapagan/github-changelog-md/pull/104)) by [seapagan](https://github.com/seapagan)
@@ -13,7 +15,7 @@
 
 - Don't add all settings to auto-generated config file ([#103](https://github.com/seapagan/github-changelog-md/pull/103)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...HEAD)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0)
 
 ## [0.5.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.1) (November 02, 2023)
 
@@ -33,7 +35,7 @@
 
 ## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023)
 
-**Enhancements**
+**New Features**
 
 - Change the default position of custom sections and allow custom position ([#94](https://github.com/seapagan/github-changelog-md/pull/94)) by [seapagan](https://github.com/seapagan)
 - Allow a custom date format ([#92](https://github.com/seapagan/github-changelog-md/pull/92)) by [seapagan](https://github.com/seapagan)
@@ -69,7 +71,7 @@
 
 ## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (October 28, 2023)
 
-**Enhancements**
+**New Features**
 
 - Don't list any PRs with specific flag in the PR title ([#74](https://github.com/seapagan/github-changelog-md/pull/74)) by [seapagan](https://github.com/seapagan)
 - Allow a custom output file name ([#72](https://github.com/seapagan/github-changelog-md/pull/72)) by [seapagan](https://github.com/seapagan)
@@ -93,7 +95,7 @@
 
 ## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (October 25, 2023)
 
-**Enhancements**
+**New Features**
 
 - Hide dependency PRs if requested ([#68](https://github.com/seapagan/github-changelog-md/pull/68)) by [seapagan](https://github.com/seapagan)
 - Add and implement '--unreleased' option ([#60](https://github.com/seapagan/github-changelog-md/pull/60)) by [seapagan](https://github.com/seapagan)
@@ -169,7 +171,7 @@
 - Add testing with Pytest ([#29](https://github.com/seapagan/github-changelog-md/issues/29)) by [seapagan](https://github.com/seapagan)
 - Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is. ([#22](https://github.com/seapagan/github-changelog-md/issues/22)) by [seapagan](https://github.com/seapagan)
 
-**Enhancements**
+**New Features**
 
 - List closed issues ([#38](https://github.com/seapagan/github-changelog-md/pull/38)) by [seapagan](https://github.com/seapagan)
 - Add the '--next-release' option ([#37](https://github.com/seapagan/github-changelog-md/pull/37)) by [seapagan](https://github.com/seapagan)

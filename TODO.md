@@ -15,7 +15,7 @@ in the next release.
 - allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
 - Allow custom ordering of sections.
-- Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
+- Allow custom output formats (e.g. HTML, Markdown, PDF, etc.).
 - Ability to only update changes and leave the rest of the file untouched (ie do
   not re-generate previous releases, only new ones or the unreleased section).
   (allows user customization to the CHANGELOG).
@@ -47,18 +47,10 @@ in the next release.
 - dump markdown code for a specific release to the terminal, so it can be copy /
   pasted into other docs.
 - option to just have a flat list of PRs and Issues with no sections.
-- :rocket: change the order of PRs and Issues in the output - option to sort by
-  `newest-first` (default), or `oldest-first`.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
 - option to start at a specific release, ignoring all previous releases.
-- :rocket: add `extend_ignored` option to add to the default list of
-  ignored labels.
-- :rocket: add `ignored_labels` option to override the default list of ignored
-  labels.
-- :rocket: add `allowed_labels` option to specify which of the default ignored
-  labels you want to include in the changelog.
 - once the common config file functionality is implemented, add the ability to
   read the config from a `pyproject.toml` file if it exists in the current
   directory. This will allow one less config file. Note that the PAT will still
@@ -72,25 +64,14 @@ in the next release.
   line, since this is a side-effect of importing the settings library.`\]
 - offer to create any missing GitHub labels for the repo. This will prob require
   adding extra permissions to the PAT.
-- :rocket: allow renaming existing sections for Section headers. For example,
-  rename "Enhancements" to "New Features" etc.
 
 ## Improve existing functionality
 
-- :rocket: if there are no PR for a specific release then say something to that
-  effect instead of just leaving the section empty. We already use the Release
-  'body' for this, but if that is missing too we need to say something.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
-- :rocket: hide the closed issues section on demand.
-- :rocket: allow to hide PR's or issues from the output by their number.
 - if the tool is run in a local repo, use that for the `--contrib` functionality
   instead of the GitHub API. This should be an order of magnitude faster. Have
   an opt-out option to use the GitHub API instead.
-- :rocket: don't dump all possible setting options to the config file when we
-  create it. The only time we should write to the config is when setting the PAT
-  for a missing file. The settings package `save()` always writes all settings
-  to the file, so we need to just manually create the file the first time.
 - update the format for custom sections to allow each section to have it's own
   insertion index. This will be a breaking change in the config file format so
   require a `schema_version` bump.
