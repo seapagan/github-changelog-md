@@ -80,6 +80,9 @@ class ChangeLog:
         self.options = options
         self.settings = get_settings()
 
+        self.sections: list[SectionHeadings]
+        self.ignored_labels: list[str]
+
         self.repo_data: Repository
         self.repo_releases: list[GitRelease]
         self.repo_prs: PaginatedList[PullRequest]
@@ -105,6 +108,7 @@ class ChangeLog:
         header()
 
         self.sections = self.rename_sections(self.extend_sections())
+        self.ignored_labels = self.extend_ignored()
 
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -169,6 +173,13 @@ class ChangeLog:
         return (
             SECTIONS[:insert_index] + extend_sections + SECTIONS[insert_index:]
         )
+
+    def extend_ignored(self) -> list[str]:
+        """Extend the default ignored items with any user defined ones.
+
+        user defined items are in the self.settings.extend_ignored list
+        """
+        return IGNORED_LABELS + self.settings.extend_ignored
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.
@@ -367,7 +378,7 @@ class ChangeLog:
         for issue in self.get_sorted_items(visible_issues):
             if (
                 any(
-                    label.name.lower() in IGNORED_LABELS
+                    label.name.lower() in self.ignored_labels
                     for label in issue.labels
                 )
                 or "[no changelog]" in issue.title.lower()
@@ -422,7 +433,7 @@ class ChangeLog:
 
         merged_section_title = next(
             (section[0] for section in self.sections if section[1] is None),
-            None,
+            "Merged Pull Requests",
         )
         release_sections[merged_section_title] = [
             pr
@@ -432,7 +443,7 @@ class ChangeLog:
                 for _, label in self.sections
             )
             and not any(
-                label in IGNORED_LABELS
+                label in self.ignored_labels
                 for label in [label.name.lower() for label in pr.labels]
             )
         ]
@@ -493,7 +504,7 @@ class ChangeLog:
                 for pr in pr_list
                 if label in [label.name.lower() for label in pr.labels]
                 and not any(
-                    label in IGNORED_LABELS
+                    label in self.ignored_labels
                     for label in [label.name.lower() for label in pr.labels]
                 )
             ]
