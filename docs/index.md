@@ -6,8 +6,21 @@
 version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.io/py/github-changelog-md)&nbsp;
 ![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)&nbsp;
 
-This project will generate a Markdown-formatted Changelog from a Github
-repository. It will detect all GitHub releases and generate a changelog based on
+Having a changelog is a great way to keep your users informed about changes to
+your project. It is also a great way to keep track of what you have done and
+when. However, it can be a pain to maintain, especially if you have a lot of
+changes. This tool aims to make it easy to generate a Markdown-formatted
+changelog from your project's Github repository.
+
+!!! warning "Important!"
+
+    You need to use the Github `Pull Request` and `Release` methodology for this
+    tool to work. If you don't, then this tool is not for you!
+
+    Until you have at least one GitHub Release, this tool will lump all the PRs
+    together under the `Unreleased` heading.
+
+It will detect all GitHub releases and generate a changelog based on
 the **merged** Pull Requests for each release along with a section for
 **unreleased** PRs (those merged since the last release) at the top. It will
 also include a list of all Issues closed for each release.
@@ -20,7 +33,7 @@ previous release) with an upcoming release number to ease the process of
 creating a new release by having the changelog already up to date, *or hide any
 unreleased PR's completely*.
 
-There is much more this app can do, see the [Usage](usage.md) page for more
+There is much more this app can do, see the [Usage](usage.md) page for full
 details.
 
 While the project is written in Python, it is **NOT** limited to just generating

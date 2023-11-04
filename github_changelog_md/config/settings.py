@@ -32,6 +32,9 @@ class Settings(TOMLSettings):
     show_issues: bool = True
     item_order: str = "newest-first"
     ignore_items: ClassVar[list[int]] = []
+    extend_ignored: ClassVar[list[str]] = []
+    ignored_labels: ClassVar[list[str]] = []
+    allowed_labels: ClassVar[list[str]] = []
 
 
 def get_settings_object() -> Settings:

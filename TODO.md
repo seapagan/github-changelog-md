@@ -14,7 +14,7 @@ in the next release.
 
 - allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
-- :fire: Allow custom ordering of sections.
+- Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, Markdown, PDF, LaTeX, etc.).
 - Ability to only update changes and leave the rest of the file untouched (ie do
   not re-generate previous releases, only new ones or the unreleased section).
@@ -53,11 +53,11 @@ in the next release.
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
 - option to start at a specific release, ignoring all previous releases.
-- :fire: add `extend_ignored_labels` option to add to the default list of
+- :rocket: add `extend_ignored` option to add to the default list of
   ignored labels.
-- :fire: add `ignored_labels` option to override the default list of ignored
+- :rocket: add `ignored_labels` option to override the default list of ignored
   labels.
-- :fire: add `allowed_labels` option to specify which of the default ignored
+- :rocket: add `allowed_labels` option to specify which of the default ignored
   labels you want to include in the changelog.
 - once the common config file functionality is implemented, add the ability to
   read the config from a `pyproject.toml` file if it exists in the current
