@@ -27,6 +27,7 @@ class Settings(TOMLSettings):
     skip_releases: ClassVar[list[str]] = []
     extend_sections: ClassVar[list[dict[str, str]]] = []
     extend_sections_index: Optional[int] = None
+    rename_sections: ClassVar[list[dict[str, str]]] = []
     date_format: str = "%Y-%m-%d"
     show_issues: bool = True
     item_order: str = "newest-first"
