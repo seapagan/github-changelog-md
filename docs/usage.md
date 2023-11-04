@@ -10,7 +10,7 @@
     PRs.
 
 This tool is designed to be run from the root of a project, and will generate a
-`CHANGELOG.md` file in the current folder using the GitHub release and PR
+`CHANGELOG.md` file in the current folder using the GitHub Release and PR
 history. It can also create a `CONTRIBUTORS.md` file if you want it to.
 
 Note that this tool is designed to be run **after** you have merged your PRs,
@@ -180,8 +180,8 @@ you can use the inline array format or the verbose format as you prefer.
 
 ## Ignored Labels
 
-There are a few labels that are ignored by default, as they should not be
-included in the changelog. These are:
+There are a few labels that are ignored by default and will not be included in
+the changelog. These are:
 
 - `duplicate`
 - `invalid`
@@ -190,12 +190,63 @@ included in the changelog. These are:
 
 These are ignored for both PRs and Issues.
 
-!!! tip
+### Customizing Ignored Labels
 
-    This list of ignored labels will be customizable in future versions using a
-    combination of `extend_ignored_labels` and `ignored_labels`. There will
-    probably also be an `allowed_labels` option, so you can specify which of the
-    default ignored labels you want to include in the changelog.
+There are three ways to customize the ignored labels, all using settings in the
+config file.
+
+#### `ignored_labels`
+
+The `ignored_labels` setting is a definitive list of labels that should be
+ignored. This totally replaces the default list. For example, if you only want
+to ignore the `wontfix` label, but include every other label, you would add the
+following to your config file:
+
+```toml
+ignored_labels = ["wontfix"]
+```
+
+!!! danger ""
+
+    :sparkles: If this setting is present in your config file, the
+    `extend_ignored` and `allowed_labels` settings will be silently ignored.
+
+#### `extend_ignored`
+
+The `extend_ignored` setting is a list of labels to add to the default list. For
+example, if you don't want to list documentation changes in the changelog, you
+could add the following to your config file:
+
+```toml
+extend_ignored = ["documentation"]
+```
+
+!!! danger ""
+
+    :sparkles: This setting is ignored if you also have the `ignored_labels`
+    setting in your config file.
+
+#### `allowed_labels`
+
+Finally, the `allowed_labels` setting is a list of labels that should be
+included, even if they are in the default list. For example, if you want to
+include the `question` label in the changelog, you could add the following to
+your config file:
+
+```toml
+allowed_labels = ["question"]
+```
+
+!!! danger ""
+
+    :sparkles: This setting is ignored if you also have the `ignored_labels`
+    setting in your config file.
+
+!!! Tip "Tip"
+
+    You CAN combine the `extend_ignored` and `allowed_labels` settings if needed
+    , but it is probably easier to just use the `ignored_labels` setting
+    instead.
 
 ## Configuration File
 
@@ -235,6 +286,9 @@ Current available options are:
 | `date_format`           | Date format for release dates      | `%Y-%m-%d`    |
 | `item_order`            | Order of PR/Issues in each section | `newest_first`|
 | `ignore_items`          | List of PRs/Issues to ignore       | `[]`          |
+| `ignored_labels`        | List of labels to ignore           | See above     |
+| `extend_ignored`        | List of labels to add to ignored   | `[]`          |
+| `allowed_labels`        | List of labels to allow            | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -267,6 +321,8 @@ rename_sections = [{ old = "Enhancements", new = "New Features" }]
 date_format = "%d %B %Y" # (2)!
 item_order = "oldest_first"
 ignore_items = [123, 456] # (3)!
+extend_ignored = ["testing"]
+allowed_labels = ["question"]
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
