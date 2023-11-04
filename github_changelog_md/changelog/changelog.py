@@ -108,7 +108,7 @@ class ChangeLog:
         header()
 
         self.sections = self.rename_sections(self.extend_sections())
-        self.ignored_labels = self.extend_ignored()
+        self.ignored_labels = self.flatten_ignores()
 
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -133,6 +133,25 @@ class ChangeLog:
         if self.options["quiet"]:
             sys.stdout = orig_stdout
             out.close()
+
+    def flatten_ignores(self) -> list[str]:
+        """Process the ignored labels.
+
+        Takes into account the assorted ways the user can define the ignored
+        labels.
+        """
+        if not self.settings.ignored_labels:
+            ignored_labels = IGNORED_LABELS + self.settings.extend_ignored
+            if self.settings.allowed_labels:
+                ignored_labels = [
+                    label
+                    for label in ignored_labels
+                    if label not in self.settings.allowed_labels
+                ]
+        else:
+            ignored_labels = self.settings.ignored_labels
+
+        return ignored_labels
 
     def rename_sections(
         self, sections: list[SectionHeadings]
@@ -173,13 +192,6 @@ class ChangeLog:
         return (
             SECTIONS[:insert_index] + extend_sections + SECTIONS[insert_index:]
         )
-
-    def extend_ignored(self) -> list[str]:
-        """Extend the default ignored items with any user defined ones.
-
-        user defined items are in the self.settings.extend_ignored list
-        """
-        return IGNORED_LABELS + self.settings.extend_ignored
 
     def get_contributors(self) -> list[NamedUser]:
         """This will get all the contributors to the repo.
