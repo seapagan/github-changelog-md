@@ -35,8 +35,6 @@ in the next release.
 - add ability to place a section between releases with custom markdown, eg to
   explain changes in the version numbering scheme or other important
   information.
-- :fire: option to change PR/Issue/Commit links to use the GitHub autolink
-  syntax instead of explicitly linking to the GitHub page.
 - Allow to add a text block to the 'Breaking Changes' section. Should be added
   to the config file.
 - Add config option to add a custom text block to specfic releases.
@@ -78,6 +76,8 @@ in the next release.
   line, since this is a side-effect of importing the settings library.`\]
 - offer to create any missing GitHub labels for the repo. This will prob require
   adding extra permissions to the PAT.
+- allow renaming existing sections for Section headers. For example, rename
+  "Enhancements" to "New Features" etc.
 
 ## Improve existing functionality
 
@@ -109,7 +109,7 @@ in the next release.
   priority to fix this for it's intended usage, but just for completeness.
 - The table styling under mobile looks a bit squashed due to setting the width
   to 100% for better desktop display. Need to add a media query to set the width
-  better for mobile.
+  better for mobile, prob using overflow
 
 ## Documentation
 
