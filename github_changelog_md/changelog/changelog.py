@@ -104,7 +104,7 @@ class ChangeLog:
 
         header()
 
-        self.sections: list[SectionHeadings] = self.extend_sections()
+        self.sections = self.rename_sections(self.extend_sections())
 
         self.repo_data = self.get_repo_data()
         self.repo_releases = self.get_repo_releases()
@@ -129,6 +129,29 @@ class ChangeLog:
         if self.options["quiet"]:
             sys.stdout = orig_stdout
             out.close()
+
+    def rename_sections(
+        self, sections: list[SectionHeadings]
+    ) -> list[SectionHeadings]:
+        """Rename the default sections with any user defined ones."""
+        rename_sections = [
+            (section["old"], section["new"])
+            for section in self.settings.rename_sections
+        ]
+
+        try:
+            for rename in rename_sections:
+                index = get_index_of_tuple(sections, 0, rename[0])
+                sections[index] = (rename[1], sections[index][1])
+        except ValueError:
+            print(
+                f"[red]  X  Error: Section '[bold]{rename[0]}[/bold]' not "
+                "found \\[[reverse]rename_sections[/reverse]]\n",
+                file=sys.stderr,
+            )
+            sys.exit(ExitErrors.INVALID_ACTION)
+
+        return sections
 
     def extend_sections(self) -> list[SectionHeadings]:
         """Extend the default sections with any user defined ones."""
@@ -394,7 +417,14 @@ class ChangeLog:
         # default section for PRs that don't have any of the specific labels we
         # have defined for section headings. This may be able to be merged with
         # the above dict comprehension?
-        release_sections["Merged Pull Requests"] = [
+
+        # find the new section title
+
+        merged_section_title = next(
+            (section[0] for section in self.sections if section[1] is None),
+            None,
+        )
+        release_sections[merged_section_title] = [
             pr
             for pr in pr_list
             if not any(

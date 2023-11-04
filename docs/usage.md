@@ -160,6 +160,24 @@ just a bit easier to read and IMHO look nicer.
     in future versions. I also plan to add the ability to use
     multiple labels for the same section, eg `enhancement` and `enhancements`
 
+### Renaming Default Sections
+
+You can also **rename** the default section headers using the `rename_sections`
+option in the config file. For example, if you want to rename the `Enhancements`
+section to `New Features`, you would add the following to your config file:
+
+```toml
+rename_sections = [{ old = "Enhancements", new = "New Features" }]
+```
+
+You specify the original title of the section you want to rename as `old`
+(**case sensitive!**), and the new title as `new`. You can rename as many
+sections as you
+want, just add more tables to the array.
+
+The same notes apply to this option as to the `extend_sections` option above,
+you can use the inline array format or the verbose format as you prefer.
+
 ## Ignored Labels
 
 There are a few labels that are ignored by default, as they should not be
@@ -213,6 +231,7 @@ Current available options are:
 | `show_issues`           | Show closed issues                 | `True`        |
 | `extend_sections`       | A list of custom sections          | `[]`          |
 | `extend_sections_index` | Index to insert custom sections    | dynamic [^1]  |
+| `rename_sections`       | Rename default section headers     | `[]`          |
 | `date_format`           | Date format for release dates      | `%Y-%m-%d`    |
 | `item_order`            | Order of PR/Issues in each section | `newest_first`|
 | `ignore_items`          | List of PRs/Issues to ignore       | `[]`          |
@@ -244,6 +263,7 @@ extend_sections = [
   { title = "Security", label = "security" },
 ]
 extend_sections_index = 3
+rename_sections = [{ label = "enhancements", title = "New Features" }]
 date_format = "%d %B %Y" # (2)!
 item_order = "oldest_first"
 ignore_items = [123, 456] # (3)!
