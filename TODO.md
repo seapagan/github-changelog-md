@@ -19,9 +19,6 @@ in the next release.
 - Ability to only update changes and leave the rest of the file untouched (ie do
   not re-generate previous releases, only new ones or the unreleased section).
   (allows user customization to the CHANGELOG).
-- Ability to specify a custom template layout.
-- Allow filtering of commits based on commit message or other criteria.
-- Allow customization of the commit message format in the changelog.
 - Add support for generating changelogs for specific time periods (e.g. last
   week, last month, etc.)
 - Add support for generating changelogs for specific contributors, authors or
@@ -49,8 +46,7 @@ in the next release.
   package`\]
 - dump markdown code for a specific release to the terminal, so it can be copy /
   pasted into other docs.
-- option to hide certain headers, or remove all headers and just have a list of
-  PRs.
+- option to just have a flat list of PRs and Issues with no sections.
 - :rocket: change the order of PRs and Issues in the output - option to sort by
   `newest-first` (default), or `oldest-first`.
 - Add settings to run this as a GitHub action, so it can be run automatically
@@ -76,15 +72,14 @@ in the next release.
   line, since this is a side-effect of importing the settings library.`\]
 - offer to create any missing GitHub labels for the repo. This will prob require
   adding extra permissions to the PAT.
-- allow renaming existing sections for Section headers. For example, rename
-  "Enhancements" to "New Features" etc.
+- :rocket: allow renaming existing sections for Section headers. For example,
+  rename "Enhancements" to "New Features" etc.
 
 ## Improve existing functionality
 
 - :rocket: if there are no PR for a specific release then say something to that
   effect instead of just leaving the section empty. We already use the Release
   'body' for this, but if that is missing too we need to say something.
-- add link targets to the release headers so they can be linked to directly.
 - allow multiple labels to be used for the same section, eg 'enhancement'
   and 'enhancements' both map to the 'Enhancements' section.
 - :rocket: hide the closed issues section on demand.
