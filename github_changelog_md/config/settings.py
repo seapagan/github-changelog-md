@@ -31,6 +31,7 @@ class Settings(TOMLSettings):
     show_issues: bool = True
     item_order: str = "newest-first"
     ignore_items: ClassVar[list[int]] = []
+    autolinks: bool = False
 
 
 def get_settings_object() -> Settings:

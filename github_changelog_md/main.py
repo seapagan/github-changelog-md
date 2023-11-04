@@ -119,6 +119,15 @@ def main(
         ),
         show_default=False,
     ),
+    autolinks: Optional[bool] = typer.Option(
+        default=None,
+        help=(
+            "Allow GitHub to autolink PRs and Issues in the Changelog as "
+            "opposed to using the full URL. Only works on GitHub. "
+            "Defaults to [bold]False[/bold]."
+        ),
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
@@ -159,6 +168,7 @@ def main(
         "show_issues": settings.show_issues if issues is None else issues,
         "item_order": settings.item_order if item_order is None else item_order,
         "ignore_items": settings.ignore_items if ignore == [] else ignore,
+        "autolinks": settings.autolinks if autolinks is None else autolinks,
     }
 
     changelog = ChangeLog(repo, options)

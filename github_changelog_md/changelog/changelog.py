@@ -353,11 +353,16 @@ class ChangeLog:
             escaped_title = cap_first_letter(
                 issue.title.replace("__", "\\_\\_").strip(),
             )
-            f.write(
-                f"- {escaped_title} "
-                f"([#{issue.number}]({issue.html_url})) "
-                f"by [{issue.user.login}]({issue.user.html_url})\n",
-            )
+            f.write(f"- {escaped_title} ")
+            if not self.options["autolinks"]:
+                f.write(
+                    f"([#{issue.number}]({issue.html_url})) "
+                    f"by [{issue.user.login}]({issue.user.html_url})\n",
+                )
+            else:
+                f.write(
+                    f"(#{issue.number}) by @{issue.user.login}\n",
+                )
         f.write("\n")
 
     def generate_diff_url(
@@ -422,11 +427,16 @@ class ChangeLog:
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
                     )
-                    f.write(
-                        f"- {escaped_title} "
-                        f"([#{pr.number}]({pr.html_url})) "
-                        f"by [{pr.user.login}]({pr.user.html_url})\n",
-                    )
+                    f.write(f"- {escaped_title} ")
+                    if not self.options["autolinks"]:
+                        f.write(
+                            f"([#{pr.number}]({pr.html_url})) "
+                            f"by [{pr.user.login}]({pr.user.html_url})\n",
+                        )
+                    else:
+                        f.write(
+                            f"(#{pr.number}) by @{pr.user.login}\n",
+                        )
                 f.write("\n")
 
     def ignore_items(
