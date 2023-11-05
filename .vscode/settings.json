@@ -42,6 +42,7 @@
     "jinja-html": "django"
   },
   "mypy-type-checker.args": ["--strict"],
+  "mypy-type-checker.importStrategy": "fromEnvironment",
   "python.analysis.autoImportCompletions": true,
   "python.analysis.autoImportUserSymbols": true,
   "python.analysis.extraPaths": [],

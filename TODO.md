@@ -64,6 +64,10 @@ in the next release.
   line, since this is a side-effect of importing the settings library.`\]
 - offer to create any missing GitHub labels for the repo. This will prob require
   adding extra permissions to the PAT.
+- add `patch` and `diff` links to each release. Its pretty easy to do this -
+  just add `.patch` or `.diff` to the end of the '3-dot' url we generate for
+  each release anyway. Optional.
+- option to mark a release as 'yanked', possibly with a custom message.
 
 ## Improve existing functionality
 

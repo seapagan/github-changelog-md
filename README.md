@@ -153,7 +153,7 @@ of the contributors and to help spread the word about this project. Please leave
 this comment in place for others :pray:.
 
 If you use this tool and like it, please consider giving it a :star: on Github,
-wich helps others find it. Thanks!
+which helps others find it. Thanks!
 
 If you find this tool is useful, please consider
 [sponsoring](https://github.com/sponsors/seapagan) the developer . All sponsors
