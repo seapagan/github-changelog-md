@@ -193,7 +193,7 @@ These are ignored for both PRs and Issues.
 ### Customizing Ignored Labels
 
 There are three ways to customize the ignored labels, all using settings in the
-config file.
+config file. There are no equivalent command line options for these settings.
 
 #### `ignored_labels`
 
@@ -248,6 +248,20 @@ allowed_labels = ["question"]
     , but it is probably easier to just use the `ignored_labels` setting
     instead.
 
+## Ignoring Specific Users
+
+You can also ignore PRs and Issues from specific users, using the
+`ignored_users` setting in the config file. For example, if you want to ignore
+PRs and Issues from the `pre-commit-ci[bot]` user, you could add the following
+to your config file:
+
+```toml
+ignored_users = ["pre-commit-ci[bot]"]
+```
+
+This is a list of strings and is optional. If you do not specify this setting,
+all users will be included. This is NO command line equivalent for this setting.
+
 ## Configuration File
 
 As mentioned in the [Installation](installation.md) section, this tool uses a
@@ -289,6 +303,7 @@ Current available options are:
 | `ignored_labels`        | List of labels to ignore           | See above     |
 | `extend_ignored`        | List of labels to add to ignored   | `[]`          |
 | `allowed_labels`        | List of labels to allow            | `[]`          |
+| `ignored_users`         | List of usernames to ignore        | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -323,6 +338,7 @@ item_order = "oldest_first"
 ignore_items = [123, 456] # (3)!
 extend_ignored = ["testing"]
 allowed_labels = ["question"]
+ignored_users = ["pre-commit-ci[bot]"]
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
