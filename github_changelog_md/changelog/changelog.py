@@ -554,6 +554,10 @@ class ChangeLog:
                         issue in issue_list
                         for issue_list in issue_by_release.values()
                     )
+                    and (
+                        self.settings.ignored_users
+                        and issue.user.login not in self.settings.ignored_users
+                    )
                 ):
                     issue_by_release[release.id].append(issue)
 
@@ -568,6 +572,10 @@ class ChangeLog:
             and issue.closed_at > last_release_date
             and not any(
                 issue in pr_list for pr_list in issue_by_release.values()
+            )
+            and (
+                self.settings.ignored_users
+                and issue.user.login not in self.settings.ignored_users
             )
         ]
 
@@ -606,6 +614,10 @@ class ChangeLog:
                     and not any(
                         pr in pr_list for pr_list in pr_by_release.values()
                     )
+                    and (
+                        self.settings.ignored_users
+                        and pr.user.login not in self.settings.ignored_users
+                    )
                 ):
                     pr_by_release[release.id].append(pr)
         # Add any pull request more recent than the last release to a specific
@@ -618,6 +630,10 @@ class ChangeLog:
             if pr.merged_at
             and pr.merged_at > last_release_date
             and not any(pr in pr_list for pr_list in pr_by_release.values())
+            and (
+                self.settings.ignored_users
+                and pr.user.login not in self.settings.ignored_users
+            )
         ]
         print(self.done_str)
         return pr_by_release

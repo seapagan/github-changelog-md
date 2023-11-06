@@ -68,6 +68,13 @@ in the next release.
   just add `.patch` or `.diff` to the end of the '3-dot' url we generate for
   each release anyway. Optional.
 - option to mark a release as 'yanked', possibly with a custom message.
+- :rocket: list of usernames that should be ignored when generating the
+  changelog. This will be useful for bots, particularly the `pre-commit` bot.
+  `Dependabot` is not usually a problem, since it's PRs are usually labelled
+  with `dependencies` and can be ignored by label or using the `--no-depends`
+  flag.
+- allow to use `Git TAGS` instead of `GitHub Releases` to generate the
+  changelog. some projects don't use GitHub releases, but do use tags.
 
 ## Improve existing functionality
 
@@ -90,6 +97,10 @@ in the next release.
 - The table styling under mobile looks a bit squashed due to setting the width
   to 100% for better desktop display. Need to add a media query to set the width
   better for mobile, prob using overflow
+- when using the Release body, normalize any headings to Bold text instead so it
+  does not grate so badly with the auto-generated headings.
+- in some cases the `full-changelog` does not get removed from the existing body
+  properly depending on how it is formatted.
 
 ## Documentation
 

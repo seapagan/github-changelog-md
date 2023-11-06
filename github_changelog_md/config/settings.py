@@ -36,6 +36,7 @@ class Settings(TOMLSettings):
     ignored_labels: Optional[list[str]] = None
     allowed_labels: Optional[list[str]] = None
     ignore_strings: Optional[list[str]] = None
+    ignored_users: Optional[list[str]] = None
 
 
 def get_settings_object() -> Settings:
