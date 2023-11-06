@@ -1,7 +1,7 @@
 """Handle the settings for the project."""
 import sys
 from pathlib import Path
-from typing import ClassVar, Optional
+from typing import Optional
 
 from rich import print  # pylint: disable=redefined-builtin
 from rich.prompt import Prompt
@@ -24,17 +24,18 @@ class Settings(TOMLSettings):
     depends: bool = True
     contrib: bool = False
     quiet: bool = False
-    skip_releases: ClassVar[list[str]] = []
-    extend_sections: ClassVar[list[dict[str, str]]] = []
+    skip_releases: Optional[list[str]] = None
+    extend_sections: Optional[list[dict[str, str]]] = None
     extend_sections_index: Optional[int] = None
-    rename_sections: ClassVar[list[dict[str, str]]] = []
+    rename_sections: Optional[list[dict[str, str]]] = None
     date_format: str = "%Y-%m-%d"
     show_issues: bool = True
     item_order: str = "newest-first"
-    ignore_items: ClassVar[list[int]] = []
-    extend_ignored: ClassVar[list[str]] = []
-    ignored_labels: ClassVar[list[str]] = []
-    allowed_labels: ClassVar[list[str]] = []
+    ignore_items: Optional[list[int]] = None
+    extend_ignored: Optional[list[str]] = None
+    ignored_labels: Optional[list[str]] = None
+    allowed_labels: Optional[list[str]] = None
+    ignore_strings: Optional[list[str]] = None
 
 
 def get_settings_object() -> Settings:
