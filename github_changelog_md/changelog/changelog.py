@@ -33,7 +33,6 @@ from github_changelog_md.helpers import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
     from io import TextIOWrapper
 
     from github.Commit import Commit
@@ -141,7 +140,9 @@ class ChangeLog:
         labels.
         """
         if not self.settings.ignored_labels:
-            ignored_labels = IGNORED_LABELS + self.settings.extend_ignored
+            ignored_labels = IGNORED_LABELS
+            if self.settings.extend_ignored:
+                ignored_labels = IGNORED_LABELS + self.settings.extend_ignored
             if self.settings.allowed_labels:
                 ignored_labels = [
                     label
@@ -157,6 +158,9 @@ class ChangeLog:
         self, sections: list[SectionHeadings]
     ) -> list[SectionHeadings]:
         """Rename the default sections with any user defined ones."""
+        if not self.settings.rename_sections:
+            return sections
+
         rename_sections = [
             (section["old"], section["new"])
             for section in self.settings.rename_sections
@@ -178,6 +182,9 @@ class ChangeLog:
 
     def extend_sections(self) -> list[SectionHeadings]:
         """Extend the default sections with any user defined ones."""
+        if not self.settings.extend_sections:
+            return SECTIONS
+
         extend_sections = [
             (section["title"], section["label"])
             for section in self.settings.extend_sections
@@ -382,7 +389,7 @@ class ChangeLog:
         issue_list: list[Issue],
     ) -> None:
         """Print all the closed issues for a given release."""
-        visible_issues = self.ignore_items(issue_list)
+        visible_issues = self.ignore_items(list(issue_list))
         if len(visible_issues) == 0 or not self.options["show_issues"]:
             return
 
@@ -467,7 +474,7 @@ class ChangeLog:
             ):
                 continue
 
-            visible_prs = self.ignore_items(prs)
+            visible_prs = self.ignore_items(list(prs))
 
             if len(visible_prs) > 0:
                 f.write(f"**{heading}**\n\n")
@@ -483,9 +490,11 @@ class ChangeLog:
                 f.write("\n")
 
     def ignore_items(
-        self, items: Sequence[PullRequest | Issue]
+        self, items: list[PullRequest | Issue]
     ) -> list[PullRequest | Issue]:
         """Ignore any PRs or Issues that have been marked as hidden."""
+        if not self.options["ignore_items"]:
+            return items
         return [
             item
             for item in items
