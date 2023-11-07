@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+**New Features**
+
+- Add diff and patch links for each Release ([#117](https://github.com/seapagan/github-changelog-md/pull/117)) by [seapagan](https://github.com/seapagan)
+- Allow to only show `max_depends` number of dependency updates for each release ([#116](https://github.com/seapagan/github-changelog-md/pull/116)) by [seapagan](https://github.com/seapagan)
+- Implement the `ignore_users` setting. Users listed in this will not have any PRs or Issues in the Changelog ([#115](https://github.com/seapagan/github-changelog-md/pull/115)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Refactor settings class, change default values ([#114](https://github.com/seapagan/github-changelog-md/pull/114)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Build(deps-dev): bump poethepoet from 0.22.1 to 0.24.2 ([#113](https://github.com/seapagan/github-changelog-md/pull/113)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-material from 9.4.7 to 9.4.8 ([#112](https://github.com/seapagan/github-changelog-md/pull/112)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump ruff from 0.1.3 to 0.1.4 ([#111](https://github.com/seapagan/github-changelog-md/pull/111)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD.patch)
+
 ## [0.6.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.6.0) (November 04, 2023)
 
 **New Features**
@@ -15,7 +35,7 @@
 
 - Don't add all settings to auto-generated config file ([#103](https://github.com/seapagan/github-changelog-md/pull/103)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0.patch)
 
 ## [0.5.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.1) (November 02, 2023)
 
@@ -31,7 +51,7 @@
 
 - Bump faker from 19.12.1 to 19.13.0 ([#98](https://github.com/seapagan/github-changelog-md/pull/98)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1.patch)
 
 ## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023)
 
@@ -67,7 +87,7 @@
 - Bump pymarkdownlnt from 0.9.13.4 to 0.9.14 ([#89](https://github.com/seapagan/github-changelog-md/pull/89)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump mkdocs-material from 9.4.6 to 9.4.7 ([#80](https://github.com/seapagan/github-changelog-md/pull/80)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...0.5.0)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...0.5.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...0.5.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.4.0...0.5.0.patch)
 
 ## [0.4.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.4.0) (October 28, 2023)
 
@@ -91,7 +111,7 @@
 - Bump ruff from 0.1.2 to 0.1.3 ([#75](https://github.com/seapagan/github-changelog-md/pull/75)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump actions/checkout from 3 to 4 ([#70](https://github.com/seapagan/github-changelog-md/pull/70)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.3.0...0.4.0.patch)
 
 ## [0.3.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.3.0) (October 25, 2023)
 
@@ -111,7 +131,7 @@
 - Docs: add more badges to docs ([#67](https://github.com/seapagan/github-changelog-md/pull/67)) by [seapagan](https://github.com/seapagan)
 - Clarify some areas in the docs and update linting options, list tasks ([#66](https://github.com/seapagan/github-changelog-md/pull/66)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.2.3...0.3.0.patch)
 
 ## [0.2.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.3) (October 24, 2023)
 
@@ -133,7 +153,7 @@
 - Bump black from 23.10.0 to 23.10.1 ([#55](https://github.com/seapagan/github-changelog-md/pull/55)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump actions/checkout from 3 to 4 ([#53](https://github.com/seapagan/github-changelog-md/pull/53)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...0.2.3)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...0.2.3) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...0.2.3.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.2.2...0.2.3.patch)
 
 ## [0.2.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.2) (October 22, 2023)
 
@@ -141,7 +161,7 @@
 
 - Fix another bug with 'next-release' links ([#50](https://github.com/seapagan/github-changelog-md/pull/50)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.2.1...0.2.2.patch)
 
 ## [0.2.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.1) (October 22, 2023)
 
@@ -158,7 +178,7 @@
 
 - Bump pytest-mock from 3.11.1 to 3.12.0 ([#44](https://github.com/seapagan/github-changelog-md/pull/44)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...0.2.1)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...0.2.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...0.2.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.2.0...0.2.1.patch)
 
 ## [0.2.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.0) (October 21, 2023)
 
@@ -206,15 +226,8 @@
 - Bump mkdocs-git-revision-date-localized-plugin from 1.2.0 to 1.2.1 ([#19](https://github.com/seapagan/github-changelog-md/pull/19)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump simple-toml-settings from 0.2.0 to 0.2.2 ([#18](https://github.com/seapagan/github-changelog-md/pull/18)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump pylint from 2.17.7 to 3.0.1 ([#16](https://github.com/seapagan/github-changelog-md/pull/16)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump faker from 19.9.0 to 19.10.0 ([#15](https://github.com/seapagan/github-changelog-md/pull/15)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump pygithub from 1.59.1 to 2.1.1 ([#14](https://github.com/seapagan/github-changelog-md/pull/14)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump pylint-pydantic from 0.2.4 to 0.3.0 ([#13](https://github.com/seapagan/github-changelog-md/pull/13)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump faker from 19.8.0 to 19.9.0 ([#12](https://github.com/seapagan/github-changelog-md/pull/12)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump mypy from 1.5.1 to 1.6.0 ([#11](https://github.com/seapagan/github-changelog-md/pull/11)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump flake8-type-checking from 2.4.1 to 2.4.2 ([#9](https://github.com/seapagan/github-changelog-md/pull/9)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump mkdocs-material from 9.4.1 to 9.4.4 ([#8](https://github.com/seapagan/github-changelog-md/pull/8)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump urllib3 from 2.0.5 to 2.0.6 ([#6](https://github.com/seapagan/github-changelog-md/pull/6)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump pylint from 2.17.5 to 2.17.7 ([#5](https://github.com/seapagan/github-changelog-md/pull/5)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+- *and 9 more dependency updates*
 
 ---
 *This changelog was generated using [github-changelog-md](http://changelog.seapagan.net/) by [Seapagan](https://github.com/seapagan)*
