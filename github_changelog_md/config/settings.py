@@ -38,6 +38,8 @@ class Settings(TOMLSettings):
     ignore_strings: Optional[list[str]] = None
     ignored_users: Optional[list[str]] = None
     max_depends: int = 10
+    show_diff: bool = True
+    show_patch: bool = True
 
 
 def get_settings_object() -> Settings:
