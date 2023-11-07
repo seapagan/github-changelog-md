@@ -262,6 +262,36 @@ ignored_users = ["pre-commit-ci[bot]"]
 This is a list of strings and is optional. If you do not specify this setting,
 all users will be included. This is NO command line equivalent for this setting.
 
+## Add an introductory paragraph
+
+You can add an introductory paragraph to the top of the changelog, using the
+`intro_text` setting in the config file. For example, if you want to add a paragraph
+to the top of the changelog, you could add the following to your config file:
+
+```toml
+intro_text = """
+This is an introductory paragraph that will be added to the top of the
+changelog.
+"""
+```
+
+As seen above, you can use triple quotes to add a multi-line paragraph. If you
+only have one line of text, use normal quotes:
+
+```toml
+intro_text = "This is the project Changelog."
+```
+
+!!! tip "Tip"
+
+    This text is [Markdown](https://www.markdownguide.org/){:target="_blank"}
+    formatted, so you can use any Markdown formatting you want. Remember that a
+    single return in Markdown is ignored, so if you want a blank line between
+    paragraphs, you need to add two returns.
+
+The default value for this setting is an empty string, so if you do not specify
+this setting, no introductory paragraph will be added.
+
 ## Configuration File
 
 As mentioned in the [Installation](installation.md) section, this tool uses a
@@ -307,6 +337,7 @@ Current available options are:
 | `max_depends`           | Max dependency updates per Release | `10`          |
 | `show_diff`             | Show diff links for each Release   | `True`        |
 | `show_patch`            | Show patch links for each Release  | `True`        |
+| `intro_text`            | Introductory paragraph             | `""`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -344,6 +375,10 @@ allowed_labels = ["question"]
 ignored_users = ["pre-commit-ci[bot]"]
 max_depends = 15
 show_patch = false
+intro_text = """
+This is a log of all the changes that have been made to the project since the
+first release. It is automatically generated for each release.
+"""
 ```
 
 1. :bulb: This is the only required setting, the others are optional.

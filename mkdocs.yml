@@ -8,9 +8,12 @@ theme:
     accent: blue
   features:
     - navigation.footer
-    - navigation.expand
+    # - navigation.expand
     - content.code.copy
     - content.code.annotate
+    - navigation.tracking
+    - navigation.top
+    - toc.follow
   icon:
     logo: material/history
   favicon: images/favicon.ico
@@ -25,8 +28,8 @@ copyright: © 2023 Grant Ramsay (Seapagan)
 
 plugins:
   - search
-  - git-revision-date-localized:
-      enable_creation_date: true
+  # - git-revision-date-localized:
+  #     enable_creation_date: true
   - minify:
       minify_html: true
       minify_css: true
