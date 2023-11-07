@@ -40,6 +40,7 @@ class Settings(TOMLSettings):
     max_depends: int = 10
     show_diff: bool = True
     show_patch: bool = True
+    intro_text: str = ""
 
 
 def get_settings_object() -> Settings:
