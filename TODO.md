@@ -29,12 +29,14 @@ in the next release.
   like "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
-- add ability to place a text block between specific releases with custom
+- :fire: Add ability to place a text block between specific releases with custom
   markdown, eg to explain changes in the version numbering scheme or other
-  important information.
+  important information. can be `before` or `after` the specified release.
 - Allow to add a text block to the 'Breaking Changes' section. Should be added
   to the config file.
-- Add config option to add a custom text block to specfic releases.
+- :fire: Add config option to add a custom text block to specfic releases. This
+  is inside the release as opposed to the option above which is outside (before
+  or after) the release.
 - :rocket: Add an option to add a custom text block to the top of the changelog.
 - investigate adding caching of the GitHub API calls to speed up the process.
 - for the `--contrib` option, allow to use an existing file with comment markers
@@ -67,7 +69,7 @@ in the next release.
 - :rocket: add `patch` and `diff` links to each release. Its pretty easy to do
   this - just add `.patch` or `.diff` to the end of the '3-dot' url we generate
   for each release anyway. Optional.
-- option to mark a release as 'yanked', possibly with a custom message.
+- :fire: option to mark a release as 'yanked', possibly with a custom message.
 - :rocket: list of usernames that should be ignored when generating the
   changelog. This will be useful for bots, particularly the `pre-commit` bot.
   `Dependabot` is not usually a problem, since it's PRs are usually labelled
