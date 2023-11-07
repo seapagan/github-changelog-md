@@ -129,6 +129,22 @@ def main(
         ),
         show_default=False,
     ),
+    show_diff: Optional[bool] = typer.Option(
+        default=None,
+        help=(
+            "Show the diff of the PRs and Issues in the Changelog, defaults "
+            "to [bold]True[/bold]."
+        ),
+        show_default=False,
+    ),
+    show_patch: Optional[bool] = typer.Option(
+        default=None,
+        help=(
+            "Show the patch of the PRs and Issues in the Changelog, defaults "
+            "to [bold]True[/bold]."
+        ),
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
@@ -172,6 +188,8 @@ def main(
         "max_depends": settings.max_depends
         if max_depends is None
         else max_depends,
+        "show_diff": settings.show_diff if show_diff is None else show_diff,
+        "show_patch": settings.show_patch if show_patch is None else show_patch,
     }
 
     changelog = ChangeLog(repo, options)

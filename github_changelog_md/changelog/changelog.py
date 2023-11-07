@@ -427,8 +427,19 @@ class ChangeLog:
         f.write(
             f"[`Full Changelog`]"
             f"({self.repo_data.html_url}/compare/"
-            f"{release_tag.tag_name}...{prev_release})\n\n",
+            f"{release_tag.tag_name}...{prev_release})",
         )
+        if self.options["show_diff"]:
+            f.write(
+                f" | [`Diff`]({self.repo_data.html_url}/compare/"
+                f"{release_tag.tag_name}...{prev_release}.diff)",
+            )
+        if self.options["show_patch"]:
+            f.write(
+                f" | [`Patch`]({self.repo_data.html_url}/compare/"
+                f"{release_tag.tag_name}...{prev_release}.patch)",
+            )
+        f.write("\n\n")
 
     def print_prs(
         self,
