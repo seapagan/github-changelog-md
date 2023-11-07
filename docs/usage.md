@@ -305,6 +305,8 @@ Current available options are:
 | `allowed_labels`        | List of labels to allow            | `[]`          |
 | `ignored_users`         | List of usernames to ignore        | `[]`          |
 | `max_depends`           | Max dependency updates per Release | `10`          |
+| `show_diff`             | Show diff links for each Release   | `True`        |
+| `show_patch`            | Show patch links for each Release  | `True`        |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -341,6 +343,7 @@ extend_ignored = ["testing"]
 allowed_labels = ["question"]
 ignored_users = ["pre-commit-ci[bot]"]
 max_depends = 15
+show_patch = false
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
@@ -531,6 +534,25 @@ the changelog.
 !!! tip ""
 
     :sparkles: Equivalent to the `max_depends` setting in the config file.
+
+### `--show-diff` / `--no-show-diff`
+
+Choose whether to show the diff links for each release. By default this will be
+shown (`--show-diff`), but you can use the `--no-show-diff` option to hide them.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `show_diff` setting in the config file.
+
+### `--show-patch` / `--no-show-patch`
+
+Choose whether to show the patch links for each release. By default this will be
+shown (`--show-patch`), but you can use the `--no-show-patch` option to hide
+them.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `show_patch` setting in the config file.`
 
 ## Future plans
 
