@@ -259,6 +259,9 @@ class ChangeLog:
         ) as f:
             f.write("# Changelog\n\n")
 
+            if self.settings.intro_text:
+                f.write(f"{self.settings.intro_text}\n\n")
+
             if not self.options["show_depends"]:
                 f.write(
                     "*Dependency updates are excluded from this changelog, "
