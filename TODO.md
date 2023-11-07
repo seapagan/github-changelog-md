@@ -29,9 +29,9 @@ in the next release.
   like "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
-- add ability to place a section between releases with custom markdown, eg to
-  explain changes in the version numbering scheme or other important
-  information.
+- add ability to place a text block between specific releases with custom
+  markdown, eg to explain changes in the version numbering scheme or other
+  important information.
 - Allow to add a text block to the 'Breaking Changes' section. Should be added
   to the config file.
 - Add config option to add a custom text block to specfic releases.
@@ -75,6 +75,8 @@ in the next release.
   flag.
 - allow to use `Git TAGS` instead of `GitHub Releases` to generate the
   changelog. some projects don't use GitHub releases, but do use tags.
+- :rocket: add option to limit how many 'depencency' PRs are shown for each
+  release. Default to 10.
 
 ## Improve existing functionality
 
@@ -101,6 +103,12 @@ in the next release.
   does not grate so badly with the auto-generated headings.
 - in some cases the `full-changelog` does not get removed from the existing body
   properly depending on how it is formatted.
+
+## Refactoring
+
+- The whole code base needs a bit of refectoring to tidy the code and remove some
+of the duplication. This is a low priority but should be done at some point.
+Priority to the actual 'ChangeLog' class.
 
 ## Documentation
 
