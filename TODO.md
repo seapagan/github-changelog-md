@@ -35,7 +35,7 @@ in the next release.
 - Allow to add a text block to the 'Breaking Changes' section. Should be added
   to the config file.
 - Add config option to add a custom text block to specfic releases.
-- Add an option to add a custom text block to the top of the changelog.
+- :rocket: Add an option to add a custom text block to the top of the changelog.
 - investigate adding caching of the GitHub API calls to speed up the process.
 - for the `--contrib` option, allow to use an existing file with comment markers
   in the file to indicate where to add the names. Provide a default file with
