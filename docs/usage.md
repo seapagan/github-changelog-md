@@ -304,6 +304,7 @@ Current available options are:
 | `extend_ignored`        | List of labels to add to ignored   | `[]`          |
 | `allowed_labels`        | List of labels to allow            | `[]`          |
 | `ignored_users`         | List of usernames to ignore        | `[]`          |
+| `max_depends`           | Max dependency updates per Release | `10`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -339,6 +340,7 @@ ignore_items = [123, 456] # (3)!
 extend_ignored = ["testing"]
 allowed_labels = ["question"]
 ignored_users = ["pre-commit-ci[bot]"]
+max_depends = 15
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
@@ -515,6 +517,20 @@ section. By default the order is `newest_first`, but you can use the
 !!! tip ""
 
     :sparkles: Equivalent to the `item_order` setting in the config file.
+
+### `--max-depends` / `-m`
+
+This option allows you to specify the maximum number of dependency updates to
+show for each release. By default this is set to `10`, but you can use the
+`--max-depends` or `-m` option to change this.
+
+If you use [Dependabot](https://github.com/apps/dependabot){:target="_blank"} to
+handle your dependency updates, this setting can be useful to limit the noise in
+the changelog.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `max_depends` setting in the config file.
 
 ## Future plans
 

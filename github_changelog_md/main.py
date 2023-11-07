@@ -119,6 +119,16 @@ def main(
         ),
         show_default=False,
     ),
+    max_depends: Optional[int] = typer.Option(
+        None,
+        "--max-depends",
+        "-m",
+        help=(
+            "Maximum number of dependency updates to show in the Changelog. "
+            "Defaults to [bold]10[/bold]."
+        ),
+        show_default=False,
+    ),
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
@@ -159,6 +169,9 @@ def main(
         "show_issues": settings.show_issues if issues is None else issues,
         "item_order": settings.item_order if item_order is None else item_order,
         "ignore_items": settings.ignore_items if ignore == [] else ignore,
+        "max_depends": settings.max_depends
+        if max_depends is None
+        else max_depends,
     }
 
     changelog = ChangeLog(repo, options)

@@ -468,16 +468,18 @@ class ChangeLog:
         ]
 
         for heading, prs in release_sections.items():
-            if (
-                heading == get_section_name("dependencies")
-                and not self.options["show_depends"]
-            ):
+            is_dependencies = heading == get_section_name("dependencies")
+            if is_dependencies and not self.options["show_depends"]:
                 continue
 
             visible_prs = self.ignore_items(list(prs))
 
             if len(visible_prs) > 0:
                 f.write(f"**{heading}**\n\n")
+                sorted_prs = self.get_sorted_items(visible_prs)
+                if is_dependencies:
+                    # only show the max_depends number of PRs
+                    visible_prs = sorted_prs[: self.options["max_depends"]]
                 for pr in self.get_sorted_items(visible_prs):
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
@@ -488,6 +490,16 @@ class ChangeLog:
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
                 f.write("\n")
+                if (
+                    is_dependencies
+                    and len(sorted_prs) > self.options["max_depends"]
+                ):
+                    hidden_updates = (
+                        len(sorted_prs) - self.options["max_depends"]
+                    )
+                    f.write(
+                        f"- *and {hidden_updates} more dependency updates*\n\n",
+                    )
 
     def ignore_items(
         self, items: list[PullRequest | Issue]
@@ -671,7 +683,9 @@ class ChangeLog:
         """Get info on all the closed PRs from GitHub."""
         print("  [green]->[/green] Getting Closed PRs ... ", end="")
         try:
-            repo_prs = self.repo_data.get_pulls(state="closed", sort="created")
+            repo_prs = self.repo_data.get_pulls(
+                state="closed", sort="created", direction="desc"
+            )
         except GithubException as exc:
             git_error(exc)
         else:
