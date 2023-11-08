@@ -320,6 +320,23 @@ class ChangeLog:
                 f"{release_date}\n\n",
             )
 
+            if self.settings.release_text and "unreleased" in [
+                release_text["release"].strip()
+                for release_text in self.settings.release_text
+            ]:
+                f.write("\n")
+                f.write(
+                    next(
+                        (
+                            release_text["text"]
+                            for release_text in self.settings.release_text
+                            if release_text["release"].strip() == "unreleased"
+                        ),
+                        "",
+                    )
+                )
+                f.write("\n\n")
+
             self.print_issues(f, self.unreleased_issues)
             self.print_prs(f, self.unreleased)
 
