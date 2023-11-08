@@ -42,6 +42,7 @@ class Settings(TOMLSettings):
     show_patch: bool = True
     intro_text: str = ""
     yanked: Optional[list[dict[str, str]]] = None
+    release_text: Optional[list[dict[str, str]]] = None
 
 
 def get_settings_object() -> Settings:
