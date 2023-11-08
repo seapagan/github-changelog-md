@@ -1,13 +1,16 @@
 # Changelog
 
-This is a log of all the changes that have been made to the project since the
-first release. It is automatically generated for each release.
+This is an auto-generated log of all the changes that have been made to the
+project since the first release.
+
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
 ## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
 
 **New Features**
 
+- Allow marking a release as 'yanked' (or removed) for some reason ([#120](https://github.com/seapagan/github-changelog-md/pull/120)) by [seapagan](https://github.com/seapagan)
 - Add `intro_text` option to display a block of text at the top of the Changelog ([#118](https://github.com/seapagan/github-changelog-md/pull/118)) by [seapagan](https://github.com/seapagan)
 - Add diff and patch links for each Release ([#117](https://github.com/seapagan/github-changelog-md/pull/117)) by [seapagan](https://github.com/seapagan)
 - Allow to only show `max_depends` number of dependency updates for each release ([#116](https://github.com/seapagan/github-changelog-md/pull/116)) by [seapagan](https://github.com/seapagan)
@@ -15,6 +18,7 @@ first release. It is automatically generated for each release.
 
 **Refactoring**
 
+- Add mypy to pre-commit and update tool versions ([#119](https://github.com/seapagan/github-changelog-md/pull/119)) by [seapagan](https://github.com/seapagan)
 - Refactor settings class, change default values ([#114](https://github.com/seapagan/github-changelog-md/pull/114)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
@@ -58,7 +62,11 @@ first release. It is automatically generated for each release.
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.5.0...0.5.1.patch)
 
-## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023)
+## [0.5.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.0) (November 01, 2023) **[`YANKED`]**
+
+**This release has been removed for the following reason and should not be used:**
+
+- Crashes on missing config file, use 0.5.1 or above instead.
 
 **New Features**
 
