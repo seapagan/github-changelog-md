@@ -29,9 +29,10 @@ in the next release.
   like "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
-- :fire: Add ability to place a text block **between** specific releases with
+- :rocket: Add ability to place a text block **between** specific releases with
   custom markdown, eg to explain changes in the version numbering scheme or
-  other important information. can be `before` or `after` the specified release.
+  other important information. It is placed **before** the specified release and
+  is not available for the 'Unreleased' section.
 - :rocket: Add config option to add a custom text block to specfic releases. This
   is inside the release as opposed to the option above which is outside (before
   or after) the release.

@@ -47,6 +47,7 @@ Current available options are:
 | `show_patch`            | Show patch links for each Release  | `True`        |
 | `intro_text`            | Introductory paragraph             | `""`          |
 | `release_text`          | Add text to a specific release     | `[]`          |
+| `release_text_before`   | Add text before a specific release | `[]`          |
 | `yanked`                | Mark specific release(s) as Yanked | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 

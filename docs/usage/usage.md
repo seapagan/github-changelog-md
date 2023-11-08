@@ -352,6 +352,27 @@ Below is an example of how this looks in the changelog for this project:
 
     ![Release Text Example](../images/release_text.png)
 
+## Adding text between releases
+
+You can add a text section between releases, using the `releases_text_before`
+setting in the config file. For example, if you want to add a paragraph between
+the `1.2.3` and `1.2.4` releases, you could add the following to your config
+file:
+
+```toml
+[[github_changelog.md.release_text_before]]
+release = "1.2.4"
+text = "This is a paragraph between the 1.2.3 and 1.2.4 releases."
+```
+
+The `release` value is the release that the text will be added **before**,
+working from top to bottom in the changelog. So in the above example, the text
+will be between the `1.2.4` and `1.2.5` releases.
+
+You can either use the inline or verbose format for this setting, depending on
+how much text you want to add. There is NO command-line equivalent for this
+setting.
+
 ## Mark a release as "Yanked"
 
 Sometimes you may need to mark a release as "Yanked" (or "Retracted") for
