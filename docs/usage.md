@@ -299,6 +299,59 @@ intro_text = "This is the project Changelog."
 The default value for this setting is an empty string, so if you do not specify
 this setting, no introductory paragraph will be added.
 
+## Add text to a specific release
+
+You can add text to a specific release, using the `release_text` setting in the
+config file. For example, if you want to add a paragraph to the `1.2.3` release,
+you could add the following to your config file:
+
+```toml
+release_text = [
+  { release = "1.2.3", text = "This is a paragraph for the 1.2.3 release." }
+]
+```
+
+Generally you would add more than one line of text, so you can use triple quotes
+and the verbose format:
+
+```toml
+[[changelog_generator.release_text]]
+release = "1.2.3"
+text = """
+This is a longer paragraph for the 1.2.3 release. It can contain multiple lines
+of text, and can use **Markdown formatting**.
+"""
+```
+
+Using the special release tag "unreleased" you can add text to the top of the
+'Unreleased' section too:
+
+```toml
+[[changelog_generator.release_text]]
+release = "unreleased"
+text = """
+These are the changes that have been made to the main repository since the last
+release. You can try out these by cloning the repository and installing locally.
+Everything in this section will be included in the next release.
+"""
+```
+
+!!! tip "Tip"
+
+    In both cases, this text is
+    [Markdown](https://www.markdownguide.org/){:target="_blank"} formatted, so
+    you can use any Markdown formatting you want. Remember that a single return
+    in Markdown is ignored, so if you want a blank line between paragraphs, you
+    need to add two returns.
+
+There is NO command-line equivalent for this setting.
+
+Below is an example of how this looks in the changelog for this project:
+
+!!! info ""
+
+    ![Release Text Example](images/release_text.png)
+
 ## Mark a release as "Yanked"
 
 Sometimes you may need to mark a release as "Yanked" (or "Retracted") for
@@ -320,7 +373,7 @@ yanked = [
 
 For an example of how this looks in the changelog, see below for an example from
 this very project:
-!!! danger ""
+!!! info ""
 
     ![Yanked Release Example](images/yanked_release.png)
 
@@ -374,6 +427,7 @@ Current available options are:
 | `show_diff`             | Show diff links for each Release   | `True`        |
 | `show_patch`            | Show patch links for each Release  | `True`        |
 | `intro_text`            | Introductory paragraph             | `""`          |
+| `release_text`          | Add text to a specific release     | `[]`          |
 | `yanked`                | Mark specific release(s) as Yanked | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
@@ -419,6 +473,17 @@ first release. It is automatically generated for each release.
 yanked = [
   { release = "1.2.3", reason = "Ooooh, nasty nasty bug - use 1.2.4 instead!!!" }
 ]
+
+[[changelog_generator.release_text]]
+release = "1.2.3"
+text = "This is a paragraph for the 1.2.3 release."
+
+[[changelog_generator.release_text]]
+release = "unreleased"
+text = """
+These are the changes that have been made to the main repository since the last
+release.
+"""
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
