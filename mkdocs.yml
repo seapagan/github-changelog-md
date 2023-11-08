@@ -14,6 +14,7 @@ theme:
     - navigation.tracking
     - navigation.top
     - toc.follow
+    - navigation.expand
   icon:
     logo: material/history
   favicon: images/favicon.ico
@@ -49,7 +50,6 @@ markdown_extensions:
   - pymdownx.superfences
   - md_in_html
   - pymdownx.highlight:
-      linenums: false
       auto_title: false
   - attr_list
   - tables
@@ -63,8 +63,11 @@ extra_css:
 nav:
   - Introduction: index.md
   - Installation: installation.md
-  - Usage: usage.md
-  - Todo List: todo_list.md
+  - Usage:
+      - Usage: usage/usage.md
+      - "Configuration File": usage/config_file.md
+      - "Command Line Options": usage/cli_options.md
+  - Todo List: todo.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - License: license.md

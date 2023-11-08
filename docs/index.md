@@ -33,7 +33,7 @@ previous release) with an upcoming release number to ease the process of
 creating a new release by having the changelog already up to date, *or hide any
 unreleased PR's completely*.
 
-There is much more this app can do, see the [Usage](usage.md) page for full
+There is much more this app can do, see the [Usage](usage/usage.md) page for full
 details.
 
 While the project is written in Python, it is **NOT** limited to just generating
