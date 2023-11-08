@@ -2,37 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://changelog.seapagan.net/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/changelog/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/contributing/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/installation/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/license/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://changelog.seapagan.net/todo_list/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <loc>https://changelog.seapagan.net/todo/</loc>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://changelog.seapagan.net/usage/</loc>
-         <lastmod>2023-11-04</lastmod>
+         <loc>https://changelog.seapagan.net/usage/cli_options/</loc>
+         <lastmod>2023-11-08</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://changelog.seapagan.net/usage/config_file/</loc>
+         <lastmod>2023-11-08</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://changelog.seapagan.net/usage/usage/</loc>
+         <lastmod>2023-11-08</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
