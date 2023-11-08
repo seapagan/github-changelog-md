@@ -5,9 +5,9 @@ idea of where I want to take the project in the future.
 
 Items marked with:
 
-- ':fire:' Should be implemented as a priority before the next minor release
+- :fire: Should be implemented as a priority before the next minor release
 (patch or bug-fixes are ok as needed).
-- ':rocket:` Have been already implemented in the main repo and will be included
+- :rocket: Have been already implemented in the main repo and will be included
 in the next release.
 
 ## Features to Add
@@ -32,9 +32,7 @@ in the next release.
 - :fire: Add ability to place a text block **between** specific releases with
   custom markdown, eg to explain changes in the version numbering scheme or
   other important information. can be `before` or `after` the specified release.
-- :fire: Allow to add a text block to the 'Breaking Changes' section for a
-  specific release.
-- :fire: Add config option to add a custom text block to specfic releases. This
+- :rocket: Add config option to add a custom text block to specfic releases. This
   is inside the release as opposed to the option above which is outside (before
   or after) the release.
 - :rocket: Add an option to add a custom text block to the top of the changelog.
@@ -94,6 +92,9 @@ in the next release.
 
 ## Known Issues
 
+- if using the `--next-release` option, while also having a `release_text` set for
+  that virtual release, the `release_text` will not be shown for the virtual
+  release.
 - some version numbers in PRs (especially dependabot) get mis-identified as
   emojis in the output, especially if the version number contains `<3` which
   gives :heart: in certain viewers (**though this does NOT happen in GitHub or
@@ -102,8 +103,8 @@ in the next release.
 - The table styling under mobile looks a bit squashed due to setting the width
   to 100% for better desktop display. Need to add a media query to set the width
   better for mobile, prob using overflow
-- when using the Release body, normalize any headings to Bold text instead so it
-  does not grate so badly with the auto-generated headings.
+- when using the Release body, we need to normalize any headings to Bold text
+  instead so it does not grate so badly with the auto-generated headings.
 - in some cases the `full-changelog` does not get removed from the existing body
   properly depending on how it is formatted.
 
@@ -111,7 +112,8 @@ in the next release.
 
 - The whole code base needs a bit of refectoring to tidy the code and remove some
 of the duplication. This is a low priority but should be done at some point.
-Priority to the actual 'ChangeLog' class.
+Priority to the actual 'ChangeLog' class. **Preferably this should wait until we
+have full test coverage.**
 
 ## Documentation
 

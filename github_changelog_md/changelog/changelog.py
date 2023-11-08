@@ -320,10 +320,15 @@ class ChangeLog:
                 f"{release_date}\n\n",
             )
 
-            if self.settings.release_text and "unreleased" in [
-                release_text["release"].strip()
-                for release_text in self.settings.release_text
-            ]:
+            if (
+                self.settings.release_text
+                and not self.options["next_release"]
+                and "unreleased"
+                in [
+                    release_text["release"].strip()
+                    for release_text in self.settings.release_text
+                ]
+            ):
                 f.write("\n")
                 f.write(
                     next(
