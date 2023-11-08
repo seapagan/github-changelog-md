@@ -18,6 +18,8 @@ section, and any other sections will be ignored.
     should **NOT** commit this file to your repository. Add it to your
     `.gitignore` file to prevent it being committed.
 
+## Options
+
 Current available options are:
 
 | **Setting**             | **Description**                    | **Default**   |
@@ -60,6 +62,8 @@ Current available options are:
     updating the config file to an official newer version.
 
 ## Example Configuration File
+
+This is a faked up example of a config file with many of the settings.
 
 ```toml hl_lines="1" title="changelog_generator.toml"
 github_pat = "1234567890" # (1)!
@@ -134,3 +138,58 @@ values specified on the command line).
     `Dependency Updates` section, but you can change this by setting the
     `extend_sections_index` value. See the
     [Custom Sections](usage.md#custom-sections) section for more details.
+
+## Real-world Example
+
+The below is the exact configuration file used to create the changelog for this
+project. It is a good example of how you can customize the changelog to suit
+your needs.
+
+````toml title="changelog_generator.toml"
+[changelog_generator]
+github_pat = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+schema_version = '1'
+extend_sections = [
+  { title = "Testing", label = "testing" },
+  { title = "Security", label = "security" },
+]
+extend_sections_index = 3
+date_format = "%B %d, %Y"
+rename_sections = [{ old = "Enhancements", new = "New Features" }]
+ignored_users = ["pre-commit-ci[bot]"]
+intro_text = """
+This is an auto-generated log of all the changes that have been made to the
+project since the first release.
+
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+"""
+[[changelog_generator.yanked]]
+release = "0.5.0"
+reason = "Crashes on missing config file, use 0.5.1 or above instead."
+
+[[changelog_generator.release_text]]
+release = "0.5.1"
+text = """
+This release is a bug-fix for release 0.5.0, which was yanked due to crashing
+when creating a missing config file.
+"""
+
+[[changelog_generator.release_text]]
+release = "unreleased"
+text = """
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+Everything in this section will be included in the next official release.
+"""
+````
