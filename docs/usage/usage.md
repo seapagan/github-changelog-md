@@ -267,7 +267,12 @@ ignored_users = ["pre-commit-ci[bot]"]
 This is a list of strings and is optional. If you do not specify this setting,
 all users will be included. This is NO command -line equivalent for this setting.
 
-## Add an introductory paragraph
+## Adding Arbitrary Text
+
+It is possible to add arbitrary text to the changelog, either at the top of the
+changelog, between releases, or to a specific release.
+
+### Add an introductory paragraph
 
 You can add an introductory paragraph to the top of the changelog, using the
 `intro_text` setting in the config file. For example, if you want to add a paragraph
@@ -299,7 +304,7 @@ intro_text = "This is the project Changelog."
 The default value for this setting is an empty string, so if you do not specify
 this setting, no introductory paragraph will be added.
 
-## Add text to a specific release
+### Add text to a specific release
 
 You can add text to a specific release, using the `release_text` setting in the
 config file. For example, if you want to add a paragraph to the `1.2.3` release,
@@ -351,6 +356,27 @@ Below is an example of how this looks in the changelog for this project:
 !!! info ""
 
     ![Release Text Example](../images/release_text.png)
+
+### Adding text between releases
+
+You can add a text section between releases, using the `releases_text_before`
+setting in the config file. For example, if you want to add a paragraph between
+the `1.2.3` and `1.2.4` releases, you could add the following to your config
+file:
+
+```toml
+[[github_changelog.md.release_text_before]]
+release = "1.2.4"
+text = "This is a paragraph between the 1.2.3 and 1.2.4 releases."
+```
+
+The `release` value is the release that the text will be added **before**,
+working from top to bottom in the changelog. So in the above example, the text
+will be between the `1.2.4` and `1.2.5` releases.
+
+You can either use the inline or verbose format for this setting, depending on
+how much text you want to add. There is NO command-line equivalent for this
+setting.
 
 ## Mark a release as "Yanked"
 
