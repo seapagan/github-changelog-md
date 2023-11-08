@@ -86,6 +86,13 @@ You can tag each of your PRs with any of these labels to group them in the
 changelog - If you are using `Dependabot`, by default it will add the
 `dependencies` label.
 
+!!! danger "Warning"
+
+    For the moment, limit your PRs to a single label, as otherwise the tool will
+    include the PR in each section it finds a label for. This will be improved
+    in future versions. I also plan to add the ability to use
+    multiple labels for the same section, eg `enhancement` and `enhancements`
+
 Labels are **case-insensitive**, so `bug` or `BUG` will both match "Bug Fixes".
 The above order is also the order that the sections will appear in the
 changelog, again this order will be customizable in future versions.
@@ -135,30 +142,28 @@ at which they they are inserted.
     Finally, the `Closed Issues` section is separate and always displayed first
     regardless of the `extend_sections_index` value.
 
-The format for this option is an [array of
-tables](https://toml.io/en/v1.0.0#array-of-tables){:target="_blank}, with each
-table containing a `title` and a `label`. The above example uses an `inline TOML
-array of tables` but the more verbose format will also work:
+!!! tip "Verbose TOML Arrays"
+    The format for this option is an [array of
+    tables](https://toml.io/en/v1.0.0#array-of-tables){:target="_blank}, with
+    each table containing a `title` and a `label`. The above example uses an
+    `inline TOML array of tables` but the more verbose format will also work:
 
-```toml
-[[extend_sections]]
-title = "Automatic Testing"
-label = "testing"
+    ```toml
+    [[changelog_generator.extend_sections]]
+    title = "Automatic Testing"
+    label = "testing"
 
-[[extend_sections]]
-title = "Security"
-label = "security"
-```
+    [[changelog_generator.extend_sections]]
+    title = "Security"
+    label = "security"
+    ```
 
-Note the **double square brackets!**. Inline arrays as in the first example are
-just a bit easier to read and IMHO look nicer.
+    **Verbose arrays like this must come at the end of the config file, after
+    all the normal settings!**. Inline arrays can be with the other settings.
 
-!!! tip
-
-    For the moment, limit your PRs to a single label, as otherwise the tool will
-    include the PR in each section it finds a label for. This will be improved
-    in future versions. I also plan to add the ability to use
-    multiple labels for the same section, eg `enhancement` and `enhancements`
+    Note the **double square brackets!** and the inclusion of the
+    `changelog_generator` prefix! Inline arrays as in the first example are
+    just a bit easier to read and IMHO look nicer.
 
 ### Renaming Default Sections
 
@@ -193,7 +198,7 @@ These are ignored for both PRs and Issues.
 ### Customizing Ignored Labels
 
 There are three ways to customize the ignored labels, all using settings in the
-config file. There are no equivalent command line options for these settings.
+config file. There are no equivalent command-line options for these settings.
 
 #### `ignored_labels`
 
@@ -260,7 +265,7 @@ ignored_users = ["pre-commit-ci[bot]"]
 ```
 
 This is a list of strings and is optional. If you do not specify this setting,
-all users will be included. This is NO command line equivalent for this setting.
+all users will be included. This is NO command -line equivalent for this setting.
 
 ## Add an introductory paragraph
 
@@ -270,8 +275,10 @@ to the top of the changelog, you could add the following to your config file:
 
 ```toml
 intro_text = """
-This is an introductory paragraph that will be added to the top of the
-changelog.
+This is an auto-generated log of all the changes that have been made to the
+project since the first release.
+
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 """
 ```
 
@@ -291,6 +298,35 @@ intro_text = "This is the project Changelog."
 
 The default value for this setting is an empty string, so if you do not specify
 this setting, no introductory paragraph will be added.
+
+## Mark a release as "Yanked"
+
+Sometimes you may need to mark a release as "Yanked" (or "Retracted") for
+various reasons. You can do this using the `yanked` setting in the config file.
+This is a list of dictionaries, with each dictionary containing the `release`
+and `reason` keys. For example, if you want to mark the `1.2.3` release as
+"Yanked", you could add the following to your config file:
+
+```toml
+yanked = [
+  { release = "1.2.3", reason = "Ooooh, nasty nasty bug - use 1.2.4 instead!!!" }
+]
+```
+
+!!! tip
+
+    This only marks the release in the Changelog. It is up to you to actually
+    remove/yank the release on GitHub, PyPI or wherever you have published it.
+
+For an example of how this looks in the changelog, see below for an example from
+this very project:
+!!! danger ""
+
+    ![Yanked Release Example](images/yanked_release.png)
+
+You can add as many releases as you want to this list, just add more
+dictionaries to the array - you can also use the more verbose format for arrays
+as mentioned above. There is NO command-line equivalent for this setting.
 
 ## Configuration File
 
@@ -338,6 +374,7 @@ Current available options are:
 | `show_diff`             | Show diff links for each Release   | `True`        |
 | `show_patch`            | Show patch links for each Release  | `True`        |
 | `intro_text`            | Introductory paragraph             | `""`          |
+| `yanked`                | Mark specific release(s) as Yanked | `[]`          |
 | _`schema_version`_      | _Configuration schema version_     | _`1`_         |
 
 !!! tip "Config file schema version"
@@ -379,6 +416,9 @@ intro_text = """
 This is a log of all the changes that have been made to the project since the
 first release. It is automatically generated for each release.
 """
+yanked = [
+  { release = "1.2.3", reason = "Ooooh, nasty nasty bug - use 1.2.4 instead!!!" }
+]
 ```
 
 1. :bulb: This is the only required setting, the others are optional.

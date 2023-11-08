@@ -29,11 +29,11 @@ in the next release.
   like "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
-- :fire: Add ability to place a text block between specific releases with custom
-  markdown, eg to explain changes in the version numbering scheme or other
-  important information. can be `before` or `after` the specified release.
-- Allow to add a text block to the 'Breaking Changes' section. Should be added
-  to the config file.
+- :fire: Add ability to place a text block **between** specific releases with
+  custom markdown, eg to explain changes in the version numbering scheme or
+  other important information. can be `before` or `after` the specified release.
+- :fire: Allow to add a text block to the 'Breaking Changes' section for a
+  specific release.
 - :fire: Add config option to add a custom text block to specfic releases. This
   is inside the release as opposed to the option above which is outside (before
   or after) the release.
@@ -69,7 +69,7 @@ in the next release.
 - :rocket: add `patch` and `diff` links to each release. Its pretty easy to do
   this - just add `.patch` or `.diff` to the end of the '3-dot' url we generate
   for each release anyway. Optional.
-- :fire: option to mark a release as 'yanked', possibly with a custom message.
+- :rocket: option to mark a release as 'yanked', with a custom message.
 - :rocket: list of usernames that should be ignored when generating the
   changelog. This will be useful for bots, particularly the `pre-commit` bot.
   `Dependabot` is not usually a problem, since it's PRs are usually labelled
@@ -89,7 +89,8 @@ in the next release.
   an opt-out option to use the GitHub API instead.
 - update the format for custom sections to allow each section to have it's own
   insertion index. This will be a breaking change in the config file format so
-  require a `schema_version` bump.
+  require a `schema_version` bump. \[`This will not be needed if the option for
+  custom ordering of sections is implemented, it can be folded into that.`\]
 
 ## Known Issues
 
