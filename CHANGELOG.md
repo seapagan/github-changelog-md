@@ -8,13 +8,35 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
 
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+
 **New Features**
 
+- Implement a `release_text` option to add arbitrary text to any release ([#121](https://github.com/seapagan/github-changelog-md/pull/121)) by [seapagan](https://github.com/seapagan)
 - Allow marking a release as 'yanked' (or removed) for some reason ([#120](https://github.com/seapagan/github-changelog-md/pull/120)) by [seapagan](https://github.com/seapagan)
 - Add `intro_text` option to display a block of text at the top of the Changelog ([#118](https://github.com/seapagan/github-changelog-md/pull/118)) by [seapagan](https://github.com/seapagan)
 - Add diff and patch links for each Release ([#117](https://github.com/seapagan/github-changelog-md/pull/117)) by [seapagan](https://github.com/seapagan)
 - Allow to only show `max_depends` number of dependency updates for each release ([#116](https://github.com/seapagan/github-changelog-md/pull/116)) by [seapagan](https://github.com/seapagan)
 - Implement the `ignore_users` setting. Users listed in this will not have any PRs or Issues in the Changelog ([#115](https://github.com/seapagan/github-changelog-md/pull/115)) by [seapagan](https://github.com/seapagan)
+
+**Bug Fixes**
+
+- Hide custom text from 'unreleased' if we are also using `--next-release` ([#122](https://github.com/seapagan/github-changelog-md/pull/122)) by [seapagan](https://github.com/seapagan)
 
 **Refactoring**
 
@@ -47,6 +69,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.5.1...0.6.0.patch)
 
 ## [0.5.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.1) (November 02, 2023)
+
+
+This release is a bug-fix for release 0.5.0, which was yanked due to crashing
+when creating a missing config file.
+
 
 **Closed Issues**
 
