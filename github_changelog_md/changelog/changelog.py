@@ -343,9 +343,27 @@ class ChangeLog:
             self.settings.date_format
         )
         f.write(
-            f"## [{release.tag_name}]({release.html_url}) "
-            f"({text_date})\n\n",
+            f"## [{release.tag_name}]({release.html_url}) ({text_date})",
         )
+        if self.settings.yanked and release.tag_name in [
+            yanked["release"].strip() for yanked in self.settings.yanked
+        ]:
+            f.write(" **[`YANKED`]**\n\n")
+            reason = next(
+                (
+                    yanked["reason"]
+                    for yanked in self.settings.yanked
+                    if yanked["release"].strip() == release.tag_name
+                ),
+                "",
+            )
+            f.write(
+                "**This release has been removed for the following reason and "
+                "should not be used:**\n\n"
+                f"- {reason}"
+            )
+
+        f.write("\n\n")
         if release.title != release.tag_name and release.title:
             f.write(f"**_'{cap_first_letter(release.title.strip())}'_**\n\n")
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])

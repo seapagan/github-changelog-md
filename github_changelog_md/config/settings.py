@@ -41,6 +41,7 @@ class Settings(TOMLSettings):
     show_diff: bool = True
     show_patch: bool = True
     intro_text: str = ""
+    yanked: Optional[list[dict[str, str]]] = None
 
 
 def get_settings_object() -> Settings:
