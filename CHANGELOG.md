@@ -6,27 +6,11 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
-
-
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
-
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
-
+## [0.7.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.0) (November 08, 2023)
 
 **New Features**
 
+- Add an optional text block between releases ([#124](https://github.com/seapagan/github-changelog-md/pull/124)) by [seapagan](https://github.com/seapagan)
 - Implement a `release_text` option to add arbitrary text to any release ([#121](https://github.com/seapagan/github-changelog-md/pull/121)) by [seapagan](https://github.com/seapagan)
 - Allow marking a release as 'yanked' (or removed) for some reason ([#120](https://github.com/seapagan/github-changelog-md/pull/120)) by [seapagan](https://github.com/seapagan)
 - Add `intro_text` option to display a block of text at the top of the Changelog ([#118](https://github.com/seapagan/github-changelog-md/pull/118)) by [seapagan](https://github.com/seapagan)
@@ -43,13 +27,17 @@ Everything in this section will be included in the next official release.
 - Add mypy to pre-commit and update tool versions ([#119](https://github.com/seapagan/github-changelog-md/pull/119)) by [seapagan](https://github.com/seapagan)
 - Refactor settings class, change default values ([#114](https://github.com/seapagan/github-changelog-md/pull/114)) by [seapagan](https://github.com/seapagan)
 
+**Documentation**
+
+- Refactor the documentation layout, splitting the long documentation section into multiple sections ([#123](https://github.com/seapagan/github-changelog-md/pull/123)) by [seapagan](https://github.com/seapagan)
+
 **Dependency Updates**
 
 - Build(deps-dev): bump poethepoet from 0.22.1 to 0.24.2 ([#113](https://github.com/seapagan/github-changelog-md/pull/113)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump mkdocs-material from 9.4.7 to 9.4.8 ([#112](https://github.com/seapagan/github-changelog-md/pull/112)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump ruff from 0.1.3 to 0.1.4 ([#111](https://github.com/seapagan/github-changelog-md/pull/111)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...0.7.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...0.7.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.6.0...0.7.0.patch)
 
 ## [0.6.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.6.0) (November 04, 2023)
 
