@@ -361,6 +361,23 @@ class ChangeLog:
         if self.prev_release:
             self.generate_diff_url(f, self.prev_release, release)
 
+        if self.settings.release_text_before and release.tag_name in [
+            release_text["release"].strip()
+            for release_text in self.settings.release_text_before
+        ]:
+            f.write("---\n\n")
+            f.write(
+                next(
+                    (
+                        release_text["text"]
+                        for release_text in self.settings.release_text_before
+                        if release_text["release"].strip() == release.tag_name
+                    ),
+                    "",
+                )
+            )
+            f.write("\n---\n\n")
+
         text_date = release.created_at.date().strftime(
             self.settings.date_format
         )
