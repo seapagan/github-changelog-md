@@ -369,6 +369,23 @@ class ChangeLog:
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
         issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
+        if self.settings.release_text and release.tag_name in [
+            release_text["release"].strip()
+            for release_text in self.settings.release_text
+        ]:
+            f.write("\n")
+            f.write(
+                next(
+                    (
+                        release_text["text"]
+                        for release_text in self.settings.release_text
+                        if release_text["release"].strip() == release.tag_name
+                    ),
+                    "",
+                )
+            )
+            f.write("\n\n")
+
         self.print_issues(f, issue_list)
         self.print_prs(f, pr_list)
 
