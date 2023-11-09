@@ -6,6 +6,31 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+
+**Dependency Updates**
+
+- Build(deps-dev): bump ruff from 0.1.4 to 0.1.5 ([#126](https://github.com/seapagan/github-changelog-md/pull/126)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD.patch)
+
 ## [0.7.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.0) (November 08, 2023)
 
 **New Features**
