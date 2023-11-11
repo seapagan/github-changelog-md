@@ -93,12 +93,12 @@ This is a log of all the changes that have been made to the project since the
 first release. It is automatically generated for each release.
 """
 yanked = [
-  { release = "1.2.3", reason = "Ooooh, nasty nasty bug - use 1.2.4 instead!!!" }
+  { release = "1.3.0", reason = "Ooooh, nasty nasty bug - use 1.3.1 instead!!!" }
 ]
 
 [[changelog_generator.release_text]]
-release = "1.2.3"
-text = "This is a paragraph for the 1.2.3 release."
+release = "1.4.0"
+text = "This is a paragraph for the 1.4.0 release."
 
 [[changelog_generator.release_text]]
 release = "unreleased"
@@ -109,8 +109,8 @@ release.
 ```
 
 1. :bulb: This is the only required setting, the others are optional.
-2. :bulb: This setting uses the `strftime` format, see the block below for more
-   details.
+2. :bulb: This setting uses the `strftime` format, see
+   [Advanced Usage](options.md/#custom-date-format) for more details.
 3. :bulb: You can also add `[no changelog]` anywhere in the PR or Issue title,
    and it will be excluded from the changelog. This is case-insensitive, so `[No
    Changelog]` or `[NO CHANGELOG]` will also work.
@@ -119,26 +119,11 @@ As mentioned above, the only required setting is the `github_pat` setting. The
 other settings can be left out, and the tool will use the default values (or the
 values specified on the command line).
 
-!!! info "Custom Date Format"
-
-    The `date_format` setting allows you to specify a custom date format for the
-    release dates. The default is "`%Y-%m-%d`" (`Year-month-day`) which will
-    give you dates like `2023-10-01`. You can use any of the normal Python
-    [strftime](https://strftime.org/){:target="_blank"} options to customize the
-    date format. This is a full timestamp, so you can include the time as well
-    if you want (though that is probably a bit overkill for a changelog).
-
-    I quite like "`%B %d, %Y`" (`month day, year`) which will give you dates like
-    `November 01, 2023`.
-
-    There is no CLI option for this setting, so you will need to edit the config
-    file manually if you want to change it.
-
 [^1]:
     The default setting is to insert your custom sections just before the
     `Dependency Updates` section, but you can change this by setting the
     `extend_sections_index` value. See the
-    [Custom Sections](usage.md#custom-sections) section for more details.
+    [Custom Sections](options.md#custom-sections) section for more details.
 
 ## Real-world Example
 

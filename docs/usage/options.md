@@ -1,76 +1,21 @@
-# Usage
+# Advanced Usage
+
+There are a number of options available to customize the output of the tool, to
+ignore certain releases or PRs, to add custom text, etc. These options are
+described below. For using these from the [command line](cli_options.md) or
+[config file](config_file.md), see the respective sections.
 
 !!! tip
 
-    Read this section through to the end to learn how to configure and use the
-    tool, and to see what configuration options are available.
-
-    There are several ways to customize the output of the tool using command
-    line options, the configuration file, and by using labels or naming on your
-    PRs.
-
-This tool is designed to be run from the root of a project, and will generate a
-`CHANGELOG.md` file in the current folder using the GitHub Release and PR
-history. It can also create a `CONTRIBUTORS.md` file if you want it to.
-
-Note that this tool is designed to be run **after** you have merged your PRs,
-and just **before** you create a new release. It will use the GitHub release
-tags to determine each release.
-
-!!! tip  "Get the most out of this tool"
-    Since it also lists unreleased PRs, you can run it at any time and push the
-    `CHANGELOG.md` file up to GitHub, to give users an idea of what is coming
-    in the next release.
-
-    The generated CHANGELOG uses the **Pull Request or Issue Title** for each
-    item, it is recommended that you use clear and descriptive titles for your
-    PRs. This will make the changelog much more useful and readable. It is
-    always possible to edit the titles of your PRs after they have been merged,
-    so if you have a PR with a vague title, you can edit it to be more
-    descriptive before you run the tool.
-
-## Basic Usage
-
-Simply run the tool in the folder of a git repository and it will generate a
-`CHANGELOG.md` file in the current folder. You can specify the name of the
-repository you want to generate the changelog for using the `--repo` or `-r`
-option:
-
-```console
-$ github-changelog-md --repo <repo-name>
-```
-
-!!! note "Automatic repository name detection"
-
-    If you do not specify a repository name, the tool will try to determine the
-    repository name from the current folder if it is a git repository. Failing
-    that it will exit.
-
-    Just run the command from the root of the repository you want to generate
-    the changelog for, with no options:
-
-    ```console
-    $ github-changelog-md
-    ```
-
-This works for any repository that is linked to your username (determined from
-the PAT), however if you want to generate a changelog for a repository that is
-**not** linked to your username, you can specify the repository owner using the
-`--user` or `-u` option.
-
-```console
-$ github-changelog-md --user <repo-owner> --repo <repo-name>
-```
-
-As mentioned in the [Installation](../installation.md) section, you will be
-prompted for your GitHub PAT the first time you run the tool, and a config
-file will be created in the current folder if it does not already exist.
+    Read this Advanced Section through to the end to learn how to configure the
+    tool to your exact needs. There are a lot of options, but the defaults
+    should be a usable starting point to work from.
 
 ## Release Section Headers
 
-There are a few different section headers defined, which are used to group the
-PRs in the changelog for each release. These are taken from the GitHub `labels`
-applied to the PR. The default section headers are:
+There are a several section headers defined by default, which are used to group
+the PRs in the changelog for each release. These are taken from the GitHub
+`labels` applied to the PR. The default section headers are:
 
 | **Title**            | **Label**       | **Notes**             |
 |----------------------|-----------------|-----------------------|
@@ -183,6 +128,21 @@ want, just add more tables to the array.
 The same notes apply to this option as to the `extend_sections` option above,
 you can use the inline array format or the verbose format as you prefer.
 
+## Custom Date Format
+
+The `date_format` setting allows you to specify a custom date format for the
+release dates. The default is "`%Y-%m-%d`" (`Year-month-day`) which will give
+you dates like `2023-10-01`. You can use any of the normal Python
+[strftime](https://strftime.org/){:target="_blank"} options to customize the
+date format. This is a full timestamp, so you can include the time as well if
+you want (though that is probably a bit overkill for a changelog).
+
+I quite like "`%B %d, %Y`" (`month day, year`) which will give you dates like
+`November 01, 2023`.
+
+There is no CLI option for this setting, so you will need to edit the config
+file manually if you want to change it.
+
 ## Ignored Labels
 
 There are a few labels that are ignored by default and will not be included in
@@ -265,12 +225,12 @@ ignored_users = ["pre-commit-ci[bot]"]
 ```
 
 This is a list of strings and is optional. If you do not specify this setting,
-all users will be included. This is NO command -line equivalent for this setting.
+all users will be included. This is NO command-line equivalent for this setting.
 
 ## Adding Arbitrary Text
 
-It is possible to add arbitrary text to the changelog, either at the top of the
-changelog, between releases, or to a specific release.
+It is possible to add arbitrary text to the changelog, either at the **top** of
+the changelog, **between releases**, or to a **specific release**.
 
 ### Add an introductory paragraph
 
