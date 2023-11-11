@@ -8,13 +8,14 @@ theme:
     accent: blue
   features:
     - navigation.footer
-    # - navigation.expand
     - content.code.copy
     - content.code.annotate
     - navigation.tracking
+    - navigation.indexes
+    - navigation.prune
     - navigation.top
     - toc.follow
-    - navigation.expand
+    # - navigation.expand
   icon:
     logo: material/history
   favicon: images/favicon.ico
@@ -63,8 +64,9 @@ extra_css:
 nav:
   - Introduction: index.md
   - Installation: installation.md
-  - Usage:
-      - Usage: usage/usage.md
+  - Basic Usage: usage/basic.md
+  - Advanced Usage:
+      - "Configuration Options": usage/options.md
       - "Configuration File": usage/config_file.md
       - "Command Line Options": usage/cli_options.md
   - Todo List: todo.md

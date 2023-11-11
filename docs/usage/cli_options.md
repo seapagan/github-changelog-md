@@ -1,6 +1,8 @@
 # Command Line Options
 
-There are some options you can use to customize the output of the tool.
+Many (though not all) of the options that can be set in the config file can also
+be set on the command line. This allows you to override the config file settings
+on a per-run basis.
 
 ## `--output` / `-o`
 
