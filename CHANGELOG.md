@@ -6,30 +6,26 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.7.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.1) (November 13, 2023)
 
+**Bug Fixes**
 
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+- Fix spacing issues caused by extra line when deps are truncated ([#133](https://github.com/seapagan/github-changelog-md/pull/133)) by [seapagan](https://github.com/seapagan)
 
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or, if using poetry:
+**Documentation**
 
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
-
+- Refactor and clarify documentation site ([#127](https://github.com/seapagan/github-changelog-md/pull/127)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
+- Build(deps-dev): bump faker from 19.13.0 to 20.0.0 ([#132](https://github.com/seapagan/github-changelog-md/pull/132)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump poethepoet from 0.24.2 to 0.24.3 ([#131](https://github.com/seapagan/github-changelog-md/pull/131)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mypy from 1.6.1 to 1.7.0 ([#130](https://github.com/seapagan/github-changelog-md/pull/130)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pymdown-extensions from 10.3.1 to 10.4 ([#129](https://github.com/seapagan/github-changelog-md/pull/129)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pytest-xdist from 3.3.1 to 3.4.0 ([#128](https://github.com/seapagan/github-changelog-md/pull/128)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump ruff from 0.1.4 to 0.1.5 ([#126](https://github.com/seapagan/github-changelog-md/pull/126)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...0.7.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...0.7.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.7.0...0.7.1.patch)
 
 ## [0.7.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.0) (November 08, 2023)
 
@@ -279,7 +275,6 @@ when creating a missing config file.
 - Bump mkdocs-git-revision-date-localized-plugin from 1.2.0 to 1.2.1 ([#19](https://github.com/seapagan/github-changelog-md/pull/19)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump simple-toml-settings from 0.2.0 to 0.2.2 ([#18](https://github.com/seapagan/github-changelog-md/pull/18)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Bump pylint from 2.17.7 to 3.0.1 ([#16](https://github.com/seapagan/github-changelog-md/pull/16)) by [dependabot[bot]](https://github.com/apps/dependabot)
-
 - *and 9 more dependency updates*
 
 ---

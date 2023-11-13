@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "github-changelog-md"
-version = "0.7.0"
+version = "0.7.1"
 description = "Generate a Markdown Changelog from your Github repository."
 authors = ["Grant Ramsay <seapagan@gmail.com>"]
 readme = "README.md"
