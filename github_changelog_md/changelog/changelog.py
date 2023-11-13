@@ -577,7 +577,6 @@ class ChangeLog:
                         f"([#{pr.number}]({pr.html_url})) "
                         f"by [{pr.user.login}]({pr.user.html_url})\n",
                     )
-                f.write("\n")
                 if (
                     is_dependencies
                     and len(sorted_prs) > self.options["max_depends"]
@@ -586,8 +585,9 @@ class ChangeLog:
                         len(sorted_prs) - self.options["max_depends"]
                     )
                     f.write(
-                        f"- *and {hidden_updates} more dependency updates*\n\n",
+                        f"- *and {hidden_updates} more dependency updates*\n",
                     )
+                f.write("\n")
 
     def ignore_items(
         self, items: list[PullRequest | Issue]
