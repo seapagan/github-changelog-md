@@ -1,7 +1,7 @@
 """Handle the settings for the project."""
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import ClassVar, Optional
 
 from rich import print  # pylint: disable=redefined-builtin
 from rich.prompt import Prompt
@@ -36,7 +36,7 @@ class Settings(TOMLSettings):
     ignored_labels: Optional[list[str]] = None
     allowed_labels: Optional[list[str]] = None
     ignore_strings: Optional[list[str]] = None
-    ignored_users: Optional[list[str]] = None
+    ignored_users: ClassVar[list[str]] = []
     max_depends: int = 10
     show_diff: bool = True
     show_patch: bool = True
