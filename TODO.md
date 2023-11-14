@@ -78,6 +78,7 @@ in the next release.
   instead so it does not grate so badly with the auto-generated headings.
 - In some cases the `full-changelog` does not get removed from the existing body
   properly depending on how it is formatted.
+- extra linebreaks are added after inserted text blocks
 
 ## Refactoring
 
