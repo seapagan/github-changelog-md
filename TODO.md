@@ -85,6 +85,9 @@ in the next release.
 of the duplication. This is a low priority but should be done at some point.
 Priority to the actual 'ChangeLog' class. **Preferably this should wait until we
 have full test coverage.**
+- `Pydantic` is listed as a dependency but is not actually used. This is a
+  leftover from when I was using it for the config file. It should be removed -
+  or look at using it for validation.
 
 ## Documentation
 

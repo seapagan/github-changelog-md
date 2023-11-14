@@ -6,6 +6,22 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.7.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.2) (November 14, 2023)
+
+**Closed Issues**
+
+- If `ignored_users` is not specified, all users are ignored which results in using the release text instead of the generated changelog ([#135](https://github.com/seapagan/github-changelog-md/issues/135)) by [seapagan](https://github.com/seapagan)
+
+**Bug Fixes**
+
+- Fix bug where without `ignore_users` specified, all users are ignored ([#136](https://github.com/seapagan/github-changelog-md/pull/136)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Build(deps): bump pydantic from 2.4.2 to 2.5.0 ([#134](https://github.com/seapagan/github-changelog-md/pull/134)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.7.1...0.7.2) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.7.1...0.7.2.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.7.1...0.7.2.patch)
+
 ## [0.7.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.1) (November 13, 2023)
 
 **Bug Fixes**
