@@ -107,6 +107,12 @@ app will continue.
 $ github-changelog-md
 ```
 
+This is only the barest **minimum** usable configuration!. There are many more
+options
+available, see the
+[Configuration](https://changelog.seapagan.net/usage/options/)
+section in the documentation for a full list of the many available options.
+
 ## Add the config file to your .gitignore
 
 Make sure you add the config file to your `.gitignore` file so you don't
