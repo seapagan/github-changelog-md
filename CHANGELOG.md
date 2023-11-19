@@ -6,6 +6,21 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.8.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.0) (November 19, 2023)
+
+**New Features**
+
+- Allow totally replacing the text for a specific release (`release_overerides` option) ([#142](https://github.com/seapagan/github-changelog-md/pull/142)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Build(deps-dev): bump pyfakefs from 5.3.0 to 5.3.1 ([#141](https://github.com/seapagan/github-changelog-md/pull/141)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.5.0 to 2.5.1 ([#140](https://github.com/seapagan/github-changelog-md/pull/140)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump rich from 13.6.0 to 13.7.0 ([#139](https://github.com/seapagan/github-changelog-md/pull/139)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump faker from 20.0.0 to 20.0.3 ([#138](https://github.com/seapagan/github-changelog-md/pull/138)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.7.2...0.8.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.7.2...0.8.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.7.2...0.8.0.patch)
+
 ## [0.7.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.7.2) (November 14, 2023)
 
 **Closed Issues**
@@ -14,7 +29,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 **Bug Fixes**
 
-- Fix bug where without `ignore_users` specified, all users are ignored ([#136](https://github.com/seapagan/github-changelog-md/pull/136)) by [seapagan](https://github.com/seapagan)
+- Fix bug where without `ignored_users` specified, all users are ignored ([#136](https://github.com/seapagan/github-changelog-md/pull/136)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
@@ -247,51 +262,10 @@ when creating a missing config file.
 
 ## [0.2.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.2.0) (October 21, 2023)
 
-**Closed Issues**
+**First Public Release**
 
-- Add a '--next-release' flag which will create a virtual release containing all PRs that have been merged since the last release. ([#35](https://github.com/seapagan/github-changelog-md/issues/35)) by [seapagan](https://github.com/seapagan)
-- Try to take repo name from the current folder if it is a git repo ([#34](https://github.com/seapagan/github-changelog-md/issues/34)) by [seapagan](https://github.com/seapagan)
-- Include closed issues in the changelog, linked to the PR that closed them. ([#31](https://github.com/seapagan/github-changelog-md/issues/31)) by [seapagan](https://github.com/seapagan)
-- Finish Documentation ([#30](https://github.com/seapagan/github-changelog-md/issues/30)) by [seapagan](https://github.com/seapagan)
-- Add testing with Pytest ([#29](https://github.com/seapagan/github-changelog-md/issues/29)) by [seapagan](https://github.com/seapagan)
-- Any PR with a dunder string in the title will have that formatted as Bold instead of printed as is. ([#22](https://github.com/seapagan/github-changelog-md/issues/22)) by [seapagan](https://github.com/seapagan)
-
-**New Features**
-
-- List closed issues ([#38](https://github.com/seapagan/github-changelog-md/pull/38)) by [seapagan](https://github.com/seapagan)
-- Add the '--next-release' option ([#37](https://github.com/seapagan/github-changelog-md/pull/37)) by [seapagan](https://github.com/seapagan)
-- Get repo name from local if possible ([#36](https://github.com/seapagan/github-changelog-md/pull/36)) by [seapagan](https://github.com/seapagan)
-- Prompt for PAT if config file is missing ([#33](https://github.com/seapagan/github-changelog-md/pull/33)) by [seapagan](https://github.com/seapagan)
-- Sort prs into sections based on their labels ([#23](https://github.com/seapagan/github-changelog-md/pull/23)) by [seapagan](https://github.com/seapagan)
-- Tweak release layout ([#21](https://github.com/seapagan/github-changelog-md/pull/21)) by [seapagan](https://github.com/seapagan)
-- Use local config file ([#20](https://github.com/seapagan/github-changelog-md/pull/20)) by [seapagan](https://github.com/seapagan)
-
-**Testing**
-
-- Add Unit testing with pytest ([#42](https://github.com/seapagan/github-changelog-md/pull/42)) by [seapagan](https://github.com/seapagan)
-
-**Bug Fixes**
-
-- Fix bug #22 ([#24](https://github.com/seapagan/github-changelog-md/pull/24)) by [seapagan](https://github.com/seapagan)
-
-**Documentation**
-
-- Create release docs ([#32](https://github.com/seapagan/github-changelog-md/pull/32)) by [seapagan](https://github.com/seapagan)
-- Start working on docs ([#17](https://github.com/seapagan/github-changelog-md/pull/17)) by [seapagan](https://github.com/seapagan)
-
-**Dependency Updates**
-
-- Bump pymdown-extensions from 10.3 to 10.3.1 ([#43](https://github.com/seapagan/github-changelog-md/pull/43)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump faker from 19.10.0 to 19.11.0 ([#41](https://github.com/seapagan/github-changelog-md/pull/41)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump mypy from 1.6.0 to 1.6.1 ([#40](https://github.com/seapagan/github-changelog-md/pull/40)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump gitpython from 3.1.37 to 3.1.38 ([#28](https://github.com/seapagan/github-changelog-md/pull/28)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump flake8-type-checking from 2.4.2 to 2.5.1 ([#27](https://github.com/seapagan/github-changelog-md/pull/27)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump black from 23.9.1 to 23.10.0 ([#26](https://github.com/seapagan/github-changelog-md/pull/26)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump urllib3 from 2.0.6 to 2.0.7 ([#25](https://github.com/seapagan/github-changelog-md/pull/25)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump mkdocs-git-revision-date-localized-plugin from 1.2.0 to 1.2.1 ([#19](https://github.com/seapagan/github-changelog-md/pull/19)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump simple-toml-settings from 0.2.0 to 0.2.2 ([#18](https://github.com/seapagan/github-changelog-md/pull/18)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Bump pylint from 2.17.7 to 3.0.1 ([#16](https://github.com/seapagan/github-changelog-md/pull/16)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- *and 9 more dependency updates*
+This is the first release of this project that was uploaded to
+[PyPI](https://pypi.org/) and released as a stable version.
 
 ---
 *This changelog was generated using [github-changelog-md](http://changelog.seapagan.net/) by [Seapagan](https://github.com/seapagan)*
