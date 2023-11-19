@@ -107,7 +107,7 @@ app will continue.
 $ github-changelog-md
 ```
 
-This is only the barest **minimum** usable configuration!. There are many more
+This is only the barest **minimum** usable configuration! There are many more
 options
 available, see the
 [Configuration](https://changelog.seapagan.net/usage/options/)
