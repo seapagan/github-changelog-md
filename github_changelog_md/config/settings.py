@@ -44,6 +44,7 @@ class Settings(TOMLSettings):
     yanked: Optional[list[dict[str, str]]] = None
     release_text: Optional[list[dict[str, str]]] = None
     release_text_before: Optional[list[dict[str, str]]] = None
+    release_overrides: Optional[list[dict[str, str]]] = None
 
 
 def get_settings_object() -> Settings:

@@ -46,6 +46,10 @@ in the next release.
   adding extra permissions to the PAT.
 - Allow to use `Git TAGS` instead of `GitHub Releases` to generate the
   changelog. some projects don't use GitHub releases, but do use tags.
+- :rocket: add `release_overrides` option to completely override the release
+  text for a specific release. This will allow the user to add a custom release
+  text for the first release, or any other release. This will be useful for
+  projects that don't use GitHub releases, but do use tags.
 
 ## Improve existing functionality
 
@@ -121,12 +125,11 @@ be implemented.
   teams. \[`As above`\]
 - option to just have a flat list of PRs and Issues with no sections. \[`Would
   be ugly and limited usefulness`\]
-- Add some form of text or even block to the oldest release that says something
-  like "First release" or "Initial release" or "Initial commit" or something
+- Add some form of text block to the oldest release that says something like
+  "First release" or "Initial release" or "Initial commit" or something
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
-  \[`First part can be done using the 'release_text' option. Not sure about
-  requirement for the second part`\]
+  \[`Easily done using the 'release_overrides' option.`\]
 - Set up versioned documentation on GitHub pages using 'mike' in conjunction with
   MkDocs. I'd like to have an 'unreleased' branch to show ongoing docs for the
   upcoming versions if possible. See the
