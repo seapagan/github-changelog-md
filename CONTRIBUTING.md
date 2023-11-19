@@ -4,7 +4,9 @@
 [![Tests](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml)&nbsp;
 [![codecov](https://codecov.io/gh/seapagan/github-changelog-md/graph/badge.svg?token=27D8PGNX0E)](https://codecov.io/gh/seapagan/github-changelog-md)&nbsp;
 [![Dependency Review](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml)&nbsp;
-[![CodeQL](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml)&nbsp;
+[![Weekly Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=week&units=international_system&left_color=black&right_color=green&left_text=Weekly%20Downloads)](https://pepy.tech/project/github-changelog-md)&nbsp;
+[![Total Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=total&units=international_system&left_color=black&right_color=green&left_text=Total%20Downloads)](https://pepy.tech/project/github-changelog-md)
 
 Thank you for your interest in contributing to `github-changelog-md`! We welcome
 all contributions, big or small.
