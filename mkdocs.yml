@@ -19,9 +19,11 @@ theme:
   icon:
     logo: material/history
   favicon: images/favicon.ico
+
 extra:
   analytics:
-    - "G-F151EK9LZX"
+    provider: google
+    proprty: G-F151EK9LZX
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/seapagan
