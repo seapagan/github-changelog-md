@@ -425,6 +425,24 @@ class ChangeLog:
             )
             f.write("\n\n")
 
+        if self.settings.release_overrides and release.tag_name in [
+            release_override["release"].strip()
+            for release_override in self.settings.release_overrides
+        ]:
+            f.write(
+                next(
+                    (
+                        release_override["text"]
+                        for release_override in self.settings.release_overrides
+                        if release_override["release"].strip()
+                        == release.tag_name
+                    ),
+                    "",
+                )
+            )
+            f.write("\n")
+            return
+
         self.print_issues(f, issue_list)
         self.print_prs(f, pr_list)
 
