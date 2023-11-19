@@ -22,7 +22,9 @@ tags to determine each release.
 
 ## Basic Usage
 
-Simply run the tool in the folder of a git repository and it will generate a
+This tool is designed to produce a usable clean `CHANGELOG.md` without any extra
+configuration. Simply run the tool in the folder of a git repository and it will
+generate a
 `CHANGELOG.md` file in the current folder. You can specify the name of the
 repository you want to generate the changelog for using the `--repo` or `-r`
 option:
