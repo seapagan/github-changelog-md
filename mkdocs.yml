@@ -20,6 +20,8 @@ theme:
     logo: material/history
   favicon: images/favicon.ico
 extra:
+  analytics:
+    - "G-GT8M2ZE4CY"
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/seapagan
