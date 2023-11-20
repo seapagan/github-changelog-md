@@ -54,20 +54,6 @@ should have this installed as well. You can install Poetry by following the
 instructions on the [Poetry
 website](https://python-poetry.org/docs/#installation).
 
-!!! tip
-
-    If you **don't** want to have Poetry installed globally for any reason,
-    there is an auto-generated `requirements-dev.txt` file in the root of the
-    project. You can use this to install the dependencies using `pip`:
-
-    ```console
-    $ pip install -r requirements-dev.txt
-    ```
-
-    With this, `Poetry` is also installed as a dependency for `poe` anyway so
-    you may as well use it :rofl:! It's a great tool and I highly recommend it.
-    Also, it is an integral part of this project development.
-
 ## Getting Started
 
 Before you start contributing, please make sure you have read and understood our
@@ -102,6 +88,20 @@ $ poetry shell
 From here you can start working on the project. If you are using an IDE such as
 VSCode or PyCharm, you can set the use their Python interpreter setting to use
 the virtual environment that has just been created.
+
+### Using Pip
+
+If you **don't** want to have Poetry installed globally for any reason, there is
+an auto-generated `requirements-dev.txt` file in the root of the project. You
+can use this to install the dependencies using `pip`:
+
+```console
+$ pip install -r requirements-dev.txt
+```
+
+With this, `Poetry` is also installed as a dependency for `poe` anyway so you
+may as well use it :rofl:! It's a great tool and I highly recommend it. Also, it
+is an integral part of this project development.
 
 ## Linting
 
