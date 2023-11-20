@@ -23,7 +23,7 @@ theme:
 extra:
   analytics:
     provider: google
-    proprty: G-F151EK9LZX
+    property: G-F151EK9LZX
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/seapagan
