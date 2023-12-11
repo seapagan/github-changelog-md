@@ -6,6 +6,41 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+
+**Dependency Updates**
+
+- Build(deps-dev): bump mkdocs-material from 9.4.10 to 9.5.1 ([#158](https://github.com/seapagan/github-changelog-md/pull/158)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump actions/setup-python from 4 to 5 ([#156](https://github.com/seapagan/github-changelog-md/pull/156)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump cryptography from 41.0.5 to 41.0.6 ([#155](https://github.com/seapagan/github-changelog-md/pull/155)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.5.1 to 2.5.2 ([#152](https://github.com/seapagan/github-changelog-md/pull/152)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pygments from 2.17.1 to 2.17.2 ([#151](https://github.com/seapagan/github-changelog-md/pull/151)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pytest-xdist from 3.4.0 to 3.5.0 ([#150](https://github.com/seapagan/github-changelog-md/pull/150)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump faker from 20.0.3 to 20.1.0 ([#149](https://github.com/seapagan/github-changelog-md/pull/149)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump poethepoet from 0.24.3 to 0.24.4 ([#148](https://github.com/seapagan/github-changelog-md/pull/148)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump ruff from 0.1.5 to 0.1.6 ([#147](https://github.com/seapagan/github-changelog-md/pull/147)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pygments from 2.16.1 to 2.17.1 ([#146](https://github.com/seapagan/github-changelog-md/pull/146)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- *and 1 more dependency updates*
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD.patch)
+
 ## [0.8.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.0) (November 19, 2023)
 
 **New Features**
