@@ -25,8 +25,6 @@ in the next release.
   user's home directory. This would allow a user to set their GitHub PAT once
   and use it for all projects. \[`Probably needs to be done in the settings
   package`\]
-- Dump markdown code for a specific release to the terminal, so it can be copy /
-  pasted into other docs.
 - Add settings to run this as a GitHub action, so it can be run automatically
   when a new release is created or a PR is merged. We should be able to use the
   `secrets.GITHUB_TOKEN` for this?
@@ -46,10 +44,6 @@ in the next release.
   adding extra permissions to the PAT.
 - Allow to use `Git TAGS` instead of `GitHub Releases` to generate the
   changelog. some projects don't use GitHub releases, but do use tags.
-- :rocket: add `release_overrides` option to completely override the release
-  text for a specific release. This will allow the user to add a custom release
-  text for the first release, or any other release. This will be useful for
-  projects that don't use GitHub releases, but do use tags.
 
 ## Improve existing functionality
 
@@ -137,6 +131,8 @@ be implemented.
   page on this subject. \[`Honestly, I can't be bothered with this. I don't see
   the point of versioned docs for a tool like this. Just use the latest version
   and docs`]
+- Dump markdown code for a specific release to the terminal, so it can be copy /
+  pasted into other docs.
 
 ## Other
 
