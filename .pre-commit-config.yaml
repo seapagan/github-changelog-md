@@ -12,7 +12,7 @@ repos:
       - id: end-of-file-fixer
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.4
+    rev: v0.1.8
     hooks:
       - id: ruff
         name: "lint with ruff"
@@ -20,7 +20,7 @@ repos:
         name: "format with ruff"
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.14
+    rev: v0.9.15
     hooks:
       - id: pymarkdown
         name: "check markdown"
@@ -28,7 +28,7 @@ repos:
         args: [-d, "MD046", scan]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.6.1" # Use the sha / tag you want to point at
+    rev: "v1.7.1" # Use the sha / tag you want to point at
     hooks:
       - id: mypy
         name: "run mypy"
@@ -38,9 +38,8 @@ repos:
     hooks:
       - id: poetry-check
         name: "check poetry files"
-        additional_dependencies:
-          - poetry-plugin-export
       # - id: poetry-lock
+
   - repo: https://github.com/python-poetry/poetry-plugin-export
     rev: "1.6.0"
     hooks:
