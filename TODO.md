@@ -12,6 +12,9 @@ in the next release.
 
 ## Features to Add
 
+- Allowing some sort of merging of releases, e.g. all beta releases PR are listed
+  with the latest 'un merged' release. or, more simply, a list of releases to
+  ignore so that their PR's are added to the next release up's notes.
 - Allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
 - Allow custom ordering of sections.
