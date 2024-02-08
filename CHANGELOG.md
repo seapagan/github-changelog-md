@@ -6,13 +6,15 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [v0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/v0.8.1) (February 08, 2024)
+## [0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.1) (February 08, 2024)
+
 
 This release is to fix security issues in some of the project dependencies.
 
 These are: `cryptography`, `jinja2` and `gitpython`.
 
 Several other dependencies have been updated to their latest versions as well.
+
 
 **Dependency Updates**
 
@@ -28,7 +30,7 @@ Several other dependencies have been updated to their latest versions as well.
 - Build(deps-dev): bump pre-commit from 3.5.0 to 3.6.0 ([#166](https://github.com/seapagan/github-changelog-md/pull/166)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - *and 17 more dependency updates*
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...0.8.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...0.8.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...0.8.1.patch)
 
 ## [0.8.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.0) (November 19, 2023)
 
