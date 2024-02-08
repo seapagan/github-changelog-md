@@ -6,46 +6,35 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [v0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/v0.8.1) (February 08, 2024)
 
+This release is to fix security issues in some of the project dependencies.
 
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+These are: `cryptography`, `jinja2` and `gitpython`.
 
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
-
+Several other dependencies have been updated to their latest versions as well.
 
 **Dependency Updates**
 
-- Build(deps-dev): bump mkdocs-material from 9.4.10 to 9.5.1 ([#158](https://github.com/seapagan/github-changelog-md/pull/158)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps): bump actions/setup-python from 4 to 5 ([#156](https://github.com/seapagan/github-changelog-md/pull/156)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps): bump cryptography from 41.0.5 to 41.0.6 ([#155](https://github.com/seapagan/github-changelog-md/pull/155)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps): bump pydantic from 2.5.1 to 2.5.2 ([#152](https://github.com/seapagan/github-changelog-md/pull/152)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump pygments from 2.17.1 to 2.17.2 ([#151](https://github.com/seapagan/github-changelog-md/pull/151)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump pytest-xdist from 3.4.0 to 3.5.0 ([#150](https://github.com/seapagan/github-changelog-md/pull/150)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump faker from 20.0.3 to 20.1.0 ([#149](https://github.com/seapagan/github-changelog-md/pull/149)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump poethepoet from 0.24.3 to 0.24.4 ([#148](https://github.com/seapagan/github-changelog-md/pull/148)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump ruff from 0.1.5 to 0.1.6 ([#147](https://github.com/seapagan/github-changelog-md/pull/147)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump pygments from 2.16.1 to 2.17.1 ([#146](https://github.com/seapagan/github-changelog-md/pull/146)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- *and 1 more dependency updates*
+- Build(deps-dev): bump mkdocs-material from 9.5.1 to 9.5.8 ([#186](https://github.com/seapagan/github-changelog-md/pull/186)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump cryptography from 41.0.6 to 42.0.0 ([#185](https://github.com/seapagan/github-changelog-md/pull/185)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-git-revision-date-localized-plugin from 1.2.1 to 1.2.4 ([#184](https://github.com/seapagan/github-changelog-md/pull/184)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump codecov/codecov-action from 3 to 4 ([#182](https://github.com/seapagan/github-changelog-md/pull/182)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-minify-plugin from 0.7.1 to 0.8.0 ([#181](https://github.com/seapagan/github-changelog-md/pull/181)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump actions/dependency-review-action from 3 to 4 ([#177](https://github.com/seapagan/github-changelog-md/pull/177)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump actions/cache from 3 to 4 ([#176](https://github.com/seapagan/github-changelog-md/pull/176)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump jinja2 from 3.1.2 to 3.1.3 ([#174](https://github.com/seapagan/github-changelog-md/pull/174)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump gitpython from 3.1.40 to 3.1.41 ([#173](https://github.com/seapagan/github-changelog-md/pull/173)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pre-commit from 3.5.0 to 3.6.0 ([#166](https://github.com/seapagan/github-changelog-md/pull/166)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- *and 17 more dependency updates*
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.0...v0.8.1.patch)
 
 ## [0.8.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.0) (November 19, 2023)
 
 **New Features**
 
-- Allow totally replacing the text for a specific release (`release_overerides` option) ([#142](https://github.com/seapagan/github-changelog-md/pull/142)) by [seapagan](https://github.com/seapagan)
+- Allow totally replacing the text for a specific release (`release_overrides` option) ([#142](https://github.com/seapagan/github-changelog-md/pull/142)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
