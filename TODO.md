@@ -12,9 +12,14 @@ in the next release.
 
 ## Features to Add
 
+- Add a list of releases that should be ignored.
+- Allow ignoring all alpha/beta releases and merge their changes into the next full
+  release of the same version (or just the next release).
 - Allowing some sort of merging of releases, e.g. all beta releases PR are listed
   with the latest 'un merged' release. or, more simply, a list of releases to
   ignore so that their PR's are added to the next release up's notes.
+- Allow setting a different last release to compare to for a release links, in the
+  case that releases are out of order.
 - Allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
 - Allow custom ordering of sections.
@@ -84,9 +89,9 @@ in the next release.
 ## Refactoring
 
 - The whole code base needs a bit of refactoring to tidy the code and remove some
-of the duplication. This is a low priority but should be done at some point.
-Priority to the actual 'ChangeLog' class. **Preferably this should wait until we
-have full test coverage.**
+  of the duplication. This is a low priority but should be done at some point.
+  Priority to the actual 'ChangeLog' class. **Preferably this should wait until we
+  have full test coverage.**
 - `Pydantic` is listed as a dependency but is not actually used. This is a
   leftover from when I was using it for the config file. It should be removed -
   or look at using it for validation.
