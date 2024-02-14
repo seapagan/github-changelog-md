@@ -20,3 +20,20 @@ def config_file(fs) -> None:  # noqa: PT004
         contrib = false
         """,
     )
+
+
+@pytest.fixture()
+def bad_schema(fs) -> None:  # noqa: PT004
+    """Create a fake config file with a bad schema."""
+    fs.create_file(
+        CONFIG_FILE,
+        contents="""
+        [changelog_generator]
+        github_pat = '1234'
+        schema_version = '1'
+        unreleased = true
+        quiet = false
+        depends = true
+        contrib = false
+        """,
+    )
