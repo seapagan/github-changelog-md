@@ -57,7 +57,7 @@ def get_settings_object() -> Settings:
         local_file=True,
         settings_file_name=CONFIG_FILE,
         auto_create=False,
-        schema_version="2",
+        schema_version="1",
     )
 
 
