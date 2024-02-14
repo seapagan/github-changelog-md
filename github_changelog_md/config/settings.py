@@ -6,7 +6,10 @@ from typing import ClassVar, Optional
 from rich import print  # pylint: disable=redefined-builtin
 from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
-from simple_toml_settings.exceptions import SettingsNotFoundError
+from simple_toml_settings.exceptions import (
+    SettingsNotFoundError,
+    SettingsSchemaError,
+)
 
 from github_changelog_md.constants import (
     CONFIG_FILE,
@@ -54,7 +57,7 @@ def get_settings_object() -> Settings:
         local_file=True,
         settings_file_name=CONFIG_FILE,
         auto_create=False,
-        schema_version="1",
+        schema_version="2",
     )
 
 
@@ -98,5 +101,13 @@ def get_settings() -> Settings:
                 "you have write-access to.[/red]",
             )
             sys.exit(ExitErrors.PERMISSION_DENIED)
+    except SettingsSchemaError as e:
+        print(f"\n[red]Error in the settings file: [bold]{e}[/bold][/red]")
+        print(
+            "\n[purple]Please fix the settings file and try again.\nYou can "
+            "check the website at [bold]http://changelog.seapagan.net/[/bold] "
+            "for more information.[/purple]\n"
+        )
+        sys.exit(ExitErrors.BAD_SCHEMA)
 
     return settings
