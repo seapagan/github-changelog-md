@@ -6,6 +6,44 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+
+**New Features**
+
+- Stop with error if the config file schema is wrong ([#198](https://github.com/seapagan/github-changelog-md/pull/198)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Build(deps): bump pygithub from 2.1.1 to 2.2.0 ([#197](https://github.com/seapagan/github-changelog-md/pull/197)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump faker from 20.1.0 to 23.1.0 ([#196](https://github.com/seapagan/github-changelog-md/pull/196)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pre-commit from 3.6.0 to 3.6.1 ([#195](https://github.com/seapagan/github-changelog-md/pull/195)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump ruff from 0.1.8 to 0.2.1 ([#194](https://github.com/seapagan/github-changelog-md/pull/194)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pymdown-extensions from 10.5 to 10.7 ([#193](https://github.com/seapagan/github-changelog-md/pull/193)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pytest-sugar from 0.9.7 to 1.0.0 ([#192](https://github.com/seapagan/github-changelog-md/pull/192)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pymarkdownlnt from 0.9.15 to 0.9.17 ([#191](https://github.com/seapagan/github-changelog-md/pull/191)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mypy from 1.7.1 to 1.8.0 ([#190](https://github.com/seapagan/github-changelog-md/pull/190)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.5.2 to 2.6.1 ([#189](https://github.com/seapagan/github-changelog-md/pull/189)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pyfakefs from 5.3.2 to 5.3.5 ([#188](https://github.com/seapagan/github-changelog-md/pull/188)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...HEAD.patch)
+
 ## [0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.1) (February 08, 2024)
 
 
