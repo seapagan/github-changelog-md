@@ -68,6 +68,7 @@ Current available options are:
 This is a faked up example of a config file with many of the settings.
 
 ```toml hl_lines="1" title="changelog_generator.toml"
+[changelog_generator]
 github_pat = "1234567890" # (1)!
 schema_version = "1"
 unreleased = true
