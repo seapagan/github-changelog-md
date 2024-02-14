@@ -17,6 +17,7 @@ class ExitErrors(IntEnum):
     OS_ERROR = 4
     INVALID_ACTION = 5
     NO_PAT = 6
+    BAD_SCHEMA = 7
 
 
 # label names should be lowercase

@@ -75,6 +75,16 @@ class TestSettings:
         assert settings.settings_file_name == CONFIG_FILE
         assert isinstance(settings, Settings)
 
+    def test_get_settings_with_bad_schema(
+        self,
+        bad_schema,  # noqa: ARG002
+    ) -> None:
+        """Test we can get a settings object."""
+        with pytest.raises(SystemExit) as exc:
+            get_settings()
+
+        assert exc.value.args[0] == ExitErrors.BAD_SCHEMA
+
     def test_settings_with_no_config_file(
         self,
         fs,
