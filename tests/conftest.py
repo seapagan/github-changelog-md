@@ -13,7 +13,7 @@ def config_file(fs) -> None:  # noqa: PT004
         contents="""
         [changelog_generator]
         github_pat = '1234'
-        schema_version = '2'
+        schema_version = '1'
         unreleased = true
         quiet = false
         depends = true
@@ -30,7 +30,7 @@ def bad_schema(fs) -> None:  # noqa: PT004
         contents="""
         [changelog_generator]
         github_pat = '1234'
-        schema_version = '1'
+        schema_version = '2'
         unreleased = true
         quiet = false
         depends = true
