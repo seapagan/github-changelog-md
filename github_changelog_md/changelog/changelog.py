@@ -504,7 +504,7 @@ class ChangeLog:
             f.write(
                 f"- {escaped_title} "
                 f"([#{issue.number}]({issue.html_url})) "
-                f"by [{issue.user.login}]({issue.user.html_url})\n",
+                f"by [{issue.closed_by.login}]({issue.closed_by.html_url})\n",
             )
         f.write("\n")
 
