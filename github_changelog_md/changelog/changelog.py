@@ -33,7 +33,7 @@ from github_changelog_md.helpers import (
     header,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from io import TextIOWrapper
 
     from github.Commit import Commit
