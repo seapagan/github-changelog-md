@@ -166,6 +166,19 @@ class TestChangelog:
 
         assert exc.value.args[0] == ExitErrors.GIT_ERROR
 
+    def test_no_pat_given(self, mocker, capsys) -> None:
+        """Test the no_pat_given method."""
+        mocker.patch(
+            "github_changelog_md.changelog.changelog.get_settings",
+            return_value="",
+        )
+        with pytest.raises(typer.Exit) as exc:
+            ChangeLog("repo", {"user_name": None})
+
+        output = capsys.readouterr()
+        assert exc.value.args[0] == ExitErrors.NO_PAT
+        assert "No GitHub PAT found in settings file" in output.err
+
     def test_run(
         self,
         mock_repo_data,
