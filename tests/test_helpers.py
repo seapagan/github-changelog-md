@@ -6,19 +6,32 @@ from importlib import metadata
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from github_changelog_md.constants import ExitErrors
+import pytest
+
+from github_changelog_md.constants import ExitErrors, SectionHeadings
 from github_changelog_md.helpers import (
     cap_first_letter,
     get_app_version,
+    get_index_of_tuple,
     get_repo_name,
     get_section_name,
     header,
 )
 
 if TYPE_CHECKING:
-    import pytest
     from pyfakefs.fake_filesystem import FakeFileSystem
     from pytest_mock import MockerFixture
+
+
+@pytest.fixture()
+def sample_section_headings() -> list[SectionHeadings]:
+    """Fixture for providing a sample list of section headings."""
+    return [
+        ("Introduction", None),
+        ("Methods", "1.0"),
+        ("Results", "2.0"),
+        ("Discussion", None),
+    ]
 
 
 class TestHelpers:
@@ -135,3 +148,39 @@ class TestHelpers:
         assert get_section_name("dependencies") == "Dependency Updates"
         assert get_section_name("not_a_label") is None
         assert get_section_name(None) == "Merged Pull Requests"
+
+    def test_get_index_of_tuple_found(self, sample_section_headings) -> None:
+        """Test get_index_of_tuple returns correct index when value is found."""
+        index = get_index_of_tuple(sample_section_headings, 0, "Methods")
+        assert index == 1, "Expected index of 1"
+
+    def test_get_index_of_tuple_not_found(
+        self, sample_section_headings
+    ) -> None:
+        """Test get_index_of_tuple raises ValueError when value is not found."""
+        with pytest.raises(
+            ValueError, match="not in the supplied list of Tuples"
+        ) as exc_info:
+            get_index_of_tuple(sample_section_headings, 0, "Conclusion")
+        assert "'Conclusion' is not in the supplied list of Tuples" in str(
+            exc_info.value
+        ), "Expected a ValueError indicating 'Conclusion' was not found"
+
+    def test_get_index_of_tuple_with_none_value(
+        self, sample_section_headings
+    ) -> None:
+        """Test get_index_of_tuple when searching for None value."""
+        index = get_index_of_tuple(sample_section_headings, 1, None)
+        assert (
+            index == 0
+        ), "Expected index of 0 for the first occurrence of None value"
+
+    def test_get_index_of_tuple_empty_list(self) -> None:
+        """Test get_index_of_tuple with an empty list."""
+        with pytest.raises(
+            ValueError, match="not in the supplied list of Tuples"
+        ) as exc_info:
+            get_index_of_tuple([], 0, "Introduction")
+        assert "'Introduction' is not in the supplied list of Tuples" in str(
+            exc_info.value
+        ), "Expected a ValueError, 'Introduction' was not found in empty list"
