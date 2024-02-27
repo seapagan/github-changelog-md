@@ -6,15 +6,22 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.9.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.0) (February 26, 2024)
+## [0.9.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.1) (February 27, 2024)
 
 **New Features**
 
 - For a closed issue, show the name who closed it not who opened it ([#210](https://github.com/seapagan/github-changelog-md/pull/210)) by [seapagan](https://github.com/seapagan)
 - Stop with error if the config file schema is wrong ([#198](https://github.com/seapagan/github-changelog-md/pull/198)) by [seapagan](https://github.com/seapagan)
 
+**Bug Fixes**
+
+- Fix error causing crash if issue is converted to discussion ([#216](https://github.com/seapagan/github-changelog-md/pull/216)) by [seapagan](https://github.com/seapagan)
+
 **Dependency Updates**
 
+- Build(deps-dev): bump pre-commit from 3.6.1 to 3.6.2 ([#214](https://github.com/seapagan/github-changelog-md/pull/214)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.6.1 to 2.6.2 ([#213](https://github.com/seapagan/github-changelog-md/pull/213)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump poethepoet from 0.24.4 to 0.25.0 ([#212](https://github.com/seapagan/github-changelog-md/pull/212)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump pytest from 7.4.3 to 8.0.2 ([#209](https://github.com/seapagan/github-changelog-md/pull/209)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump mkdocs-material from 9.5.8 to 9.5.11 ([#208](https://github.com/seapagan/github-changelog-md/pull/208)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps): bump cryptography from 42.0.0 to 42.0.4 ([#207](https://github.com/seapagan/github-changelog-md/pull/207)) by [dependabot[bot]](https://github.com/apps/dependabot)
@@ -22,12 +29,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Build(deps-dev): bump ruff from 0.2.1 to 0.2.2 ([#203](https://github.com/seapagan/github-changelog-md/pull/203)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps): bump pygithub from 2.1.1 to 2.2.0 ([#197](https://github.com/seapagan/github-changelog-md/pull/197)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Build(deps-dev): bump faker from 20.1.0 to 23.1.0 ([#196](https://github.com/seapagan/github-changelog-md/pull/196)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump pre-commit from 3.6.0 to 3.6.1 ([#195](https://github.com/seapagan/github-changelog-md/pull/195)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump ruff from 0.1.8 to 0.2.1 ([#194](https://github.com/seapagan/github-changelog-md/pull/194)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- Build(deps-dev): bump pymdown-extensions from 10.5 to 10.7 ([#193](https://github.com/seapagan/github-changelog-md/pull/193)) by [dependabot[bot]](https://github.com/apps/dependabot)
-- *and 5 more dependency updates*
+- *and 8 more dependency updates*
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.0.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.1) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.1.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.8.1...0.9.1.patch)
 
 ## [0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.1) (February 08, 2024)
 
