@@ -501,11 +501,21 @@ class ChangeLog:
             escaped_title = cap_first_letter(
                 issue.title.replace("__", "\\_\\_").strip(),
             )
-            f.write(
-                f"- {escaped_title} "
-                f"([#{issue.number}]({issue.html_url})) "
-                f"by [{issue.closed_by.login}]({issue.closed_by.html_url})\n",
-            )
+            try:
+                f.write(
+                    f"- {escaped_title} "
+                    f"([#{issue.number}]({issue.html_url})) "
+                    f"by [{issue.closed_by.login}]"
+                    f"({issue.closed_by.html_url})\n",
+                )
+            except AttributeError:
+                # this means the issue was closed by a user who has since been
+                # deleted, or it was converted to a discussion. We can't get any
+                # info on them.
+                f.write(
+                    f"- {escaped_title} "
+                    f"([#{issue.number}]({issue.html_url}))\n"
+                )
         f.write("\n")
 
     def generate_diff_url(
