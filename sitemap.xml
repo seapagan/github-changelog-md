@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://changelog.seapagan.net/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/changelog/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/contributing/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/installation/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/license/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/todo/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/usage/basic/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/usage/cli_options/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/usage/config_file/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://changelog.seapagan.net/usage/options/</loc>
-         <lastmod>2024-02-14</lastmod>
+         <lastmod>2024-03-07</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
