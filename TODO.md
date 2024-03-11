@@ -7,23 +7,25 @@ Items marked with:
 
 - :fire: Should be implemented as a priority before the next minor release
 (patch or bug-fixes are ok as needed).
-- :rocket: Have been already implemented in the main repo and will be included
+- :rocket: Has been already implemented in the main repo and will be included
 in the next release.
 
 ## Features to Add
 
 - Add a list of releases that should be ignored.
-- Allow ignoring all alpha/beta releases and merge their changes into the next full
-  release of the same version (or just the next release).
-- Allowing some sort of merging of releases, e.g. all beta releases PR are listed
-  with the latest 'un merged' release. or, more simply, a list of releases to
-  ignore so that their PR's are added to the next release up's notes.
-- Allow setting a different last release to compare to for a release links, in the
+- Allow ignoring all alpha/beta releases and merge their changes into the next
+  full release of the same version (or just the next release).
+- Allowing some sort of merging of releases, e.g. all beta releases PR are
+  listed with the latest 'un merged' release. or, more simply, a list of
+  releases to ignore so that their PR's are added to the next release up's
+  notes.
+- Allow setting a different last release to compare to for release links, in the
   case that releases are out of order.
 - Allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
 - Allow custom ordering of sections.
-- Allow custom output formats (e.g. HTML, Markdown, PDF, etc.).
+- Allow custom output formats (e.g. HTML, PDF, etc.) in addition to the default
+  Markdown.
 - Add ability to create a new draft release on GitHub with the latest
   changelog text as the body.
 - For the `--contrib` option, allow to use an existing file with comment markers
@@ -40,7 +42,9 @@ in the next release.
 - Once the common config file functionality is implemented, add the ability to
   read the config from a `pyproject.toml` file if it exists in the current
   directory. This will allow one less config file. Note that the PAT will still
-  need to be set manually in the local or global config file.
+  need to be set manually in the local or global config file to aviod it getting
+  added to the repo so this has limited usefulness. Can always get the PAT from
+  a local secret file or environment variable.
 - Add option to specify the GitHub PAT from the command line, eg `--token
   <PAT>`. This will override any PAT set in the config file. **Note that this
   can be a security risk if the PAT is visible in the command history, so it
@@ -66,39 +70,43 @@ in the next release.
   insertion index. This will be a breaking change in the config file format so
   require a `schema_version` bump. \[`This will not be needed if the option for
   custom ordering of sections is implemented, it can be folded into that.`\]
+- Add option to use Markdown header levels for the section headings instead of
+  the default **bold** text. This is more correct for Markdown and will pass
+  linters.
 
 ## Known Issues
 
-- If using the `--next-release` option, while also having a `release_text` set for
-  that virtual release, the `release_text` will not be shown for the virtual
+- If using the `--next-release` option, while also having a `release_text` set
+  for that release tag, the `release_text` will not be shown for the virtual
   release.
 - Some version numbers in PRs (especially dependabot) get mis-identified as
   emojis in the output, especially if the version number contains `<3` which
   gives :heart: in certain viewers (**though this does NOT happen in GitHub or
   MkDocs at least**). This is very obvious for 'pip' version numbers. It's not a
   priority to fix this for it's intended usage, but just for completeness.
-- The table styling under mobile looks a bit squashed due to setting the width
-  to 100% for better desktop display. Need to add a media query to set the width
-  better for mobile, prob using overflow
 - When using the Release body, we need to normalize any headings to Bold text
   instead so it does not grate so badly with the auto-generated headings.
 - In some cases the `full-changelog` does not get removed from the existing body
   properly depending on how it is formatted.
 - extra linebreaks are added after inserted text blocks
+- For closed issues, if there are no issues after filtering (for example if the
+  only issue has the `ignore` label) the heading is still shown.
 
 ## Refactoring
 
-- The whole code base needs a bit of refactoring to tidy the code and remove some
-  of the duplication. This is a low priority but should be done at some point.
-  Priority to the actual 'ChangeLog' class. **Preferably this should wait until we
-  have full test coverage.**
+- The whole code base needs a bit of refactoring to tidy the code and remove
+  some of the duplication. This is a low priority but should be done at some
+  point. Priority to the actual 'ChangeLog' class. **Preferably this should wait
+  until we have full test coverage.**
 - `Pydantic` is listed as a dependency but is not actually used. This is a
   leftover from when I was using it for the config file. It should be removed -
   or look at using it for validation.
 
 ## Documentation
 
-- None
+- The table styling under mobile looks a bit squashed due to setting the width
+  to 100% for better desktop display. Need to add a media query to set the width
+  better for mobile, prob using overflow
 
 ## Testing
 
