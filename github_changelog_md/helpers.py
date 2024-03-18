@@ -1,4 +1,5 @@
 """Define helper functions for the application."""
+
 from __future__ import annotations
 
 import sys

@@ -1,4 +1,5 @@
 """Test module for the 'main' module."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

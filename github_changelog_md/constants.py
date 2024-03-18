@@ -1,4 +1,5 @@
 """Define constants used throughout the application."""
+
 from enum import IntEnum
 from typing import Union
 

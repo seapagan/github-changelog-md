@@ -1,4 +1,5 @@
 """Entry point for the main application loop."""
+
 from __future__ import annotations
 
 import sys

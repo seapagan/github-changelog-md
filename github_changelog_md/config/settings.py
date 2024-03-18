@@ -1,4 +1,5 @@
 """Handle the settings for the project."""
+
 import sys
 from pathlib import Path
 from typing import ClassVar, Optional

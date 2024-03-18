@@ -1,4 +1,5 @@
 """Setup some fixtures for the tests."""
+
 # mypy: disable-error-code="no-untyped-def"
 import pytest
 
