@@ -1,4 +1,5 @@
 """Test module to test the 'helpers' module."""
+
 from __future__ import annotations
 
 from importlib import metadata

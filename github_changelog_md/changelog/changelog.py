@@ -2,6 +2,7 @@
 
 This will encapsulate the logic for generating the changelog.
 """
+
 # mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 

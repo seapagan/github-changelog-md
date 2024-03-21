@@ -1,4 +1,5 @@
 """Test the ChangeLog class."""
+
 # mypy: disable-error-code="no-untyped-def"
 import datetime
 from unittest.mock import MagicMock
