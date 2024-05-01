@@ -23,9 +23,10 @@ include a list of all Issues closed for each release.
 The PRs and issues are grouped by type (bug, enhancement, etc.) and sorted by
 latest to oldest in this release.
 
-For an example of the output, see the
-[CHANGELOG](https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md)
-for this project.
+> [!TIP]
+> For an example of the output, see the
+> [CHANGELOG](https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md)
+> for this project.
 
 **Full documentation is available at:** <https://changelog.seapagan.net>
 
@@ -110,11 +111,11 @@ app will continue.
 $ github-changelog-md
 ```
 
-This is only the barest **minimum** usable configuration! There are many more
-options
-available, see the
-[Configuration](https://changelog.seapagan.net/usage/options/)
-section in the documentation for a full list of the many available options.
+> [!TIP]
+> This is only the barest **minimum** usable configuration! There are many more
+> options available, see the
+> [Configuration](https://changelog.seapagan.net/usage/options/) section in the
+> documentation for a full list of the many available options.
 
 ## Add the config file to your .gitignore
 
