@@ -6,6 +6,29 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.9.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.3) (May 02, 2024)
+
+**Dependency Updates**
+
+- Build(deps-dev): bump mypy from 1.9.0 to 1.10.0 ([#278](https://github.com/seapagan/github-changelog-md/pull/278)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pytest-xdist from 3.5.0 to 3.6.1 ([#277](https://github.com/seapagan/github-changelog-md/pull/277)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.6.4 to 2.7.1 ([#276](https://github.com/seapagan/github-changelog-md/pull/276)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump poethepoet from 0.25.0 to 0.26.1 ([#275](https://github.com/seapagan/github-changelog-md/pull/275)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pymarkdownlnt from 0.9.18 to 0.9.19 ([#274](https://github.com/seapagan/github-changelog-md/pull/274)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump faker from 24.4.0 to 25.0.0 ([#271](https://github.com/seapagan/github-changelog-md/pull/271)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-material from 9.5.15 to 9.5.20 ([#270](https://github.com/seapagan/github-changelog-md/pull/270)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump ruff from 0.3.4 to 0.4.2 ([#267](https://github.com/seapagan/github-changelog-md/pull/267)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pyfakefs from 5.3.5 to 5.4.1 ([#258](https://github.com/seapagan/github-changelog-md/pull/258)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump idna from 3.4 to 3.7 ([#257](https://github.com/seapagan/github-changelog-md/pull/257)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- *and 21 more dependency updates*
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.2...0.9.3) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.2...0.9.3.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.2...0.9.3.patch)
+
+## [0.9.2](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.2) (March 07, 2024)
+
+This release relaxes the version criteria for `simple-toml-settings`, there are no further changes.
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.1...0.9.2) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.1...0.9.2.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.1...0.9.2.patch)
+
 ## [0.9.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.1) (February 27, 2024)
 
 **New Features**
