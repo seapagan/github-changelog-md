@@ -321,27 +321,13 @@ class ChangeLog:
                 f"{release_date}\n\n",
             )
 
-            if (
-                self.settings.release_text
-                and not self.options["next_release"]
-                and "unreleased"
-                in [
-                    release_text["release"].strip()
-                    for release_text in self.settings.release_text
-                ]
-            ):
-                f.write("\n")
-                f.write(
-                    next(
-                        (
-                            release_text["text"]
-                            for release_text in self.settings.release_text
-                            if release_text["release"].strip() == "unreleased"
-                        ),
-                        "",
-                    )
-                )
-                f.write("\n\n")
+            # show any release text that is defined for this release
+            self.show_release_text(
+                f,
+                self.options["next_release"]
+                if self.options["next_release"]
+                else "unreleased",
+            )
 
             self.print_issues(f, self.unreleased_issues)
             self.print_prs(f, self.unreleased)
@@ -409,22 +395,8 @@ class ChangeLog:
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
         issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
-        if self.settings.release_text and release.tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text
-        ]:
-            f.write("\n")
-            f.write(
-                next(
-                    (
-                        release_text["text"]
-                        for release_text in self.settings.release_text
-                        if release_text["release"].strip() == release.tag_name
-                    ),
-                    "",
-                )
-            )
-            f.write("\n\n")
+        # show any release text that is defined for this release
+        self.show_release_text(f, release)
 
         if self.settings.release_overrides and release.tag_name in [
             release_override["release"].strip()
@@ -450,6 +422,34 @@ class ChangeLog:
         # if no closed releases or PR's then get the release body instead
         if len(issue_list) == 0 and len(pr_list) == 0:
             self.get_release_body(f, release)
+
+    def show_release_text(
+        self,
+        f: TextIOWrapper,
+        release: str | GitRelease,
+    ) -> None:
+        """Print the release_text if it exists."""
+        if isinstance(release, GitRelease):
+            tag_name = release.tag_name
+        else:
+            tag_name = release
+
+        if self.settings.release_text and tag_name in [
+            release_text["release"].strip()
+            for release_text in self.settings.release_text
+        ]:
+            f.write("\n")
+            f.write(
+                next(
+                    (
+                        release_text["text"]
+                        for release_text in self.settings.release_text
+                        if release_text["release"].strip() == tag_name
+                    ),
+                    "",
+                )
+            )
+            f.write("\n\n")
 
     def get_release_body(
         self,
