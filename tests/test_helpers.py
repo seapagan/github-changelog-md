@@ -16,6 +16,8 @@ from github_changelog_md.helpers import (
     get_repo_name,
     get_section_name,
     header,
+    strip_first_alpha_char,
+    title_unique,
 )
 
 if TYPE_CHECKING:
@@ -184,3 +186,28 @@ class TestHelpers:
         assert "'Introduction' is not in the supplied list of Tuples" in str(
             exc_info.value
         ), "Expected a ValueError, 'Introduction' was not found in empty list"
+
+    def test_strip_first_alpha(self) -> None:
+        """Test strip_first_alpha_char function."""
+        assert strip_first_alpha_char("v1.0.0") == "1.0.0"
+        assert strip_first_alpha_char("1.0.0") == "1.0.0"
+        assert strip_first_alpha_char("a1.0.0") == "1.0.0"
+        assert strip_first_alpha_char("a") == ""
+        assert strip_first_alpha_char("") == ""
+
+    @pytest.mark.parametrize(
+        ("title", "tag_name", "expected"),
+        [
+            ("v1.0.0", "1.0.0", False),
+            ("v1.0.0", "2.0.0", True),
+            ("V1.0.0", "", False),
+            ("", "1.0.0", False),
+        ],
+    )
+    def test_title_unique(self, mocker, title, tag_name, expected) -> None:
+        """Test the title_unique function."""
+        release = mocker.Mock()
+        release.title = title
+        release.tag_name = tag_name
+
+        assert title_unique(release) is expected

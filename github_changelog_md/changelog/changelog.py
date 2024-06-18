@@ -31,6 +31,7 @@ from github_changelog_md.helpers import (
     get_index_of_tuple,
     get_section_name,
     header,
+    title_unique,
 )
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -390,8 +391,13 @@ class ChangeLog:
             )
 
         f.write("\n\n")
-        if release.title != release.tag_name and release.title:
-            f.write(f"**_'{cap_first_letter(release.title.strip())}'_**\n\n")
+
+        # write the release title if it is different from the tag name
+        # and it is not empty. We may need to strip any leading alpha character
+        # from the title (eg 'v' or 'V')
+        if title_unique(release):
+            f.write(f"**_{cap_first_letter(release.title.strip())}_**\n\n")
+
         pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
         issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
 
