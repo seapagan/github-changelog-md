@@ -73,6 +73,11 @@ in the next release.
 - Add option to use Markdown header levels for the section headings instead of
   the default **bold** text. This is more correct for Markdown and will pass
   linters.
+- Display release title in the release header instead of body. If it is the
+  same as the release version (after stripping the 'v' prefix if exists), don't
+  show it. To help, ad an option to specify a custom release prefix on a project
+  level, and an option in the indicidual `changelog_generator.release_text`
+  sections to hide the title for that release.
 
 ## Known Issues
 
