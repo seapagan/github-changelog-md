@@ -67,8 +67,9 @@ $ pip install github-changelog-md
 ## Install Globally
 
 You could also install the package globally if you want to use it in every
-project. See the [Documentation](http://127.0.0.1:8000/installation/#globally)
-for more information.
+project. See the
+[Documentation](https://changelog.seapagan.net/installation/#globally) for more
+information.
 
 ## Setup a GitHub PAT
 
