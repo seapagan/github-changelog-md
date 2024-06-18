@@ -29,19 +29,31 @@ default_options = {
     "output_file": "CHANGELOG.md",
     "contributors": False,
     "quiet": False,
+    "skip_releases": None,
+    "show_issues": True,
+    "item_order": "newest-first",
+    "ignore_items": None,
+    "max_depends": 10,
+    "show_diff": True,
+    "show_patch": True,
 }
 
 
-@pytest.mark.skip(reason="Fails d/t config file changes")
 @pytest.mark.usefixtures("config_file")
 class TestCLI:
     """Test class for the CLI functionality."""
 
-    def test_cli_with_version(self) -> None:
+    def test_cli_with_version(self, mocker) -> None:
         """Test the main function with the version flag."""
         runner = CliRunner()
+        mock_version = mocker.patch(
+            "github_changelog_md.main.get_app_version", return_value="1.0.0"
+        )
+        # with pytest.raises(typer.Exit, match="0"):
         result = runner.invoke(app, ["--version"])
+        mock_version.assert_called_once()
         assert "Github Changelog Markdown" in result.output
+        assert "Version: 1.0.0;" in result.output
 
     def test_cli_with_repo(self, mock_changelog: MockType) -> None:
         """Test the main function with the repo flag."""

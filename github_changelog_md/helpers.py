@@ -93,7 +93,7 @@ def get_section_name(label: str | None) -> str | None:
 
 
 def get_index_of_tuple(
-    tuple_list: list[SectionHeadings], index: int, value: str
+    tuple_list: list[SectionHeadings], index: int, value: str | None
 ) -> int:
     """Return the index of a tuple in a list."""
     for pos, t in enumerate(tuple_list):
