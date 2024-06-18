@@ -73,17 +73,14 @@ in the next release.
 - Add option to use Markdown header levels for the section headings instead of
   the default **bold** text. This is more correct for Markdown and will pass
   linters.
-- Display release title in the release header instead of body. If it is the
-  same as the release version (after stripping the 'v' prefix if exists), don't
-  show it. To help, ad an option to specify a custom release prefix on a project
+- Display release title in the release header instead of body. If it is the same
+  as the release version (after stripping the 'v' prefix if exists), don't show
+  it. To help, add an option to specify a custom release prefix on a project
   level, and an option in the indicidual `changelog_generator.release_text`
   sections to hide the title for that release.
 
 ## Known Issues
 
-- If using the `--next-release` option, while also having a `release_text` set
-  for that release tag, the `release_text` will not be shown for the virtual
-  release.
 - Some version numbers in PRs (especially dependabot) get mis-identified as
   emojis in the output, especially if the version number contains `<3` which
   gives :heart: in certain viewers (**though this does NOT happen in GitHub or
@@ -103,9 +100,6 @@ in the next release.
   some of the duplication. This is a low priority but should be done at some
   point. Priority to the actual 'ChangeLog' class. **Preferably this should wait
   until we have full test coverage.**
-- `Pydantic` is listed as a dependency but is not actually used. This is a
-  leftover from when I was using it for the config file. It should be removed -
-  or look at using it for validation.
 
 ## Documentation
 
