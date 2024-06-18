@@ -6,6 +6,45 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.9.4](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.4) (June 18, 2024)
+
+**Closed Issues**
+
+- The `release_text` option does not work if the `--next-release` is specified and corresponds to that release_text version. ([#272](https://github.com/seapagan/github-changelog-md/issues/272)) by [seapagan](https://github.com/seapagan)
+
+**Testing**
+
+- Slightly improve test coverage ([#215](https://github.com/seapagan/github-changelog-md/pull/215)) by [seapagan](https://github.com/seapagan)
+
+**Bug Fixes**
+
+- Don't print the release title if it is the same as the tag ([#309](https://github.com/seapagan/github-changelog-md/pull/309)) by [seapagan](https://github.com/seapagan)
+- Fix missing release text when using `--next-release` option ([#273](https://github.com/seapagan/github-changelog-md/pull/273)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Remove pydantic as a dependency ([#308](https://github.com/seapagan/github-changelog-md/pull/308)) by [seapagan](https://github.com/seapagan)
+
+**Documentation**
+
+- Docs: fix bad README link to installation docs ([#307](https://github.com/seapagan/github-changelog-md/pull/307)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Build(deps): bump urllib3 from 2.0.7 to 2.2.2 ([#306](https://github.com/seapagan/github-changelog-md/pull/306)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-material from 9.5.26 to 9.5.27 ([#305](https://github.com/seapagan/github-changelog-md/pull/305)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump ruff from 0.4.2 to 0.4.9 ([#304](https://github.com/seapagan/github-changelog-md/pull/304)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump pydantic from 2.7.1 to 2.7.4 ([#303](https://github.com/seapagan/github-changelog-md/pull/303)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pre-commit from 3.7.0 to 3.7.1 ([#302](https://github.com/seapagan/github-changelog-md/pull/302)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pygments from 2.17.2 to 2.18.0 ([#300](https://github.com/seapagan/github-changelog-md/pull/300)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pyfakefs from 5.4.1 to 5.5.0 ([#299](https://github.com/seapagan/github-changelog-md/pull/299)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump pymarkdownlnt from 0.9.19 to 0.9.20 ([#298](https://github.com/seapagan/github-changelog-md/pull/298)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mkdocs-material from 9.5.20 to 9.5.26 ([#297](https://github.com/seapagan/github-changelog-md/pull/297)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump faker from 25.0.0 to 25.8.0 ([#296](https://github.com/seapagan/github-changelog-md/pull/296)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- *and 6 more dependency updates*
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.3...0.9.4) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.3...0.9.4.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.3...0.9.4.patch)
+
 ## [0.9.3](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.3) (May 02, 2024)
 
 **Dependency Updates**
