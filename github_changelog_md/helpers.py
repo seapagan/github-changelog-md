@@ -5,11 +5,15 @@ from __future__ import annotations
 import sys
 from importlib import metadata, resources
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import rtoml
 from rich import print  # pylint: disable=redefined-builtin
 
 from github_changelog_md.constants import SECTIONS, ExitErrors, SectionHeadings
+
+if TYPE_CHECKING:  # pragma: no cover
+    from github.GitRelease import GitRelease
 
 
 def get_toml_path() -> Path:
@@ -102,3 +106,26 @@ def get_index_of_tuple(
 
     error_msg = f"'{value}' is not in the supplied list of Tuples"
     raise ValueError(error_msg)
+
+
+def strip_first_alpha_char(version_string: str) -> str:
+    """Strip the first character from a string if it is a letter."""
+    if version_string and version_string[0].isalpha():
+        return version_string[1:]
+    return version_string
+
+
+def title_unique(release: GitRelease) -> bool:
+    """Ensures that the release title and tag name are not the same.
+
+    It will remove the first alpha character from the title and tag (if it is a
+    letter) and compare the two strings. Returns True if they are different,
+    False otherwise.
+
+    It will also return False if the title or tag name is empty.
+    """
+    if not release.title or not release.tag_name:
+        return False
+    return strip_first_alpha_char(release.title) != strip_first_alpha_char(
+        release.tag_name
+    )
