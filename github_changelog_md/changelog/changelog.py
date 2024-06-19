@@ -349,22 +349,8 @@ class ChangeLog:
         if self.prev_release:
             self.generate_diff_url(f, self.prev_release, release)
 
-        if self.settings.release_text_before and release.tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text_before
-        ]:
-            f.write("---\n\n")
-            f.write(
-                next(
-                    (
-                        release_text["text"]
-                        for release_text in self.settings.release_text_before
-                        if release_text["release"].strip() == release.tag_name
-                    ),
-                    "",
-                )
-            )
-            f.write("\n---\n\n")
+        # show any text before this release if it exists
+        self.show_before_text(f, release)
 
         text_date = release.created_at.date().strftime(
             self.settings.date_format
@@ -428,6 +414,25 @@ class ChangeLog:
         # if no closed releases or PR's then get the release body instead
         if len(issue_list) == 0 and len(pr_list) == 0:
             self.get_release_body(f, release)
+
+    def show_before_text(self, f: TextIOWrapper, release: GitRelease) -> None:
+        """Shows text before this release if it exists."""
+        if self.settings.release_text_before and release.tag_name in [
+            release_text["release"].strip()
+            for release_text in self.settings.release_text_before
+        ]:
+            f.write("---\n\n")
+            f.write(
+                next(
+                    (
+                        release_text["text"].strip()
+                        for release_text in self.settings.release_text_before
+                        if release_text["release"].strip() == release.tag_name
+                    ),
+                    "",
+                )
+            )
+            f.write("\n\n---\n\n")
 
     def show_release_text(
         self,
