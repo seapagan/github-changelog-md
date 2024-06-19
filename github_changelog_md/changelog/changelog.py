@@ -449,11 +449,10 @@ class ChangeLog:
             release_text["release"].strip()
             for release_text in self.settings.release_text
         ]:
-            f.write("\n")
             f.write(
                 next(
                     (
-                        release_text["text"]
+                        release_text["text"].strip()
                         for release_text in self.settings.release_text
                         if release_text["release"].strip() == tag_name
                     ),
