@@ -358,23 +358,7 @@ class ChangeLog:
         f.write(
             f"## [{release.tag_name}]({release.html_url}) ({text_date})",
         )
-        if self.settings.yanked and release.tag_name in [
-            yanked["release"].strip() for yanked in self.settings.yanked
-        ]:
-            f.write(" **[`YANKED`]**\n\n")
-            reason = next(
-                (
-                    yanked["reason"]
-                    for yanked in self.settings.yanked
-                    if yanked["release"].strip() == release.tag_name
-                ),
-                "",
-            )
-            f.write(
-                "**This release has been removed for the following reason and "
-                "should not be used:**\n\n"
-                f"- {reason}"
-            )
+        self.check_yanked(f, release)
 
         f.write("\n\n")
 
@@ -414,6 +398,26 @@ class ChangeLog:
         # if no closed releases or PR's then get the release body instead
         if len(issue_list) == 0 and len(pr_list) == 0:
             self.get_release_body(f, release)
+
+    def check_yanked(self, f: TextIOWrapper, release: GitRelease) -> None:
+        """Note if this release has been yanked, and the reason why."""
+        if self.settings.yanked and release.tag_name in [
+            yanked["release"].strip() for yanked in self.settings.yanked
+        ]:
+            f.write(" **[`YANKED`]**\n\n")
+            reason = next(
+                (
+                    yanked["reason"]
+                    for yanked in self.settings.yanked
+                    if yanked["release"].strip() == release.tag_name
+                ),
+                "",
+            )
+            f.write(
+                "**This release has been removed for the following reason and "
+                "should not be used:**\n\n"
+                f"- {reason}"
+            )
 
     def show_before_text(self, f: TextIOWrapper, release: GitRelease) -> None:
         """Shows text before this release if it exists."""
