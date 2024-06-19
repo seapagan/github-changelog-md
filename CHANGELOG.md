@@ -6,6 +6,29 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+**Refactoring**
+
+- Perform some more refactoring ([#311](https://github.com/seapagan/github-changelog-md/pull/311)) by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD.patch)
+
 ## [0.9.4](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.4) (June 18, 2024)
 
 **Closed Issues**
@@ -97,13 +120,11 @@ This release relaxes the version criteria for `simple-toml-settings`, there are 
 
 ## [0.8.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.8.1) (February 08, 2024)
 
-
 This release is to fix security issues in some of the project dependencies.
 
 These are: `cryptography`, `jinja2` and `gitpython`.
 
 Several other dependencies have been updated to their latest versions as well.
-
 
 **Dependency Updates**
 
@@ -225,10 +246,8 @@ Several other dependencies have been updated to their latest versions as well.
 
 ## [0.5.1](https://github.com/seapagan/github-changelog-md/releases/tag/0.5.1) (November 02, 2023)
 
-
 This release is a bug-fix for release 0.5.0, which was yanked due to crashing
 when creating a missing config file.
-
 
 **Closed Issues**
 
