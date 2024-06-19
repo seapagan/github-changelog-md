@@ -113,6 +113,11 @@ omit = ["*/tests/*"]
 
 [tool.ruff]
 line-length = 80
+
+src = ["github_changelog_md"]
+target-version = "py39"       # minimum python version supported
+
+[tool.ruff.lint]
 select = ["ALL"] # we are being very strict!
 ignore = [
   "ANN101",
@@ -123,20 +128,19 @@ ignore = [
 ] # These rules are too strict even for us 😝
 extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
 
-src = ["github_changelog_md"]
-target-version = "py39"       # minimum python version supported
+[tool.ruff.lint.isort]
+known-first-party = ["github_changelog_md"]
 
-[tool.ruff.format]
-indent-style = "space"
-quote-style = "double"
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
 
-[tool.ruff.pep8-naming]
+[tool.ruff.lint.pep8-naming]
 classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = [
   "S101",   # we can (and MUST!) use 'assert' in test files.
   "ANN001", # annotations for fixtures are sometimes a pain for test files.
@@ -146,11 +150,9 @@ convention = "google"
   "PLR0913",
 ] # These cause issues in Typer Apps
 
-[tool.ruff.isort]
-known-first-party = ["github_changelog_md"]
-
-[tool.ruff.pyupgrade]
-keep-runtime-typing = true
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
 
 [[tool.mypy.overrides]]
 disable_error_code = ["method-assign", "no-untyped-def", "attr-defined"]
