@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from pytest_mock.plugin import MockType
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_changelog(mocker: MockerFixture) -> MockType:
     """Return a mocked ChangeLog class."""
     return mocker.patch("github_changelog_md.main.ChangeLog")

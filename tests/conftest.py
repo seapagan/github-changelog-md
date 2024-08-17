@@ -6,8 +6,8 @@ import pytest
 from github_changelog_md.constants import CONFIG_FILE
 
 
-@pytest.fixture()
-def config_file(fs) -> None:  # noqa: PT004
+@pytest.fixture
+def config_file(fs) -> None:
     """Create a fake config file."""
     fs.create_file(
         CONFIG_FILE,
@@ -23,8 +23,8 @@ def config_file(fs) -> None:  # noqa: PT004
     )
 
 
-@pytest.fixture()
-def bad_schema(fs) -> None:  # noqa: PT004
+@pytest.fixture
+def bad_schema(fs) -> None:
     """Create a fake config file with a bad schema."""
     fs.create_file(
         CONFIG_FILE,
