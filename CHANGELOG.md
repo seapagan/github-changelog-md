@@ -6,28 +6,30 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+## [0.9.5](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.5) (August 17, 2024)
 
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+This release fixes some security issues in the project dependencies, and updates
+some of the tooling.
 
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or, if using poetry:
+**Merged Pull Requests**
 
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
+- Relax dependency version constraints ([#335](https://github.com/seapagan/github-changelog-md/pull/335)) by [seapagan](https://github.com/seapagan)
 
 **Refactoring**
 
 - Perform some more refactoring ([#311](https://github.com/seapagan/github-changelog-md/pull/311)) by [seapagan](https://github.com/seapagan)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...HEAD.patch)
+**Dependency Updates**
+
+- Build(deps-dev): bump faker from 25.8.0 to 27.0.0 ([#334](https://github.com/seapagan/github-changelog-md/pull/334)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump mypy from 1.10.0 to 1.11.1 ([#328](https://github.com/seapagan/github-changelog-md/pull/328)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump setuptools from 68.2.2 to 70.0.0 ([#324](https://github.com/seapagan/github-changelog-md/pull/324)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump zipp from 3.17.0 to 3.19.1 ([#322](https://github.com/seapagan/github-changelog-md/pull/322)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump certifi from 2023.7.22 to 2024.7.4 ([#320](https://github.com/seapagan/github-changelog-md/pull/320)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps-dev): bump poethepoet from 0.26.1 to 0.27.0 ([#319](https://github.com/seapagan/github-changelog-md/pull/319)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Build(deps): bump rtoml from 0.10.0 to 0.11.0 ([#315](https://github.com/seapagan/github-changelog-md/pull/315)) by [dependabot[bot]](https://github.com/apps/dependabot)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...0.9.5) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...0.9.5.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.4...0.9.5.patch)
 
 ## [0.9.4](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.4) (June 18, 2024)
 
