@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from pytest_mock import MockerFixture
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_section_headings() -> list[SectionHeadings]:
     """Fixture for providing a sample list of section headings."""
     return [

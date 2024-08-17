@@ -12,7 +12,7 @@ from github_changelog_md.changelog.changelog import ChangeLog, git_error
 from github_changelog_md.constants import ExitErrors
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_repo_data(mocker) -> MagicMock:
     """Mock out the repo data object."""
     mock_repo_data = MagicMock()
@@ -34,7 +34,7 @@ def mock_repo_data(mocker) -> MagicMock:
     return mock_repo_data
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_repo() -> MagicMock:
     """Mock out the repo object."""
     mock_repo = MagicMock()
