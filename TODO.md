@@ -11,7 +11,8 @@ Items marked with:
 in the next release.
 
 ## Features to Add
-
+- If there are no releases, say that at the bottom. Allow the text for this to
+  be customized in the config file.
 - Add a list of releases that should be ignored.
 - Allow ignoring all alpha/beta releases and merge their changes into the next
   full release of the same version (or just the next release).
