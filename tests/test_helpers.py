@@ -78,7 +78,7 @@ class TestHelpers:
         fs.create_file(
             self.test_toml_path,
             contents=(
-                "[tool.poetry]\n"
+                "[project]\n"
                 'name = "github_changelog_md"\n'
                 'version = "0.5.0"\n'
             ),
@@ -97,7 +97,7 @@ class TestHelpers:
         """Test get_app_version function with a bad pyproject.toml file."""
         fs.create_file(
             self.test_toml_path,
-            contents=('[tool.poetry]\nname = "github_changelog_md"\n'),
+            contents=('[project]\nname = "github_changelog_md"\n'),
         )
         mocker.patch(
             self.patch_get_toml,
