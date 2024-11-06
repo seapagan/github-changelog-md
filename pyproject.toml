@@ -1,67 +1,58 @@
-[tool.poetry]
+[project]
 name = "github-changelog-md"
 version = "0.9.5"
 description = "Generate a Markdown Changelog from your Github repository."
-authors = ["Grant Ramsay <seapagan@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "pygithub>=2.4.0",
+  "rich>=13.9.4",
+  "rtoml>=0.11.0",
+  "simple-toml-settings>=0.8.0",
+  "typer>=0.12.5",
+]
 license = "MIT"
+authors = [{ name = "Grant Ramsay", email = "seapagan@gmail.com" }]
 
-packages = [{ include = "github_changelog_md" }]
+[project.scripts]
+github-changelog-md = "github_changelog_md.main:app"
 
-homepage = "https://changelog.seapagan.net"
-repository = "https://github.com/seapagan/github-changelog-md"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry.urls]
+[project.urls]
+"homepage" = "https://changelog.seapagan.net"
+"repository" = "https://github.com/seapagan/github-changelog-md"
 "Pull Requests" = "https://github.com/seapagan/github-changelog-md/pulls"
 "Bug Tracker" = "https://github.com/seapagan/github-changelog-md/issues"
 "Changelog" = "https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md"
 
-[tool.poetry.scripts]
-github-changelog-md = "github_changelog_md.main:app"
-
-[tool.poetry.dependencies]
-python = ">=3.9,<4.0"
-pygithub = ">=1.59.1,<3.0.0"
-rtoml = ">=0.9.0,<1.0.0"
-simple-toml-settings = ">=0.4.0,<1.0.0"
-typer = ">=0.9,<0.13"
-rich = ">=13.6.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-# linting, type-checking and security checks
-pre-commit = ">=3.3.3"
-pymarkdownlnt = ">=0.9.12"
-mypy = ">=1.4.1"
-ruff = ">=0.5.0"
-
-# task runner
-poethepoet = ">=0.27.0,<0.28.0"
-
-# testing
-faker = ">=19.2,<28.0"
-mock = ">=5.1.0"
-pyfakefs = ">=5.3.0"
-pytest = ">=7.4,<9.0"
-pytest-cov = ">=4,<6"
-pytest-xdist = ">=3.2.1"
-pytest-sugar = ">=0.9.7,<1.1.0"
-pytest-randomly = ">=3.13.0"
-pytest-reverse = ">=1.7.0"
-pytest-asyncio = ">=0.21.1"
-pytest-mock = ">=3.11.1"
-
-# documentation
-mkdocs = ">=1.4.3"
-mkdocs-autorefs = ">=0.5,<1.1"
-mkdocs-material = ">=9.1.19"
-mkdocs-minify-plugin = ">=0.7,<0.9"
-mkdocs-git-revision-date-localized-plugin = ">=1.2.0"
-pymdown-extensions = ">=10.1"
-pygments = ">=2.15.1"
+[tool.uv]
+dev-dependencies = [
+  "faker>=30.8.2",
+  "mock>=5.1.0",
+  "mypy>=1.13.0",
+  "poethepoet>=0.29.0",
+  "pre-commit>=4.0.1",
+  "pyfakefs>=5.7.1",
+  "pymarkdownlnt>=0.9.24",
+  "pytest>=8.3.3",
+  "pytest-cov>=6.0.0",
+  "pytest-mock>=3.14.0",
+  "pytest-randomly>=3.16.0",
+  "pytest-reverse>=1.8.0",
+  "pytest-sugar>=1.0.0",
+  "pytest-xdist>=3.6.1",
+  "ruff>=0.7.2",
+  "mkdoc>=0.1",
+  "mkdocs-git-revision-date-localized-plugin>=1.3.0",
+  "mkdocs-autorefs>=1.2.0",
+  "mkdocs-material>=9.5.44",
+  "mkdocs-minify-plugin>=0.8.0",
+  "pymdown-extensions>=10.12",
+  "pygments>=2.18.0",
+]
 
 [tool.poe.tasks]
 # setup PoeThePoet tasks
