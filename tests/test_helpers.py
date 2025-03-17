@@ -173,9 +173,9 @@ class TestHelpers:
     ) -> None:
         """Test get_index_of_tuple when searching for None value."""
         index = get_index_of_tuple(sample_section_headings, 1, None)
-        assert (
-            index == 0
-        ), "Expected index of 0 for the first occurrence of None value"
+        assert index == 0, (
+            "Expected index of 0 for the first occurrence of None value"
+        )
 
     def test_get_index_of_tuple_empty_list(self) -> None:
         """Test get_index_of_tuple with an empty list."""

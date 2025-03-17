@@ -315,7 +315,7 @@ class ChangeLog:
             release_link = (
                 "tree/HEAD"
                 if not self.options["next_release"]
-                else f'releases/tag/{self.options["next_release"]}'
+                else f"releases/tag/{self.options['next_release']}"
             )
             f.write(
                 f"## [{heading}]({self.repo_data.html_url}/{release_link})"
@@ -528,8 +528,7 @@ class ChangeLog:
                 # deleted, or it was converted to a discussion. We can't get any
                 # info on them.
                 f.write(
-                    f"- {escaped_title} "
-                    f"([#{issue.number}]({issue.html_url}))\n"
+                    f"- {escaped_title} ([#{issue.number}]({issue.html_url}))\n"
                 )
         f.write("\n")
 
