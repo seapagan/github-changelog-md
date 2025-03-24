@@ -51,11 +51,11 @@ the tool from.
 Change to your project directory and install the package using your preferred
 package manager or plain `pip`.
 
-I'd recommend using [Poetry](https://python-poetry.org/) for managing your
+I'd recommend using [uv][uv-link] for managing your
 project dependencies if you don't already have a preference:
 
 ```console
-$ poetry add github-changelog-md --group dev
+$ uv add --dev github-changelog-md
 ```
 
 or
@@ -68,7 +68,7 @@ $ pip install github-changelog-md
 
 You could also install the package globally if you want to use it in every
 project. See the
-[Documentation](https://changelog.seapagan.net/installation/#globally) for more
+[Documentation][docs-install] for more
 information.
 
 ## Setup a GitHub PAT
@@ -129,25 +129,22 @@ but there is a small chance someone could use it to access your repositories.
 
 Install the dependencies using Poetry:
 
-```console
-$ poetry install
+```terminal
+$ uv sync
 ```
 
 Then, activate the virtual environment:
 
-```console
-$ poetry shell
+```terminal
+$ source .venv/bin/activate
 ```
 
-If you don't want to use Poetry, you can create a virtual environment yourself
+If you don't want to use `uv`, you can create a virtual environment yourself
 then install the dependencies using pip:
 
-```console
+```terminal
 $ pip install -r requirements-dev.txt
 ```
-
-Note however that Poetry will be installed anyway as a dependency of the
-project, so you may as well take the time to learn and use it! :grin:
 
 See the [Contributing](https://changelog.seapagan.net/contributing/) section in
 the documentation for more information on how to contribute to this project.
@@ -173,3 +170,6 @@ appreciated and will be directly used to support and improve the project.
 
 The original Python boilerplate for this package was created using my
 [Pymaker](https://github.com/seapagan/py-maker) tool.
+
+[uv-link]: https://docs.astral.sh/uv/
+[docs-install]: https://changelog.seapagan.net/installation/#globally

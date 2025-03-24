@@ -49,10 +49,37 @@ Mac OS X. For Windows, you can use the
 [here](https://github.com/pyenv-win/pyenv-win#installation ) for installation
 instructions.
 
-We also use [Poetry](https://python-poetry.org/) to manage our dependencies. You
-should have this installed as well. You can install Poetry by following the
-instructions on the [Poetry
-website](https://python-poetry.org/docs/#installation).
+> [!IMPORTANT]
+>
+> We use [uv](https://docs.astral.sh/uv/) to manage our dependencies. You should
+> have this installed as well. You can install `uv` by following the
+> instructions on their
+>[website](https://docs.astral.sh/uv/getting-started/installation/).
+
+`uv` can be used to actually install Python, even if you do not have it
+installed locally (either by system, pyenv or similar).
+
+For example, to install Python 3.12 using `uv`, you can run the following command:
+
+```console
+uv python install 3.12
+```
+
+If you already have a Python version installed, uv will use this.
+
+> [!TIP]
+>
+> If you **don't** want to have `uv` installed globally for any reason,
+> there is an auto-generated `requirements-dev.txt` file in the root of the
+> project. You can use this to install the dependencies using `pip`:
+>
+>```console
+>
+>$ pip install -r requirements-dev.txt
+>```
+
+However, if you are going to be contributing to the project, `uv` is
+strongly recommended as this is what we use internally and in the CI.
 
 ## Getting Started
 
@@ -75,44 +102,48 @@ To get started, follow these steps:
 
 Run the following command to install the required dependencies:
 
-```console
-$ poetry install
+```terminal
+uv sync
 ```
 
 You then need to activate the virtual environment:
 
-```console
-$ poetry shell
+```terminal
+source .venv/bin/activate
+```
+
+If you are using Windows, you can activate the virtual environment using the
+following command instead:
+
+```terminal
+.venv\Scripts\activate
 ```
 
 From here you can start working on the project. If you are using an IDE such as
 VSCode or PyCharm, you can set the use their Python interpreter setting to use
 the virtual environment that has just been created.
 
-### Using Pip
-
-If you **don't** want to have Poetry installed globally for any reason, there is
-an auto-generated `requirements-dev.txt` file in the root of the project. You
-can use this to install the dependencies using `pip`:
-
-```console
-$ pip install -r requirements-dev.txt
-```
-
-With this, `Poetry` is also installed as a dependency for `poe` anyway so you
-may as well use it :rofl:! It's a great tool and I highly recommend it. Also, it
-is an integral part of this project development.
-
 ## Linting
 
 I am quite strict about linting and code formatting and have set up a number of
 pre-commit hooks and tasks to ensure that the code meets the required standards.
 
+### Code linting and formatting
+
+We are using [Ruff](https://docs.astral.sh/ruff/) for linting and formatting.
+These are set up as pre-commit hooks and can be run as below. You can also use
+the `poe ruff` and `poe format` commands to run these manually.
+
+### Type hinting
+
+All code must pass `mypy` checks. This can be run manually using the `poe mypy`
+and is part of the pre-commit hooks.
+
 ### Install Git Pre-Commit hooks
 
 Please install this if you are intending to submit a PR. It will check commits
 locally before they are pushed up to the Repo. The GitHub CI runs the linting
-checks (and in future probably MyPy as well), and will fail if there are any errors.
+and mypy checks, and will fail if there are any errors.
 
 ```console
 $ pre-commit install
