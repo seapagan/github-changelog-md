@@ -6,6 +6,33 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+**New Features**
+
+- Migrate from `poetry` to `uv` ([#351](https://github.com/seapagan/github-changelog-md/pull/351)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Chore(deps): update astral-sh/setup-uv action to v5 ([#354](https://github.com/seapagan/github-changelog-md/pull/354)) by [renovate[bot]](https://github.com/apps/renovate)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.patch)
+
 ## [0.9.5](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.5) (August 17, 2024)
 
 This release fixes some security issues in the project dependencies, and updates
