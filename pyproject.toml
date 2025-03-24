@@ -111,7 +111,6 @@ target-version = "py39"       # minimum python version supported
 [tool.ruff.lint]
 select = ["ALL"] # we are being very strict!
 ignore = [
-  "ANN101",
   "PGH003",
   "FBT002",
   "FBT003",

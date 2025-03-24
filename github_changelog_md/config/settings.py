@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import ClassVar, Optional
 
-from rich import print  # pylint: disable=redefined-builtin
+from rich import print as rprint
 from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
 from simple_toml_settings.exceptions import (
@@ -66,7 +66,7 @@ def get_pat_input() -> str:
     """Return the GitHub PAT."""
     user_pat = Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
     if not user_pat:
-        print("[red]No PAT entered, exiting.[/red]")
+        rprint("[red]No PAT entered, exiting.[/red]")
         sys.exit(ExitErrors.INVALID_ACTION)
     return user_pat
 
@@ -87,7 +87,7 @@ def get_settings() -> Settings:
         try:
             get_pat = get_pat_input()
         except KeyboardInterrupt:
-            print("\n[red]Exiting[/red]")
+            rprint("\n[red]Exiting[/red]")
             sys.exit(ExitErrors.USER_ABORT)
 
         try:
@@ -97,14 +97,14 @@ def get_settings() -> Settings:
                 settings = get_settings_object()
                 f.write(f"schema_version = '{settings.schema_version}'\n")
         except PermissionError:
-            print(
+            rprint(
                 "\n[red]Permission denied. Please run the command in a folder "
                 "you have write-access to.[/red]",
             )
             sys.exit(ExitErrors.PERMISSION_DENIED)
     except SettingsSchemaError as e:
-        print(f"\n[red]Error in the settings file: [bold]{e}[/bold][/red]")
-        print(
+        rprint(f"\n[red]Error in the settings file: [bold]{e}[/bold][/red]")
+        rprint(
             "\n[purple]Please fix the settings file and try again.\nYou can "
             "check the website at [bold]http://changelog.seapagan.net/[/bold] "
             "for more information.[/purple]\n"

@@ -6,7 +6,7 @@ import sys
 from typing import Any, Optional
 
 import typer
-from rich import print  # pylint: disable=redefined-builtin
+from rich import print as rprint
 
 from github_changelog_md.changelog import ChangeLog
 from github_changelog_md.config import get_settings
@@ -149,7 +149,7 @@ def main(
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
-        print(
+        rprint(
             "\n[green]Github Changelog Markdown - "
             "Generate your CHANGELOG file automatically."
             f"\n[/green]Version: {get_app_version()}; "
@@ -163,7 +163,7 @@ def main(
 
         if not repo:
             # cant find a local repo and none specified on the cmd line.
-            print(
+            rprint(
                 "[red]  ->  Could not find a local repository, "
                 "Please use the --repo option.\n",
                 file=sys.stderr,

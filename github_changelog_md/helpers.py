@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import rtoml
-from rich import print  # pylint: disable=redefined-builtin
+from rich import print as rprint
 
 from github_changelog_md.constants import SECTIONS, ExitErrors, SectionHeadings
 
@@ -46,7 +46,7 @@ def get_app_version() -> str:
             config = rtoml.load(toml_path)
             version: str = config["project"]["version"]
         except (KeyError, OSError) as exc:
-            print(f"Problem getting the Version : {exc}")
+            rprint(f"Problem getting the Version : {exc}")
             sys.exit(ExitErrors.OS_ERROR)
         else:
             return version
@@ -55,13 +55,13 @@ def get_app_version() -> str:
         try:
             return metadata.version("github_changelog_md")
         except metadata.PackageNotFoundError as exc:
-            print(f"Problem getting the Version : {exc}")
+            rprint(f"Problem getting the Version : {exc}")
             sys.exit(ExitErrors.OS_ERROR)
 
 
 def header() -> None:
     """Print the application header."""
-    print(
+    rprint(
         "\n[bold blue]GitHub Changelog Generator[/bold blue] "
         f"v{get_app_version()}\n",
     )
