@@ -78,9 +78,7 @@ class TestHelpers:
         fs.create_file(
             self.test_toml_path,
             contents=(
-                "[tool.poetry]\n"
-                'name = "github_changelog_md"\n'
-                'version = "0.5.0"\n'
+                '[project]\nname = "github_changelog_md"\nversion = "0.5.0"\n'
             ),
         )
         mocker.patch(
@@ -97,7 +95,7 @@ class TestHelpers:
         """Test get_app_version function with a bad pyproject.toml file."""
         fs.create_file(
             self.test_toml_path,
-            contents=('[tool.poetry]\nname = "github_changelog_md"\n'),
+            contents=('[project]\nname = "github_changelog_md"\n'),
         )
         mocker.patch(
             self.patch_get_toml,
@@ -173,9 +171,9 @@ class TestHelpers:
     ) -> None:
         """Test get_index_of_tuple when searching for None value."""
         index = get_index_of_tuple(sample_section_headings, 1, None)
-        assert (
-            index == 0
-        ), "Expected index of 0 for the first occurrence of None value"
+        assert index == 0, (
+            "Expected index of 0 for the first occurrence of None value"
+        )
 
     def test_get_index_of_tuple_empty_list(self) -> None:
         """Test get_index_of_tuple with an empty list."""

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Any, Literal
 import typer
 from github import Auth, Github, GithubException
 from github.GitRelease import GitRelease
-from rich import print  # pylint: disable=redefined-builtin
+from rich import print as rprint
 
 from github_changelog_md.config import get_settings
 from github_changelog_md.constants import (
@@ -47,7 +47,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def git_error(exc: GithubException) -> None:
     """Handle a Git Exception."""
-    print(
+    rprint(
         f"\n[red]  X  Error {exc.status} while getting the "
         f"Repo : {exc.data.get('message')}\n",
         file=sys.stderr,
@@ -70,7 +70,7 @@ class ChangeLog:
             self.auth = Auth.Token(get_settings().github_pat)
             self.git = Github(auth=self.auth)
         except AttributeError as exc:
-            print(
+            rprint(
                 "\n[red]  X  Error: No GitHub PAT found in settings file\n",
                 file=sys.stderr,
             )
@@ -173,7 +173,7 @@ class ChangeLog:
                 index = get_index_of_tuple(sections, 0, rename[0])
                 sections[index] = (rename[1], sections[index][1])
         except ValueError:
-            print(
+            rprint(
                 f"[red]  X  Error: Section '[bold]{rename[0]}[/bold]' not "
                 "found \\[[reverse]rename_sections[/reverse]]\n",
                 file=sys.stderr,
@@ -209,21 +209,21 @@ class ChangeLog:
         of PRs and Issues, removing any duplicates
         """
         user_list: list[NamedUser] = []
-        print("  [green]->[/green] Getting Contributors ... ", end="")
+        rprint("  [green]->[/green] Getting Contributors ... ", end="")
         for pr in self.repo_prs:
             if pr.user not in user_list:
                 user_list.append(pr.user)
-        print(self.done_str)
+        rprint(self.done_str)
 
-        print("  [green]->[/green] Sorting Contributors ... ", end="")
+        rprint("  [green]->[/green] Sorting Contributors ... ", end="")
         user_list.sort(key=lambda x: x.name if x.name else x.login)
-        print(self.done_str)
+        rprint(self.done_str)
 
         return user_list
 
     def update_contributors(self) -> None:
         """Update the CONTRIBUTORS.md file."""
-        print("  [green]->[/green] Updating CONTRIBUTORS.md ... ", end="")
+        rprint("  [green]->[/green] Updating CONTRIBUTORS.md ... ", end="")
         with Path(Path.cwd() / CONTRIBUTORS_FILE).open(
             mode="w",
             encoding="utf-8",
@@ -243,17 +243,17 @@ class ChangeLog:
                     f"- {name} "
                     f"([@{contributor.login}]({contributor.html_url}))\n",
                 )
-        print(self.done_str, "\n")
+        rprint(self.done_str, "\n")
 
     def generate_changelog(self) -> None:
         """Generate a markdown changelog using the data we have gererated."""
         if self.options["skip_releases"]:
-            print(
+            rprint(
                 "\n  [green]->[/green] Skipping releases: "
                 f"{', '.join(self.options['skip_releases'])}",
             )
 
-        print("  [green]->[/green] Generating Changelog ... ", end="")
+        rprint("  [green]->[/green] Generating Changelog ... ", end="")
 
         with Path(Path.cwd() / self.options["output_file"]).open(
             mode="w",
@@ -287,8 +287,8 @@ class ChangeLog:
                 "by [Seapagan](https://github.com/seapagan)*\n",
             )
 
-        print(self.done_str)
-        print(
+        rprint(self.done_str)
+        rprint(
             f"  [green]->[/green] Changelog generated to "
             f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
@@ -315,7 +315,7 @@ class ChangeLog:
             release_link = (
                 "tree/HEAD"
                 if not self.options["next_release"]
-                else f'releases/tag/{self.options["next_release"]}'
+                else f"releases/tag/{self.options['next_release']}"
             )
             f.write(
                 f"## [{heading}]({self.repo_data.html_url}/{release_link})"
@@ -330,8 +330,8 @@ class ChangeLog:
                 else "unreleased",
             )
 
-            self.print_issues(f, self.unreleased_issues)
-            self.print_prs(f, self.unreleased)
+            self.rprint_issues(f, self.unreleased_issues)
+            self.rprint_prs(f, self.unreleased)
 
             self.prev_release = "HEAD"
 
@@ -392,8 +392,8 @@ class ChangeLog:
             f.write("\n")
             return
 
-        self.print_issues(f, issue_list)
-        self.print_prs(f, pr_list)
+        self.rprint_issues(f, issue_list)
+        self.rprint_prs(f, pr_list)
 
         # if no closed releases or PR's then get the release body instead
         if len(issue_list) == 0 and len(pr_list) == 0:
@@ -493,7 +493,7 @@ class ChangeLog:
                 "See the Full Changelog below for details.\n\n"
             )
 
-    def print_issues(
+    def rprint_issues(
         self,
         f: TextIOWrapper,
         issue_list: list[Issue],
@@ -528,8 +528,7 @@ class ChangeLog:
                 # deleted, or it was converted to a discussion. We can't get any
                 # info on them.
                 f.write(
-                    f"- {escaped_title} "
-                    f"([#{issue.number}]({issue.html_url}))\n"
+                    f"- {escaped_title} ([#{issue.number}]({issue.html_url}))\n"
                 )
         f.write("\n")
 
@@ -561,7 +560,7 @@ class ChangeLog:
             )
         f.write("\n\n")
 
-    def print_prs(
+    def rprint_prs(
         self,
         f: TextIOWrapper,
         pr_list: list[PullRequest],
@@ -681,7 +680,7 @@ class ChangeLog:
         This will create a dictionary with the key on the release id and
         the value a list of issues.
         """
-        print(
+        rprint(
             "  [green]->[/green] Linking Closed Issues to their respective "
             "Release ... ",
             end="",
@@ -716,7 +715,7 @@ class ChangeLog:
             and issue.user.login not in self.settings.ignored_users
         ]
 
-        print(self.done_str)
+        rprint(self.done_str)
         return issue_by_release
 
     def get_latest_release_date(self) -> datetime.date:
@@ -736,7 +735,7 @@ class ChangeLog:
         This will create a dictionary with the key on the release id and
         the value a list of pull requests.
         """
-        print(
+        rprint(
             "\n  [green]->[/green] Linking Pull Requests to their respective "
             "Release ... ",
             end="",
@@ -766,18 +765,18 @@ class ChangeLog:
             and not any(pr in pr_list for pr_list in pr_by_release.values())
             and pr.user.login not in self.settings.ignored_users
         ]
-        print(self.done_str)
+        rprint(self.done_str)
         return pr_by_release
 
     def filter_issues(self) -> list[Issue]:
         """Filter out non-merged PRs and actual issues."""
-        print("\n  [green]->[/green] Filtering Issues from PRs... ", end="")
+        rprint("\n  [green]->[/green] Filtering Issues from PRs... ", end="")
         filtered_repo_issues = [
             issue for issue in self.repo_issues if not issue.pull_request
         ]
-        print(self.done_str)
+        rprint(self.done_str)
 
-        print(
+        rprint(
             f"  [green]->[/green] Found [green]"
             f"{len(filtered_repo_issues)}"
             "[/green] Actual Closed Issues",
@@ -786,7 +785,7 @@ class ChangeLog:
 
     def get_closed_issues(self) -> PaginatedList[Issue]:  # type: ignore[return]
         """Get info on all the closed issues from GitHub."""
-        print("  [green]->[/green] Getting Closed Issues ... ", end="")
+        rprint("  [green]->[/green] Getting Closed Issues ... ", end="")
         try:
             repo_issues = self.repo_data.get_issues(
                 state="closed",
@@ -795,12 +794,12 @@ class ChangeLog:
         except GithubException as exc:
             git_error(exc)
         else:
-            print(f"[green]{repo_issues.totalCount} Found[/green]")
+            rprint(f"[green]{repo_issues.totalCount} Found[/green]")
             return repo_issues
 
     def get_closed_prs(self) -> PaginatedList[PullRequest]:  # type: ignore
         """Get info on all the closed PRs from GitHub."""
-        print("  [green]->[/green] Getting Closed PRs ... ", end="")
+        rprint("  [green]->[/green] Getting Closed PRs ... ", end="")
         try:
             repo_prs = self.repo_data.get_pulls(
                 state="closed", sort="created", direction="desc"
@@ -808,23 +807,23 @@ class ChangeLog:
         except GithubException as exc:
             git_error(exc)
         else:
-            print(f"[green]{repo_prs.totalCount} Found[/green]")
+            rprint(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
     def get_repo_releases(self) -> list[GitRelease]:  # type: ignore[return]
         """Get info on all the releases from GitHub."""
-        print("  [green]->[/green] Getting Releases ... ", end="")
+        rprint("  [green]->[/green] Getting Releases ... ", end="")
         try:
             repo_releases = self.repo_data.get_releases()
         except GithubException as exc:
             git_error(exc)
         else:
-            print(f"[green]{repo_releases.totalCount} Found[/green]")
+            rprint(f"[green]{repo_releases.totalCount} Found[/green]")
             return list(repo_releases)
 
     def get_repo_data(self) -> Repository:  # type: ignore[return]
         """Read the repository data from GitHub."""
-        print("  [green]->[/green] Getting Repository data ... ", end="")
+        rprint("  [green]->[/green] Getting Repository data ... ", end="")
         try:
             repo_user = self.user if self.user else self.git.get_user().login
 
@@ -832,8 +831,8 @@ class ChangeLog:
         except GithubException as exc:
             git_error(exc)
         else:
-            print(self.done_str)
-            print(
+            rprint(self.done_str)
+            rprint(
                 "  [green]->[/green] Repository : "
                 f"[bold]{repo_data.full_name}[/bold]",
             )

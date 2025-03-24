@@ -11,14 +11,14 @@ the tool from.
 Change to your project directory and install the package using your preferred
 package manager or plain `pip`.
 
-I'd recommend using [Poetry](https://python-poetry.org/){:target="_blank"} for
+I'd recommend using [uv](https://docs.astral.sh/uv/){:target="_blank"} for
 managing your project dependencies if you don't already have a preference:
 
 ```console
-$ poetry add github-changelog-md --group dev
+$ uv add --dev github-changelog-md
 ```
 
-or, from inside a virtual environment:
+or (from inside a virtual environment)
 
 ```console
 $ pip install github-changelog-md
@@ -26,7 +26,13 @@ $ pip install github-changelog-md
 
 ## Globally
 
-Install the package globally using pip:
+Install with [pipx](https://pypa.github.io/pipx/) (recommended)
+
+```console
+$ pipx install github-changelog-md
+```
+
+Or, install the package globally using pip:
 
 ```console
 $ pip install github-changelog-md
@@ -37,12 +43,6 @@ user install directory:
 
 ```console
 $ pip install --user github-changelog-md
-```
-
-or use [pipx](https://pypa.github.io/pipx/) (recommended)
-
-```console
-$ pipx install github-changelog-md
 ```
 
 ## Setup a GitHub PAT

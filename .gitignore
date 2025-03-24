@@ -215,3 +215,4 @@ pyrightconfig.json
 .github_changelog_generator
 .changelog_gen.toml
 .changelog_generator.toml
+.envrc
