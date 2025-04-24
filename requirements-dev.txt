@@ -67,11 +67,11 @@ gitdb==4.0.12
     # via gitpython
 gitpython==3.1.44
     # via mkdocs-git-revision-date-localized-plugin
-h11==0.14.0
+h11==0.16.0
     # via httpcore
 htmlmin2==0.1.13
     # via mkdocs-minify-plugin
-httpcore==1.0.7
+httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via openai
