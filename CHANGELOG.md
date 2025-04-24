@@ -29,6 +29,8 @@ Everything in this section will be included in the next official release.
 
 **Dependency Updates**
 
+- Build(deps-dev): bump h11 from 0.14.0 to 0.16.0 ([#358](https://github.com/seapagan/github-changelog-md/pull/358)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Chore(deps): update astral-sh/setup-uv action to v6 ([#357](https://github.com/seapagan/github-changelog-md/pull/357)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update astral-sh/setup-uv action to v5 ([#354](https://github.com/seapagan/github-changelog-md/pull/354)) by [renovate[bot]](https://github.com/apps/renovate)
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.patch)
