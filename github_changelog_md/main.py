@@ -1,5 +1,6 @@
 """Entry point for the main application loop."""
 
+# ruff: noqa: FBT001
 from __future__ import annotations
 
 import sys

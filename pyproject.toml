@@ -58,7 +58,7 @@ dev-dependencies = [
 # setup PoeThePoet tasks
 pre.cmd = "pre-commit run --all-files"
 pre.help = "Run pre-commit checks"
-mypy.cmd = "mypy github_changelog_md/**/*.py tests/**/*.py --strict"
+mypy.cmd = "mypy . --strict --exclude site --exclude docs"
 mypy.help = "Run mypy checks"
 format.help = "Format code with Ruff"
 format.cmd = "ruff format ."
