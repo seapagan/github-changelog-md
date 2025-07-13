@@ -1,6 +1,6 @@
 [project]
 name = "github-changelog-md"
-version = "0.9.5"
+version = "0.9.6"
 description = "Generate a Markdown Changelog from your Github repository."
 readme = "README.md"
 requires-python = ">=3.9"

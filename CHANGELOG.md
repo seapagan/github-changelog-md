@@ -6,22 +6,7 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
-
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
-
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
+## [0.9.6](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.6) (July 13, 2025)
 
 **New Features**
 
@@ -29,11 +14,12 @@ Everything in this section will be included in the next official release.
 
 **Dependency Updates**
 
+- Fix some security issues with dependencies and some compatibility with typer ([#363](https://github.com/seapagan/github-changelog-md/pull/363)) by [seapagan](https://github.com/seapagan)
 - Build(deps-dev): bump h11 from 0.14.0 to 0.16.0 ([#358](https://github.com/seapagan/github-changelog-md/pull/358)) by [dependabot[bot]](https://github.com/apps/dependabot)
 - Chore(deps): update astral-sh/setup-uv action to v6 ([#357](https://github.com/seapagan/github-changelog-md/pull/357)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update astral-sh/setup-uv action to v5 ([#354](https://github.com/seapagan/github-changelog-md/pull/354)) by [renovate[bot]](https://github.com/apps/renovate)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...0.9.6) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...0.9.6.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.5...0.9.6.patch)
 
 ## [0.9.5](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.5) (August 17, 2024)
 
