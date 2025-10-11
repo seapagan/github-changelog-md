@@ -6,6 +6,35 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
+
+These are the changes that have been merged to the repository since the last
+release. If you want to try out these changes, you can install the latest
+version from the main branch by running:
+
+```console
+$ pip install git+https://github.com/seapagan/github-changelog-md
+```
+or, if using poetry:
+
+```console
+$ poetry add git+https://github.com/seapagan/github-changelog-md
+```
+
+Everything in this section will be included in the next official release.
+
+**New Features**
+
+- Update deps and fix pyproject.toml to latest `uv` requirements ([#370](https://github.com/seapagan/github-changelog-md/pull/370)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Chore(deps): update astral-sh/setup-uv action to v7 ([#369](https://github.com/seapagan/github-changelog-md/pull/369)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update github/codeql-action action to v4 ([#368](https://github.com/seapagan/github-changelog-md/pull/368)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update actions/checkout action to v5 ([#366](https://github.com/seapagan/github-changelog-md/pull/366)) by [renovate[bot]](https://github.com/apps/renovate)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD.patch)
+
 ## [0.9.6](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.6) (July 13, 2025)
 
 **New Features**
