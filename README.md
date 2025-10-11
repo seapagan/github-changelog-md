@@ -12,6 +12,11 @@ version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.i
 [![Weekly Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=week&units=international_system&left_color=black&right_color=green&left_text=Weekly%20Downloads)](https://pepy.tech/project/github-changelog-md)
 [![Total Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=total&units=international_system&left_color=black&right_color=green&left_text=Total%20Downloads)](https://pepy.tech/project/github-changelog-md)
 
+> [!WARNING]
+> This tool is not currently compatible with Python `3.14`, due to using the
+> `rtoml` library which needs updating to work with `3.14`. Once the author of
+> that tool has done this, I'll mark this tool as `3.14` compatible too.
+
 **Generate a Markdown changelog from a Github repository.**
 
 This project will generate a Markdown-formatted changelog from a Github
