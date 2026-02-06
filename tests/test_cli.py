@@ -14,6 +14,8 @@ if TYPE_CHECKING:
     from pytest_mock import MockerFixture
     from pytest_mock.plugin import MockType
 
+    from github_changelog_md.constants import ChangelogOptions
+
 
 @pytest.fixture
 def mock_changelog(mocker: MockerFixture) -> MockType:
@@ -21,7 +23,7 @@ def mock_changelog(mocker: MockerFixture) -> MockType:
     return mocker.patch("github_changelog_md.main.ChangeLog")
 
 
-default_options = {
+default_options: ChangelogOptions = {
     "user_name": None,
     "next_release": None,
     "show_unreleased": True,

@@ -1,9 +1,20 @@
 """Setup some fixtures for the tests."""
 
 # mypy: disable-error-code="no-untyped-def"
+from collections.abc import Generator
+
 import pytest
 
+from github_changelog_md.config.settings import Settings
 from github_changelog_md.constants import CONFIG_FILE
+
+
+@pytest.fixture(autouse=True)
+def _reset_settings_singleton() -> Generator[None]:
+    """Clear the Settings singleton between tests."""
+    Settings._instances.pop(Settings, None)  # noqa: SLF001
+    yield
+    Settings._instances.pop(Settings, None)  # noqa: SLF001
 
 
 @pytest.fixture

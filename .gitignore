@@ -218,5 +218,6 @@ pyrightconfig.json
 .envrc
 
 # AI Stuff
+.claude/
 CLAUDE.md
 AGENTS.md

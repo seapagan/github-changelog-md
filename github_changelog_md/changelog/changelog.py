@@ -3,14 +3,15 @@
 This will encapsulate the logic for generating the changelog.
 """
 
-# mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 
+import contextlib
 import datetime
 import os
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, NoReturn
 
 import typer
 from github import Auth, Github, GithubException
@@ -23,6 +24,7 @@ from github_changelog_md.constants import (
     IGNORED_CONTRIBUTORS,
     IGNORED_LABELS,
     SECTIONS,
+    ChangelogOptions,
     ExitErrors,
     SectionHeadings,
 )
@@ -45,7 +47,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from github.Repository import Repository
 
 
-def git_error(exc: GithubException) -> None:
+def git_error(exc: GithubException) -> NoReturn:
     """Handle a Git Exception."""
     rprint(
         f"\n[red]  X  Error {exc.status} while getting the "
@@ -53,6 +55,16 @@ def git_error(exc: GithubException) -> None:
         file=sys.stderr,
     )
     raise typer.Exit(ExitErrors.GIT_ERROR)
+
+
+@dataclass
+class ReleaseTextCache:
+    """Cache release-text settings keyed by release tag."""
+
+    yanked_by_release: dict[str, str] = field(default_factory=dict)
+    release_text_before_by_release: dict[str, str] = field(default_factory=dict)
+    release_text_by_release: dict[str, str] = field(default_factory=dict)
+    release_overrides_by_release: dict[str, str] = field(default_factory=dict)
 
 
 class ChangeLog:
@@ -63,11 +75,13 @@ class ChangeLog:
     def __init__(
         self,
         repo_name: str,
-        options: dict[str, Any],
+        options: ChangelogOptions,
     ) -> None:
         """Initialize the class."""
+        self.settings = get_settings()
+
         try:
-            self.auth = Auth.Token(get_settings().github_pat)
+            self.auth = Auth.Token(self.settings.github_pat)
             self.git = Github(auth=self.auth)
         except AttributeError as exc:
             rprint(
@@ -79,7 +93,6 @@ class ChangeLog:
         self.repo_name: str = repo_name
         self.user: str | None = options["user_name"]
         self.options = options
-        self.settings = get_settings()
 
         self.sections: list[SectionHeadings]
         self.ignored_labels: list[str]
@@ -90,10 +103,50 @@ class ChangeLog:
         self.repo_issues: PaginatedList[Issue]
         self.pr_by_release: dict[int, list[PullRequest]]
         self.issue_by_release: dict[int, list[Issue]]
+        self.prev_release: GitRelease | Literal["HEAD"] | None = None
         self.filtered_repo_issues: list[Issue]
         self.unreleased: list[PullRequest]
         self.unreleased_issues: list[Issue]
         self.contributors: list[NamedUser]
+        self.release_text_cache = ReleaseTextCache(
+            yanked_by_release=self.build_release_lookup(
+                self.settings.yanked,
+                value_key="reason",
+            ),
+            release_text_before_by_release=self.build_release_lookup(
+                self.settings.release_text_before,
+                value_key="text",
+                strip_value=True,
+            ),
+            release_text_by_release=self.build_release_lookup(
+                self.settings.release_text,
+                value_key="text",
+                strip_value=True,
+            ),
+            release_overrides_by_release=self.build_release_lookup(
+                self.settings.release_overrides,
+                value_key="text",
+            ),
+        )
+
+    @staticmethod
+    def build_release_lookup(
+        values: list[dict[str, str]] | None,
+        value_key: str,
+        *,
+        strip_value: bool = False,
+    ) -> dict[str, str]:
+        """Build a release-tag keyed lookup table for fast text lookups."""
+        if not values:
+            return {}
+
+        lookup: dict[str, str] = {}
+        for value in values:
+            release = value["release"].strip()
+            text = value[value_key].strip() if strip_value else value[value_key]
+            lookup[release] = text
+
+        return lookup
 
     def run(self) -> None:
         """Run the changelog.
@@ -101,39 +154,35 @@ class ChangeLog:
         Each individual step is a method that will be called in order, and
         contains it's own error handling.
         """
-        if self.options["quiet"]:
-            orig_stdout = sys.stdout
-            out = open(os.devnull, "w")  # noqa: SIM115, PTH123
-            sys.stdout = out
+        with contextlib.ExitStack() as stack:
+            if self.options["quiet"]:
+                devnull = stack.enter_context(Path(os.devnull).open("w"))
+                stack.enter_context(contextlib.redirect_stdout(devnull))
 
-        header()
+            header()
 
-        self.sections = self.rename_sections(self.extend_sections())
-        self.ignored_labels = self.flatten_ignores()
+            self.sections = self.rename_sections(self.extend_sections())
+            self.ignored_labels = self.flatten_ignores()
 
-        self.repo_data = self.get_repo_data()
-        self.repo_releases = self.get_repo_releases()
-        self.repo_prs = self.get_closed_prs()
-        self.repo_issues = self.get_closed_issues()
-        # filter out PRs from actual issues (PR's are issues too but
-        # we don't want them in the list).
-        self.filtered_repo_issues = self.filter_issues()
+            self.repo_data = self.get_repo_data()
+            self.repo_releases = self.get_repo_releases()
+            self.repo_prs = self.get_closed_prs()
+            self.repo_issues = self.get_closed_issues()
+            # filter out PRs from actual issues (PR's are issues too but
+            # we don't want them in the list).
+            self.filtered_repo_issues = self.filter_issues()
 
-        self.pr_by_release = self.link_pull_requests()
-        self.issue_by_release = self.link_issues()
+            self.pr_by_release = self.link_pull_requests()
+            self.issue_by_release = self.link_issues()
 
-        # actually generate the changelog file from all the data we have
-        # collected.
-        self.generate_changelog()
+            # actually generate the changelog file from all the data we have
+            # collected.
+            self.generate_changelog()
 
-        # update the CONTRIBUTORS.md file if requested
-        if self.options["contributors"]:
-            self.contributors = self.get_contributors()
-            self.update_contributors()
-
-        if self.options["quiet"]:
-            sys.stdout = orig_stdout
-            out.close()
+            # update the CONTRIBUTORS.md file if requested
+            if self.options["contributors"]:
+                self.contributors = self.get_contributors()
+                self.update_contributors()
 
     def flatten_ignores(self) -> list[str]:
         """Process the ignored labels.
@@ -178,14 +227,14 @@ class ChangeLog:
                 "found \\[[reverse]rename_sections[/reverse]]\n",
                 file=sys.stderr,
             )
-            sys.exit(ExitErrors.INVALID_ACTION)
+            raise typer.Exit(ExitErrors.INVALID_ACTION) from None
 
         return sections
 
     def extend_sections(self) -> list[SectionHeadings]:
         """Extend the default sections with any user defined ones."""
         if not self.settings.extend_sections:
-            return SECTIONS
+            return list(SECTIONS)
 
         extend_sections = [
             (section["title"], section["label"])
@@ -235,7 +284,7 @@ class ChangeLog:
             for contributor in self.contributors:
                 if contributor.login in IGNORED_CONTRIBUTORS:
                     continue
-                name = (contributor.name or contributor.login).capitalize()
+                name = contributor.name or contributor.login
                 f.write(
                     f"- {name} "
                     f"([@{contributor.login}]({contributor.html_url}))\n",
@@ -267,7 +316,7 @@ class ChangeLog:
                     "check each `Full Changelog` for details.*\n\n "
                 )
 
-            self.prev_release: GitRelease | (Literal["HEAD"] | None) = None
+            self.prev_release = None
 
             if self.options["show_unreleased"]:
                 self.process_unreleased(f)
@@ -295,7 +344,7 @@ class ChangeLog:
         f: TextIOWrapper,
     ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
-        if len(self.unreleased) > 0 or len(self.unreleased_issues) > 0:
+        if self.unreleased or self.unreleased_issues:
             heading = self.options["next_release"] or "Unreleased"
             text_date = (
                 datetime.datetime.now(tz=datetime.timezone.utc)
@@ -365,20 +414,14 @@ class ChangeLog:
         # show any release text that is defined for this release
         self.show_release_text(f, release)
 
-        if self.settings.release_overrides and release.tag_name in [
-            release_override["release"].strip()
-            for release_override in self.settings.release_overrides
-        ]:
+        if (
+            release.tag_name
+            in self.release_text_cache.release_overrides_by_release
+        ):
             f.write(
-                next(
-                    (
-                        release_override["text"]
-                        for release_override in self.settings.release_overrides
-                        if release_override["release"].strip()
-                        == release.tag_name
-                    ),
-                    "",
-                )
+                self.release_text_cache.release_overrides_by_release[
+                    release.tag_name
+                ]
             )
             f.write("\n")
             return
@@ -387,45 +430,31 @@ class ChangeLog:
         self.rprint_prs(f, pr_list)
 
         # if no closed releases or PR's then get the release body instead
-        if len(issue_list) == 0 and len(pr_list) == 0:
+        if not issue_list and not pr_list:
             self.get_release_body(f, release)
 
     def check_yanked(self, f: TextIOWrapper, release: GitRelease) -> None:
         """Note if this release has been yanked, and the reason why."""
-        if self.settings.yanked and release.tag_name in [
-            yanked["release"].strip() for yanked in self.settings.yanked
-        ]:
+        if release.tag_name in self.release_text_cache.yanked_by_release:
             f.write(" **[`YANKED`]**\n\n")
-            reason = next(
-                (
-                    yanked["reason"]
-                    for yanked in self.settings.yanked
-                    if yanked["release"].strip() == release.tag_name
-                ),
-                "",
-            )
             f.write(
                 "**This release has been removed for the following reason and "
                 "should not be used:**\n\n"
-                f"- {reason}"
+                f"- "
+                f"{self.release_text_cache.yanked_by_release[release.tag_name]}"
             )
 
     def show_before_text(self, f: TextIOWrapper, release: GitRelease) -> None:
         """Shows text before this release if it exists."""
-        if self.settings.release_text_before and release.tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text_before
-        ]:
+        if (
+            release.tag_name
+            in self.release_text_cache.release_text_before_by_release
+        ):
             f.write("---\n\n")
             f.write(
-                next(
-                    (
-                        release_text["text"].strip()
-                        for release_text in self.settings.release_text_before
-                        if release_text["release"].strip() == release.tag_name
-                    ),
-                    "",
-                )
+                self.release_text_cache.release_text_before_by_release[
+                    release.tag_name
+                ]
             )
             f.write("\n\n---\n\n")
 
@@ -440,20 +469,8 @@ class ChangeLog:
         else:
             tag_name = release
 
-        if self.settings.release_text and tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text
-        ]:
-            f.write(
-                next(
-                    (
-                        release_text["text"].strip()
-                        for release_text in self.settings.release_text
-                        if release_text["release"].strip() == tag_name
-                    ),
-                    "",
-                )
-            )
+        if tag_name in self.release_text_cache.release_text_by_release:
+            f.write(self.release_text_cache.release_text_by_release[tag_name])
             f.write("\n\n")
 
     def get_release_body(
@@ -474,7 +491,7 @@ class ChangeLog:
                     body_lines.pop(i)
                     break
             body = "\n".join(body_lines)
-            if body.strip() and body[-2] != "\n":
+            if body.strip() and not body.endswith("\n"):
                 body += "\n"
             f.write(body)
         else:
@@ -491,17 +508,14 @@ class ChangeLog:
     ) -> None:
         """Print all the closed issues for a given release."""
         visible_issues = self.ignore_items(list(issue_list))
-        if len(visible_issues) == 0 or not self.options["show_issues"]:
+        if not visible_issues or not self.options["show_issues"]:
             return
 
         f.write("**Closed Issues**\n\n")
         for issue in self.get_sorted_items(visible_issues):
-            if (
-                any(
-                    label.name.lower() in self.ignored_labels
-                    for label in issue.labels
-                )
-                or "[no changelog]" in issue.title.lower()
+            if any(
+                label.name.lower() in self.ignored_labels
+                for label in issue.labels
             ):
                 continue
             escaped_title = cap_first_letter(
@@ -560,7 +574,7 @@ class ChangeLog:
 
         They are sorted into sections depending on the labels they have.
         """
-        if len(pr_list) == 0:
+        if not pr_list:
             return
 
         release_sections = self.get_release_sections(pr_list)
@@ -579,12 +593,13 @@ class ChangeLog:
             pr
             for pr in pr_list
             if not any(
-                label in [label.name.lower() for label in pr.labels]
-                for _, label in self.sections
+                section_label
+                in [pr_label.name.lower() for pr_label in pr.labels]
+                for _, section_label in self.sections
             )
             and not any(
-                label in self.ignored_labels
-                for label in [label.name.lower() for label in pr.labels]
+                pr_label.name.lower() in self.ignored_labels
+                for pr_label in pr.labels
             )
         ]
 
@@ -595,13 +610,15 @@ class ChangeLog:
 
             visible_prs = self.ignore_items(list(prs))
 
-            if len(visible_prs) > 0:
+            if visible_prs:
                 f.write(f"**{heading}**\n\n")
                 sorted_prs = self.get_sorted_items(visible_prs)
-                if is_dependencies:
-                    # only show the max_depends number of PRs
-                    visible_prs = sorted_prs[: self.options["max_depends"]]
-                for pr in self.get_sorted_items(visible_prs):
+                display_prs = (
+                    sorted_prs[: self.options["max_depends"]]
+                    if is_dependencies
+                    else sorted_prs
+                )
+                for pr in display_prs:
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
                     )
@@ -656,13 +673,14 @@ class ChangeLog:
             heading: [
                 pr
                 for pr in pr_list
-                if label in [label.name.lower() for label in pr.labels]
+                if section_label
+                in [pr_label.name.lower() for pr_label in pr.labels]
                 and not any(
-                    label in self.ignored_labels
-                    for label in [label.name.lower() for label in pr.labels]
+                    pr_label.name.lower() in self.ignored_labels
+                    for pr_label in pr.labels
                 )
             ]
-            for heading, label in self.sections
+            for heading, section_label in self.sections
         }
 
     def link_issues(self) -> dict[int, list[Issue]]:
@@ -677,19 +695,18 @@ class ChangeLog:
             end="",
         )
         issue_by_release: dict[int, list[Issue]] = {}
+        seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             issue_by_release[release.id] = []
             for issue in self.filtered_repo_issues:
                 if (
                     issue.closed_at
                     and issue.closed_at <= release.created_at
-                    and not any(
-                        issue in issue_list
-                        for issue_list in issue_by_release.values()
-                    )
+                    and issue.id not in seen
                     and issue.user.login not in self.settings.ignored_users
                 ):
                     issue_by_release[release.id].append(issue)
+                    seen.add(issue.id)
 
         # Add any issue more recent than the last release to a specific
         # list. We need some special handling if there are no releases yet.
@@ -700,9 +717,7 @@ class ChangeLog:
             for issue in self.filtered_repo_issues
             if issue.closed_at
             and issue.closed_at > last_release_date
-            and not any(
-                issue in pr_list for pr_list in issue_by_release.values()
-            )
+            and issue.id not in seen
             and issue.user.login not in self.settings.ignored_users
         ]
 
@@ -732,18 +747,18 @@ class ChangeLog:
             end="",
         )
         pr_by_release: dict[int, list[PullRequest]] = {}
+        seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             pr_by_release[release.id] = []
             for pr in self.repo_prs:
                 if (
                     pr.merged_at
                     and pr.merged_at <= release.created_at
-                    and not any(
-                        pr in pr_list for pr_list in pr_by_release.values()
-                    )
+                    and pr.id not in seen
                     and pr.user.login not in self.settings.ignored_users
                 ):
                     pr_by_release[release.id].append(pr)
+                    seen.add(pr.id)
         # Add any pull request more recent than the last release to a specific
         # list. We need some special handling if there are no releases yet.
         last_release_date = self.get_latest_release_date()
@@ -753,7 +768,7 @@ class ChangeLog:
             for pr in self.repo_prs
             if pr.merged_at
             and pr.merged_at > last_release_date
-            and not any(pr in pr_list for pr_list in pr_by_release.values())
+            and pr.id not in seen
             and pr.user.login not in self.settings.ignored_users
         ]
         rprint(self.done_str)
@@ -774,7 +789,7 @@ class ChangeLog:
         )
         return filtered_repo_issues
 
-    def get_closed_issues(self) -> PaginatedList[Issue]:  # type: ignore[return]
+    def get_closed_issues(self) -> PaginatedList[Issue]:
         """Get info on all the closed issues from GitHub."""
         rprint("  [green]->[/green] Getting Closed Issues ... ", end="")
         try:
@@ -788,7 +803,7 @@ class ChangeLog:
             rprint(f"[green]{repo_issues.totalCount} Found[/green]")
             return repo_issues
 
-    def get_closed_prs(self) -> PaginatedList[PullRequest]:  # type: ignore
+    def get_closed_prs(self) -> PaginatedList[PullRequest]:
         """Get info on all the closed PRs from GitHub."""
         rprint("  [green]->[/green] Getting Closed PRs ... ", end="")
         try:
@@ -801,7 +816,7 @@ class ChangeLog:
             rprint(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
-    def get_repo_releases(self) -> list[GitRelease]:  # type: ignore[return]
+    def get_repo_releases(self) -> list[GitRelease]:
         """Get info on all the releases from GitHub."""
         rprint("  [green]->[/green] Getting Releases ... ", end="")
         try:
@@ -812,7 +827,7 @@ class ChangeLog:
             rprint(f"[green]{repo_releases.totalCount} Found[/green]")
             return list(repo_releases)
 
-    def get_repo_data(self) -> Repository:  # type: ignore[return]
+    def get_repo_data(self) -> Repository:
         """Read the repository data from GitHub."""
         rprint("  [green]->[/green] Getting Repository data ... ", end="")
         try:

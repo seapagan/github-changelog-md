@@ -1,8 +1,12 @@
 """Test our manipulations of the TOMLSettings library."""
 # mypy: disable-error-code="no-untyped-def"
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
-import pytest_mock
+import typer
 from simple_toml_settings.exceptions import SettingsNotFoundError
 
 from github_changelog_md.config.settings import (
@@ -12,6 +16,9 @@ from github_changelog_md.config.settings import (
     get_settings_object,
 )
 from github_changelog_md.constants import CONFIG_FILE, ExitErrors
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 MOCK_PROMPT_ASK = "rich.prompt.Prompt.ask"
 
@@ -59,7 +66,7 @@ class TestSettings:
     ) -> None:
         """Test when we get an invalid PAT from the user."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "")
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_pat_input()
 
         assert exc.value.args[0] == ExitErrors.INVALID_ACTION
@@ -80,7 +87,7 @@ class TestSettings:
         bad_schema,  # noqa: ARG002
     ) -> None:
         """Test we can get a settings object."""
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.BAD_SCHEMA
@@ -102,14 +109,14 @@ class TestSettings:
     def test_settings_with_no_config_file_and_keyboard_interrupt(
         self,
         fs,
-        mocker: pytest_mock.MockFixture,
+        mocker: MockerFixture,
     ) -> None:
         """Test we can get a settings object."""
         mocker.patch(
             MOCK_PROMPT_ASK,
             side_effect=KeyboardInterrupt,
         )
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.USER_ABORT
@@ -119,7 +126,7 @@ class TestSettings:
         self,
         fs,  # noqa: ARG002
         monkeypatch,
-        mocker: pytest_mock.MockFixture,
+        mocker: MockerFixture,
     ) -> None:
         """Test settings error if we dont have write permission."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "1234")
@@ -127,7 +134,7 @@ class TestSettings:
             "pathlib.Path.open",
             side_effect=PermissionError,
         )
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.PERMISSION_DENIED

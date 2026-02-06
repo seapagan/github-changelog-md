@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import subprocess
 import sys
 from importlib import metadata, resources
 from pathlib import Path
+from shutil import which
 from typing import TYPE_CHECKING
 
 import rtoml
@@ -69,14 +71,26 @@ def header() -> None:
 
 def get_repo_name() -> str | None:
     """Return the name of the repository from the current directory."""
-    git_config_path = Path.cwd() / ".git" / "config"
-    repo_name = None
-    if git_config_path.exists():
-        with Path(git_config_path).open("r", encoding="utf-8") as git_config:
-            for line in git_config:
-                if "url" in line:
-                    repo_name = Path(line.split("=")[-1]).stem
-    return repo_name
+    git_executable = which("git")
+    if git_executable is None:
+        return None
+
+    try:
+        remote_url = subprocess.run(  # noqa: S603
+            [git_executable, "remote", "get-url", "origin"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None
+
+    # Support HTTPS and SSH forms:
+    # https://github.com/user/repo.git, git@github.com:user/repo.git
+    repo_part = remote_url.rstrip("/").rsplit("/", maxsplit=1)[-1]
+    repo_name = repo_part.rsplit(":", maxsplit=1)[-1]
+    repo_name = repo_name.removesuffix(".git")
+    return repo_name.strip() or None
 
 
 def cap_first_letter(string: str) -> str:
