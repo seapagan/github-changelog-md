@@ -105,12 +105,8 @@ class ChangeLog:
         """
         with contextlib.ExitStack() as stack:
             if self.options["quiet"]:
-                devnull = stack.enter_context(
-                    Path(os.devnull).open("w")
-                )
-                stack.enter_context(
-                    contextlib.redirect_stdout(devnull)
-                )
+                devnull = stack.enter_context(Path(os.devnull).open("w"))
+                stack.enter_context(contextlib.redirect_stdout(devnull))
 
             header()
 
