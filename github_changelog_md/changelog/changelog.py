@@ -3,7 +3,6 @@
 This will encapsulate the logic for generating the changelog.
 """
 
-# mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 
 import contextlib
@@ -24,6 +23,7 @@ from github_changelog_md.constants import (
     IGNORED_CONTRIBUTORS,
     IGNORED_LABELS,
     SECTIONS,
+    ChangelogOptions,
     ExitErrors,
     SectionHeadings,
 )
@@ -64,7 +64,7 @@ class ChangeLog:
     def __init__(
         self,
         repo_name: str,
-        options: dict[str, Any],
+        options: ChangelogOptions,
     ) -> None:
         """Initialize the class."""
         self.settings = get_settings()

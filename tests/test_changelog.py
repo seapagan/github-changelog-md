@@ -173,7 +173,25 @@ class TestChangelog:
             return_value="",
         )
         with pytest.raises(typer.Exit) as exc:
-            ChangeLog("repo", {"user_name": None})
+            ChangeLog(
+                "repo",
+                {
+                    "user_name": None,
+                    "next_release": None,
+                    "show_unreleased": True,
+                    "show_depends": True,
+                    "output_file": "CHANGELOG.md",
+                    "contributors": False,
+                    "quiet": False,
+                    "skip_releases": None,
+                    "show_issues": True,
+                    "item_order": "newest-first",
+                    "ignore_items": None,
+                    "max_depends": 10,
+                    "show_diff": True,
+                    "show_patch": True,
+                },
+            )
 
         output = capsys.readouterr()
         assert exc.value.args[0] == ExitErrors.NO_PAT
@@ -211,8 +229,17 @@ class TestChangelog:
                 "user_name": "user",
                 "next_release": None,
                 "show_unreleased": True,
+                "show_depends": True,
+                "output_file": "CHANGELOG.md",
                 "contributors": False,
-                "quiet": None,
+                "quiet": False,
+                "skip_releases": None,
+                "show_issues": True,
+                "item_order": "newest-first",
+                "ignore_items": None,
+                "max_depends": 10,
+                "show_diff": True,
+                "show_patch": True,
             },
         )
         changelog.get_repo_data = MagicMock(return_value=mock_repo_data)
