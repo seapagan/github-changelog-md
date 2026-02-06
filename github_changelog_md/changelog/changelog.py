@@ -194,8 +194,7 @@ class ChangeLog:
 
         insert_index = (
             self.settings.extend_sections_index
-            if self.settings.extend_sections_index
-            else get_index_of_tuple(SECTIONS, 1, "dependencies")
+            or get_index_of_tuple(SECTIONS, 1, "dependencies")
         )
 
         return (
@@ -216,7 +215,7 @@ class ChangeLog:
         rprint(self.done_str)
 
         rprint("  [green]->[/green] Sorting Contributors ... ", end="")
-        user_list.sort(key=lambda x: x.name if x.name else x.login)
+        user_list.sort(key=lambda x: x.name or x.login)
         rprint(self.done_str)
 
         return user_list
@@ -236,9 +235,7 @@ class ChangeLog:
             for contributor in self.contributors:
                 if contributor.login in IGNORED_CONTRIBUTORS:
                     continue
-                name = (
-                    contributor.name if contributor.name else contributor.login
-                ).capitalize()
+                name = (contributor.name or contributor.login).capitalize()
                 f.write(
                     f"- {name} "
                     f"([@{contributor.login}]({contributor.html_url}))\n",
@@ -299,11 +296,7 @@ class ChangeLog:
     ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
         if len(self.unreleased) > 0 or len(self.unreleased_issues) > 0:
-            heading = (
-                self.options["next_release"]
-                if self.options["next_release"]
-                else "Unreleased"
-            )
+            heading = self.options["next_release"] or "Unreleased"
             text_date = (
                 datetime.datetime.now(tz=datetime.timezone.utc)
                 .date()
@@ -325,9 +318,7 @@ class ChangeLog:
             # show any release text that is defined for this release
             self.show_release_text(
                 f,
-                self.options["next_release"]
-                if self.options["next_release"]
-                else "unreleased",
+                self.options["next_release"] or "unreleased",
             )
 
             self.rprint_issues(f, self.unreleased_issues)
@@ -825,7 +816,7 @@ class ChangeLog:
         """Read the repository data from GitHub."""
         rprint("  [green]->[/green] Getting Repository data ... ", end="")
         try:
-            repo_user = self.user if self.user else self.git.get_user().login
+            repo_user = self.user or self.git.get_user().login
 
             repo_data = self.git.get_user(repo_user).get_repo(self.repo_name)
         except GithubException as exc:
