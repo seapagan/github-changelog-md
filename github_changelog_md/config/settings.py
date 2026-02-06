@@ -53,7 +53,7 @@ class Settings(TOMLSettings):
 
 def get_settings_object() -> Settings:
     """Return a settings object for this app."""
-    return Settings(
+    return Settings.get_instance(
         "changelog_generator",
         local_file=True,
         settings_file_name=CONFIG_FILE,

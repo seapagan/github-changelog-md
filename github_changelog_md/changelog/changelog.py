@@ -11,7 +11,7 @@ import datetime
 import os
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, NoReturn
 
 import typer
 from github import Auth, Github, GithubException
@@ -46,7 +46,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from github.Repository import Repository
 
 
-def git_error(exc: GithubException) -> None:
+def git_error(exc: GithubException) -> NoReturn:
     """Handle a Git Exception."""
     rprint(
         f"\n[red]  X  Error {exc.status} while getting the "
@@ -67,8 +67,10 @@ class ChangeLog:
         options: dict[str, Any],
     ) -> None:
         """Initialize the class."""
+        self.settings = get_settings()
+
         try:
-            self.auth = Auth.Token(get_settings().github_pat)
+            self.auth = Auth.Token(self.settings.github_pat)
             self.git = Github(auth=self.auth)
         except AttributeError as exc:
             rprint(
@@ -80,7 +82,6 @@ class ChangeLog:
         self.repo_name: str = repo_name
         self.user: str | None = options["user_name"]
         self.options = options
-        self.settings = get_settings()
 
         self.sections: list[SectionHeadings]
         self.ignored_labels: list[str]
@@ -599,10 +600,12 @@ class ChangeLog:
             if len(visible_prs) > 0:
                 f.write(f"**{heading}**\n\n")
                 sorted_prs = self.get_sorted_items(visible_prs)
-                if is_dependencies:
-                    # only show the max_depends number of PRs
-                    visible_prs = sorted_prs[: self.options["max_depends"]]
-                for pr in self.get_sorted_items(visible_prs):
+                display_prs = (
+                    sorted_prs[: self.options["max_depends"]]
+                    if is_dependencies
+                    else sorted_prs
+                )
+                for pr in display_prs:
                     escaped_title = cap_first_letter(
                         pr.title.replace("__", "\\_\\_").strip(),
                     )
@@ -678,19 +681,18 @@ class ChangeLog:
             end="",
         )
         issue_by_release: dict[int, list[Issue]] = {}
+        seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             issue_by_release[release.id] = []
             for issue in self.filtered_repo_issues:
                 if (
                     issue.closed_at
                     and issue.closed_at <= release.created_at
-                    and not any(
-                        issue in issue_list
-                        for issue_list in issue_by_release.values()
-                    )
+                    and issue.id not in seen
                     and issue.user.login not in self.settings.ignored_users
                 ):
                     issue_by_release[release.id].append(issue)
+                    seen.add(issue.id)
 
         # Add any issue more recent than the last release to a specific
         # list. We need some special handling if there are no releases yet.
@@ -701,9 +703,7 @@ class ChangeLog:
             for issue in self.filtered_repo_issues
             if issue.closed_at
             and issue.closed_at > last_release_date
-            and not any(
-                issue in pr_list for pr_list in issue_by_release.values()
-            )
+            and issue.id not in seen
             and issue.user.login not in self.settings.ignored_users
         ]
 
@@ -733,18 +733,18 @@ class ChangeLog:
             end="",
         )
         pr_by_release: dict[int, list[PullRequest]] = {}
+        seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             pr_by_release[release.id] = []
             for pr in self.repo_prs:
                 if (
                     pr.merged_at
                     and pr.merged_at <= release.created_at
-                    and not any(
-                        pr in pr_list for pr_list in pr_by_release.values()
-                    )
+                    and pr.id not in seen
                     and pr.user.login not in self.settings.ignored_users
                 ):
                     pr_by_release[release.id].append(pr)
+                    seen.add(pr.id)
         # Add any pull request more recent than the last release to a specific
         # list. We need some special handling if there are no releases yet.
         last_release_date = self.get_latest_release_date()
@@ -754,7 +754,7 @@ class ChangeLog:
             for pr in self.repo_prs
             if pr.merged_at
             and pr.merged_at > last_release_date
-            and not any(pr in pr_list for pr_list in pr_by_release.values())
+            and pr.id not in seen
             and pr.user.login not in self.settings.ignored_users
         ]
         rprint(self.done_str)
@@ -775,7 +775,7 @@ class ChangeLog:
         )
         return filtered_repo_issues
 
-    def get_closed_issues(self) -> PaginatedList[Issue]:  # type: ignore[return]
+    def get_closed_issues(self) -> PaginatedList[Issue]:
         """Get info on all the closed issues from GitHub."""
         rprint("  [green]->[/green] Getting Closed Issues ... ", end="")
         try:
@@ -789,7 +789,7 @@ class ChangeLog:
             rprint(f"[green]{repo_issues.totalCount} Found[/green]")
             return repo_issues
 
-    def get_closed_prs(self) -> PaginatedList[PullRequest]:  # type: ignore
+    def get_closed_prs(self) -> PaginatedList[PullRequest]:
         """Get info on all the closed PRs from GitHub."""
         rprint("  [green]->[/green] Getting Closed PRs ... ", end="")
         try:
@@ -802,7 +802,7 @@ class ChangeLog:
             rprint(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
-    def get_repo_releases(self) -> list[GitRelease]:  # type: ignore[return]
+    def get_repo_releases(self) -> list[GitRelease]:
         """Get info on all the releases from GitHub."""
         rprint("  [green]->[/green] Getting Releases ... ", end="")
         try:
@@ -813,7 +813,7 @@ class ChangeLog:
             rprint(f"[green]{repo_releases.totalCount} Found[/green]")
             return list(repo_releases)
 
-    def get_repo_data(self) -> Repository:  # type: ignore[return]
+    def get_repo_data(self) -> Repository:
         """Read the repository data from GitHub."""
         rprint("  [green]->[/green] Getting Repository data ... ", end="")
         try:
