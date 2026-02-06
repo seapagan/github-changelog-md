@@ -1,8 +1,11 @@
 """Test our manipulations of the TOMLSettings library."""
 # mypy: disable-error-code="no-untyped-def"
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
-import pytest_mock
 import typer
 from simple_toml_settings.exceptions import SettingsNotFoundError
 
@@ -13,6 +16,9 @@ from github_changelog_md.config.settings import (
     get_settings_object,
 )
 from github_changelog_md.constants import CONFIG_FILE, ExitErrors
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 MOCK_PROMPT_ASK = "rich.prompt.Prompt.ask"
 
@@ -103,7 +109,7 @@ class TestSettings:
     def test_settings_with_no_config_file_and_keyboard_interrupt(
         self,
         fs,
-        mocker: pytest_mock.MockFixture,
+        mocker: MockerFixture,
     ) -> None:
         """Test we can get a settings object."""
         mocker.patch(
@@ -120,7 +126,7 @@ class TestSettings:
         self,
         fs,  # noqa: ARG002
         monkeypatch,
-        mocker: pytest_mock.MockFixture,
+        mocker: MockerFixture,
     ) -> None:
         """Test settings error if we dont have write permission."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "1234")
