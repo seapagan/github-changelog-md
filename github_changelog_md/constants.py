@@ -1,9 +1,30 @@
 """Define constants used throughout the application."""
 
-from enum import IntEnum
-from typing import Union
+from __future__ import annotations
 
-SectionHeadings = tuple[str, Union[str, None]]
+from enum import IntEnum
+from typing import Optional, TypedDict
+
+SectionHeadings = tuple[str, Optional[str]]
+
+
+class ChangelogOptions(TypedDict):
+    """Type definition for the options passed to ChangeLog."""
+
+    user_name: str | None
+    next_release: str | None
+    show_unreleased: bool
+    show_depends: bool
+    output_file: str
+    contributors: bool
+    quiet: bool
+    skip_releases: list[str] | None
+    show_issues: bool
+    item_order: str
+    ignore_items: list[int] | None
+    max_depends: int
+    show_diff: bool
+    show_patch: bool
 
 
 class ExitErrors(IntEnum):

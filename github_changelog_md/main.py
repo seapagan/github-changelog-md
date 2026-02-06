@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Optional
 
 import typer
 from rich import print as rprint
@@ -12,6 +12,9 @@ from rich import print as rprint
 from github_changelog_md.changelog import ChangeLog
 from github_changelog_md.config import get_settings
 from github_changelog_md.helpers import get_app_version, get_repo_name
+
+if TYPE_CHECKING:
+    from github_changelog_md.constants import ChangelogOptions
 
 app = typer.Typer(
     pretty_exceptions_show_locals=False,
@@ -173,7 +176,7 @@ def main(
 
     settings = get_settings()
 
-    options: dict[str, Any] = {
+    options: ChangelogOptions = {
         "user_name": user,
         "next_release": next_release,
         "show_unreleased": (
