@@ -2,6 +2,7 @@
 
 # mypy: disable-error-code="no-untyped-def"
 import datetime
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -448,8 +449,8 @@ class TestChangelog:
 
         mock_path = mocker.patch(
             "github_changelog_md.changelog.changelog.Path",
-            autospec=True,
         )
+        mock_path.cwd.return_value = Path("test_cwd")
         file_handle = MagicMock()
         mock_path.return_value.open.return_value.__enter__.return_value = (
             file_handle
