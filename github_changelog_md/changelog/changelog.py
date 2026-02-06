@@ -283,7 +283,7 @@ class ChangeLog:
             for contributor in self.contributors:
                 if contributor.login in IGNORED_CONTRIBUTORS:
                     continue
-                name = (contributor.name or contributor.login).capitalize()
+                name = contributor.name or contributor.login
                 f.write(
                     f"- {name} "
                     f"([@{contributor.login}]({contributor.html_url}))\n",

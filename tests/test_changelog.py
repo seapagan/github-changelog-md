@@ -434,3 +434,30 @@ class TestChangelog:
         assert "Override body\n" in rendered
         changelog.rprint_issues.assert_not_called()
         changelog.rprint_prs.assert_not_called()
+
+    def test_update_contributors_preserves_name_casing(self, mocker) -> None:
+        """Test update_contributors does not alter contributor name casing."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock(name="repo_data")
+        changelog.repo_data.name = "repo"
+        contributor = MagicMock(name="contributor")
+        contributor.login = "mcd"
+        contributor.name = "McDonald"
+        contributor.html_url = "https://github.com/mcd"
+        changelog.contributors = [contributor]
+
+        mock_path = mocker.patch(
+            "github_changelog_md.changelog.changelog.Path",
+            autospec=True,
+        )
+        file_handle = MagicMock()
+        mock_path.return_value.open.return_value.__enter__.return_value = (
+            file_handle
+        )
+
+        changelog.update_contributors()
+
+        rendered = "".join(
+            call.args[0] for call in file_handle.write.call_args_list
+        )
+        assert "- McDonald ([@mcd](https://github.com/mcd))" in rendered
