@@ -69,6 +69,14 @@ class TestHelpers:
         )
         assert get_repo_name() is None
 
+    def test_get_repo_name_without_git_binary(
+        self,
+        mocker: MockerFixture,
+    ) -> None:
+        """Test get_repo_name returns None when git executable is missing."""
+        mocker.patch("github_changelog_md.helpers.which", return_value=None)
+        assert get_repo_name() is None
+
     def test_header(self, capsys: pytest.CaptureFixture[str]) -> None:
         """Test that the header function prints the correct output."""
         header()

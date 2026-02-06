@@ -924,3 +924,322 @@ class TestChangelog:
         assert issue_old in issue_by_release[1]
         assert issue_new in issue_by_release[2]
         assert changelog.unreleased_issues == [issue_unreleased]
+
+    def test_run_quiet_and_contributors_path(self, mocker) -> None:
+        """Test run covers quiet stdout redirect and contributors update."""
+        changelog = _build_changelog(mocker)
+        changelog.options["quiet"] = True
+        changelog.options["contributors"] = True
+
+        mocker.patch("github_changelog_md.changelog.changelog.header")
+        changelog.rename_sections = MagicMock(return_value=[("Merged", None)])
+        changelog.extend_sections = MagicMock(return_value=[("Merged", None)])
+        changelog.flatten_ignores = MagicMock(return_value=[])
+        changelog.get_repo_data = MagicMock(return_value=MagicMock())
+        changelog.get_repo_releases = MagicMock(return_value=[])
+        changelog.get_closed_prs = MagicMock(return_value=[])
+        changelog.get_closed_issues = MagicMock(return_value=[])
+        changelog.filter_issues = MagicMock(return_value=[])
+        changelog.link_pull_requests = MagicMock(return_value={})
+        changelog.link_issues = MagicMock(return_value={})
+        changelog.generate_changelog = MagicMock()
+        changelog.get_contributors = MagicMock(return_value=[])
+        changelog.update_contributors = MagicMock()
+
+        mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
+        devnull_handle = MagicMock()
+        devnull_ctx = MagicMock()
+        devnull_ctx.__enter__.return_value = devnull_handle
+        devnull_ctx.__exit__.return_value = None
+        mock_path.return_value.open.return_value = devnull_ctx
+
+        changelog.run()
+
+        changelog.get_contributors.assert_called_once()
+        changelog.update_contributors.assert_called_once()
+
+    def test_update_contributors_ignores_known_bots(self, mocker) -> None:
+        """Test update_contributors skips IGNORED_CONTRIBUTORS logins."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock(name="repo_data")
+        changelog.repo_data.name = "repo"
+
+        ignored = MagicMock()
+        ignored.login = "dependabot[bot]"
+        ignored.name = "Dependabot"
+        ignored.html_url = "https://github.com/apps/dependabot"
+        normal = MagicMock()
+        normal.login = "dev-user"
+        normal.name = "Dev User"
+        normal.html_url = "https://github.com/dev-user"
+        changelog.contributors = [ignored, normal]
+
+        mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
+        mock_path.cwd.return_value = Path("test_cwd")
+        file_handle = MagicMock()
+        mock_path.return_value.open.return_value.__enter__.return_value = (
+            file_handle
+        )
+
+        changelog.update_contributors()
+        rendered = "".join(
+            call.args[0] for call in file_handle.write.call_args_list
+        )
+        assert "dependabot[bot]" not in rendered
+        assert "dev-user" in rendered
+
+    def test_generate_changelog_with_skip_and_no_depends(self, mocker) -> None:
+        """Test generate_changelog skip message and depends warning block."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
+        changelog.repo_releases = [MagicMock(tag_name="v1.0.0")]
+        changelog.options["skip_releases"] = ["v0.9.0"]
+        changelog.options["show_depends"] = False
+        changelog.options["show_unreleased"] = True
+        changelog.process_unreleased = MagicMock()
+        changelog.process_release = MagicMock()
+
+        mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
+        mock_path.cwd.return_value = Path("test_cwd")
+        file_handle = MagicMock()
+        mock_path.return_value.open.return_value.__enter__.return_value = (
+            file_handle
+        )
+
+        changelog.generate_changelog()
+        rendered = "".join(
+            call.args[0] for call in file_handle.write.call_args_list
+        )
+        assert "Dependency updates are excluded" in rendered
+        changelog.process_unreleased.assert_called_once()
+        changelog.process_release.assert_called_once()
+        assert changelog.prev_release == changelog.repo_releases[0]
+
+    def test_process_release_skip_prev_release_and_title(
+        self,
+        mocker,
+    ) -> None:
+        """Test process_release skip branch and title/diff rendering branch."""
+        changelog = _build_changelog(mocker)
+        changelog.options["skip_releases"] = ["v1.0.0"]
+        release = MagicMock(
+            id=1,
+            tag_name="v1.0.0",
+            created_at=datetime.datetime(
+                2021, 1, 1, tzinfo=datetime.timezone.utc
+            ),
+            html_url="https://github.com/user/repo/releases/tag/v1.0.0",
+            title="Release Title",
+        )
+        out = MagicMock()
+        changelog.process_release(out, release)
+        out.write.assert_not_called()
+
+        changelog.options["skip_releases"] = None
+        changelog.prev_release = "HEAD"
+        changelog.generate_diff_url = MagicMock()
+        changelog.show_before_text = MagicMock()
+        changelog.check_yanked = MagicMock()
+        changelog.show_release_text = MagicMock()
+        changelog.rprint_issues = MagicMock()
+        changelog.rprint_prs = MagicMock()
+        changelog.pr_by_release = {1: [MagicMock()]}
+        changelog.issue_by_release = {1: [MagicMock()]}
+        mocker.patch(
+            "github_changelog_md.changelog.changelog.title_unique",
+            return_value=True,
+        )
+        out = MagicMock()
+        changelog.process_release(out, release)
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "**_Release Title_**" in rendered
+        changelog.generate_diff_url.assert_called_once()
+
+    def test_show_release_text_accepts_release_instance(self, mocker) -> None:
+        """Test show_release_text branch when given a release instance."""
+        changelog = _build_changelog(mocker)
+        changelog.release_text_cache.release_text_by_release = {
+            "v1.0.0": "Text"
+        }
+
+        class FakeRelease:
+            def __init__(self) -> None:
+                self.tag_name = "v1.0.0"
+
+        mocker.patch(
+            "github_changelog_md.changelog.changelog.GitRelease",
+            FakeRelease,
+        )
+        out = MagicMock()
+        changelog.show_release_text(out, cast("Any", FakeRelease()))
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert rendered == "Text\n\n"
+
+    def test_rprint_issues_skips_ignored_labels(self, mocker) -> None:
+        """Test rprint_issues drops issues with ignored labels."""
+        changelog = _build_changelog(mocker)
+        changelog.options["show_issues"] = True
+        changelog.ignored_labels = ["wontfix"]
+        issue = MagicMock()
+        issue.number = 7
+        issue.title = "Ignored issue"
+        issue.html_url = "https://github.com/user/repo/issues/7"
+        label = MagicMock()
+        label.name = "wontfix"
+        issue.labels = [label]
+        issue.closed_by = MagicMock(
+            login="dev",
+            html_url="https://github.com/dev",
+        )
+        out = MagicMock()
+        changelog.rprint_issues(out, [issue])
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "[#7]" not in rendered
+
+    def test_generate_diff_url_with_release_prev(self, mocker) -> None:
+        """Test generate_diff_url branch when prev_release is release object."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
+        changelog.options["show_diff"] = False
+        changelog.options["show_patch"] = False
+
+        class FakeRelease:
+            def __init__(self, tag_name: str) -> None:
+                self.tag_name = tag_name
+
+        mocker.patch(
+            "github_changelog_md.changelog.changelog.GitRelease",
+            FakeRelease,
+        )
+        out = MagicMock()
+        changelog.generate_diff_url(
+            out,
+            cast("Any", FakeRelease("v0.9.0")),
+            cast("Any", FakeRelease("v1.0.0")),
+        )
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "v1.0.0...v0.9.0" in rendered
+        assert "[`Diff`]" not in rendered
+        assert "[`Patch`]" not in rendered
+
+    def test_rprint_prs_skips_dependencies_when_disabled(self, mocker) -> None:
+        """Test rprint_prs skips dependency section when show_depends=False."""
+        changelog = _build_changelog(mocker)
+        changelog.options["show_depends"] = False
+        changelog.sections = [("Dependency Updates", "dependencies")]
+        changelog.ignored_labels = []
+
+        dep_pr = MagicMock()
+        dep_pr.labels = [MagicMock(name="dependencies")]
+        dep_pr.number = 1
+        dep_pr.title = "dep"
+        dep_pr.html_url = "https://github.com/user/repo/pull/1"
+        dep_pr.user = MagicMock(login="bot", html_url="https://github.com/bot")
+
+        changelog.get_release_sections = MagicMock(
+            return_value={"Dependency Updates": [dep_pr]}
+        )
+        out = MagicMock()
+        changelog.rprint_prs(out, [dep_pr])
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "Dependency Updates" not in rendered
+
+    def test_get_sorted_items_unknown_order_returns_input(self, mocker) -> None:
+        """Test get_sorted_items returns input for unknown ordering value."""
+        changelog = _build_changelog(mocker)
+        changelog.options["item_order"] = "keep"
+        items = [MagicMock(number=2), MagicMock(number=1)]
+        assert changelog.get_sorted_items(items) is items
+
+    def test_get_latest_release_date_uses_first_commit_when_no_releases(
+        self,
+        mocker,
+    ) -> None:
+        """Test get_latest_release_date falls back to first commit date."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_releases = []
+        first_date = datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc)
+        first_commit = MagicMock()
+        first_commit.commit.committer.date = first_date
+        changelog.repo_data = MagicMock()
+        changelog.repo_data.get_commits.return_value.reversed = [first_commit]
+
+        assert changelog.get_latest_release_date() == first_date
+
+    def test_filter_issues_drops_pull_requests(self, mocker) -> None:
+        """Test filter_issues keeps only issues without pull_request marker."""
+        changelog = _build_changelog(mocker)
+        issue = MagicMock(pull_request=None)
+        pr_issue = MagicMock(pull_request=MagicMock())
+        changelog.repo_issues = cast("Any", [issue, pr_issue])
+
+        filtered = changelog.filter_issues()
+        assert filtered == [issue]
+
+    def test_api_wrapper_methods_success_and_error_paths(self, mocker) -> None:
+        """Test API wrapper methods success/error branches."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock()
+
+        issues = MagicMock(totalCount=2)
+        pulls = MagicMock(totalCount=3)
+        releases = MagicMock(totalCount=1)
+        releases.__iter__.return_value = iter([MagicMock(tag_name="v1.0.0")])
+        changelog.repo_data.get_issues.return_value = issues
+        changelog.repo_data.get_pulls.return_value = pulls
+        changelog.repo_data.get_releases.return_value = releases
+
+        assert changelog.get_closed_issues() == issues
+        assert changelog.get_closed_prs() == pulls
+        assert len(changelog.get_repo_releases()) == 1
+
+        git_error_mock = mocker.patch(
+            "github_changelog_md.changelog.changelog.git_error",
+            side_effect=typer.Exit(ExitErrors.GIT_ERROR),
+        )
+        changelog.repo_data.get_issues.side_effect = GithubException(
+            status=500,
+            data={"message": "boom"},
+        )
+        with pytest.raises(typer.Exit):
+            changelog.get_closed_issues()
+        assert git_error_mock.called
+
+        changelog.repo_data.get_pulls.side_effect = GithubException(
+            status=500,
+            data={"message": "boom"},
+        )
+        with pytest.raises(typer.Exit):
+            changelog.get_closed_prs()
+
+        changelog.repo_data.get_releases.side_effect = GithubException(
+            status=500,
+            data={"message": "boom"},
+        )
+        with pytest.raises(typer.Exit):
+            changelog.get_repo_releases()
+
+    def test_get_repo_data_success_and_error(self, mocker) -> None:
+        """Test get_repo_data success and exception handling."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_name = "repo"
+        changelog.user = None
+        user_obj = MagicMock(login="owner")
+        repo_obj = MagicMock(full_name="owner/repo")
+        changelog.git = MagicMock()
+        changelog.git.get_user.return_value = user_obj
+        changelog.git.get_user.return_value.get_repo.return_value = repo_obj
+
+        assert changelog.get_repo_data() == repo_obj
+
+        git_error_mock = mocker.patch(
+            "github_changelog_md.changelog.changelog.git_error",
+            side_effect=typer.Exit(ExitErrors.GIT_ERROR),
+        )
+        changelog.git.get_user.side_effect = GithubException(
+            status=404,
+            data={"message": "no repo"},
+        )
+        with pytest.raises(typer.Exit):
+            changelog.get_repo_data()
+        assert git_error_mock.called
