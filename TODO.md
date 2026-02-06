@@ -11,6 +11,7 @@ Items marked with:
 in the next release.
 
 ## Features to Add
+
 - If there are no releases, say that at the bottom. Allow the text for this to
   be customized in the config file.
 - Add a list of releases that should be ignored.
@@ -106,7 +107,6 @@ in the next release.
 
 ## Testing
 
-- Complete testing with `pytest` to 100% or as close as possible.
 - The whole `test_changelog.py` file needs to be re-written and find a better
   way to deal with missing options.
 
