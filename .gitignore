@@ -216,3 +216,8 @@ pyrightconfig.json
 .changelog_gen.toml
 .changelog_generator.toml
 .envrc
+
+# AI Stuff
+.claude/
+CLAUDE.md
+AGENTS.md
