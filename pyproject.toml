@@ -14,22 +14,22 @@ dependencies = [
 license = "MIT"
 authors = [{ name = "Grant Ramsay", email = "seapagan@gmail.com" }]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Documentation",
-    "Topic :: Software Development :: Version Control",
-    "Topic :: System :: Monitoring",
-    "Topic :: Terminals",
-    "Topic :: Utilities",
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Documentation",
+  "Topic :: Software Development :: Version Control",
+  "Topic :: System :: Monitoring",
+  "Topic :: Terminals",
+  "Topic :: Utilities",
 ]
 
 [project.scripts]
@@ -55,7 +55,6 @@ dev = [
   "mock>=5.1.0",
   "mypy>=1.13.0",
   "poethepoet>=0.29.0",
-  "pre-commit>=4.0.1",
   "pyfakefs>=5.7.1",
   "pymarkdownlnt>=0.9.24",
   "pytest>=8.3.3",
@@ -73,18 +72,19 @@ dev = [
   "mkdocs-minify-plugin>=0.8.0",
   "pymdown-extensions>=10.12",
   "pygments>=2.18.0",
+  "prek>=0.3.1",
 ]
 
 [tool.poe.tasks]
 # setup PoeThePoet tasks
-pre.cmd = "pre-commit run --all-files"
-pre.help = "Run pre-commit checks"
+pre.cmd = "prek run --all-files"
+pre.help = "Run pre-commit checks using 'prek'"
 mypy.cmd = "mypy . --strict --exclude site --exclude docs"
 mypy.help = "Run mypy checks"
 format.help = "Format code with Ruff"
 format.cmd = "ruff format ."
 ruff.help = "Run Ruff checks"
-ruff.cmd = "ruff check ."
+ruff.cmd = "ruff check . --output-format concise"
 test.help = "Run tests using Pytest"
 test.cmd = "pytest"
 markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md"
