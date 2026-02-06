@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import subprocess
 from importlib import metadata
 from pathlib import Path
 from typing import TYPE_CHECKING
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -42,25 +44,29 @@ class TestHelpers:
     patch_get_toml = "github_changelog_md.helpers.get_toml_path"
     test_toml_path = "tests/data/pyproject.toml"
 
-    def test_get_repo_name_with_git_config(self, mocker: MockerFixture) -> None:
-        """Test get_repo_name function with a valid git config file."""
-        mocker.patch(
-            "pathlib.Path.open",
-            mocker.mock_open(
-                read_data=(
-                    '[remote "origin"]\n'
-                    "url = https://github.com/user/repo.git\n"
-                ),
-            ),
-        )
-        assert get_repo_name() == "repo"
-
-    def test_get_repo_name_without_git_config(
+    def test_get_repo_name_with_origin_remote(
         self,
         mocker: MockerFixture,
     ) -> None:
-        """Test get_repo_name function without a git config file."""
-        mocker.patch("pathlib.Path.exists", return_value=False)
+        """Test get_repo_name function with a valid origin remote URL."""
+        mocker.patch(
+            "github_changelog_md.helpers.subprocess.run",
+            return_value=MagicMock(stdout="https://github.com/user/repo.git\n"),
+        )
+        assert get_repo_name() == "repo"
+
+    def test_get_repo_name_without_origin_remote(
+        self,
+        mocker: MockerFixture,
+    ) -> None:
+        """Test get_repo_name function when origin remote cannot be read."""
+        mocker.patch(
+            "github_changelog_md.helpers.subprocess.run",
+            side_effect=subprocess.CalledProcessError(
+                returncode=2,
+                cmd=["git", "remote", "get-url", "origin"],
+            ),
+        )
         assert get_repo_name() is None
 
     def test_header(self, capsys: pytest.CaptureFixture[str]) -> None:
