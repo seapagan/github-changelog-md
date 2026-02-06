@@ -6,34 +6,27 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
-
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
-
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
+## [0.9.7](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.7) (February 06, 2026)
 
 **New Features**
 
+- CI: add Python 3.13/3.14 matrix and 3.14 classifier ([#381](https://github.com/seapagan/github-changelog-md/pull/381)) by [seapagan](https://github.com/seapagan)
 - Update deps and fix pyproject.toml to latest `uv` requirements ([#370](https://github.com/seapagan/github-changelog-md/pull/370)) by [seapagan](https://github.com/seapagan)
+
+**Refactoring**
+
+- Replace pre-commit with prek and update hooks ([#377](https://github.com/seapagan/github-changelog-md/pull/377)) by [seapagan](https://github.com/seapagan)
 
 **Dependency Updates**
 
+- Update required deps to fix security alerts and regenerate requirements files ([#380](https://github.com/seapagan/github-changelog-md/pull/380)) by [seapagan](https://github.com/seapagan)
+- Chore(deps): update dependency uv_build to >=0.10.0,<0.11.0 ([#376](https://github.com/seapagan/github-changelog-md/pull/376)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update actions/checkout action to v6 ([#372](https://github.com/seapagan/github-changelog-md/pull/372)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update astral-sh/setup-uv action to v7 ([#369](https://github.com/seapagan/github-changelog-md/pull/369)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update github/codeql-action action to v4 ([#368](https://github.com/seapagan/github-changelog-md/pull/368)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update actions/checkout action to v5 ([#366](https://github.com/seapagan/github-changelog-md/pull/366)) by [renovate[bot]](https://github.com/apps/renovate)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...0.9.7) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...0.9.7.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.6...0.9.7.patch)
 
 ## [0.9.6](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.6) (July 13, 2025)
 
