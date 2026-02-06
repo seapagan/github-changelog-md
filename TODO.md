@@ -12,7 +12,7 @@ in the next release.
 
 ## Features to Add
 
-- If there are no releases, say that at the bottom. Allow the text for this to
+- :fire: If there are no releases, say that at the bottom. Allow the text for this to
   be customized in the config file.
 - Add a list of releases that should be ignored.
 - Allow ignoring all alpha/beta releases and merge their changes into the next
@@ -25,7 +25,7 @@ in the next release.
   case that releases are out of order.
 - Allow the `extend_sections` option to use a regex on the PR title in addition
   to just matching on the label.
-- Allow custom ordering of sections.
+- :fire: Allow custom ordering of sections.
 - Allow custom output formats (e.g. HTML, PDF, etc.) in addition to the default
   Markdown.
 - Add ability to create a new draft release on GitHub with the latest
