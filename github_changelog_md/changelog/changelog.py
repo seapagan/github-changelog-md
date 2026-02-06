@@ -9,6 +9,7 @@ import contextlib
 import datetime
 import os
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, NoReturn
 
@@ -56,6 +57,20 @@ def git_error(exc: GithubException) -> NoReturn:
     raise typer.Exit(ExitErrors.GIT_ERROR)
 
 
+@dataclass
+class ReleaseTextCache:
+    """Cache release-text settings keyed by release tag."""
+
+    yanked_by_release: dict[str, str] = field(default_factory=dict)
+    release_text_before_by_release: dict[str, str] = field(
+        default_factory=dict
+    )
+    release_text_by_release: dict[str, str] = field(default_factory=dict)
+    release_overrides_by_release: dict[str, str] = field(
+        default_factory=dict
+    )
+
+
 class ChangeLog:
     """Define the Changelog class."""
 
@@ -96,6 +111,45 @@ class ChangeLog:
         self.unreleased: list[PullRequest]
         self.unreleased_issues: list[Issue]
         self.contributors: list[NamedUser]
+        self.release_text_cache = ReleaseTextCache(
+            yanked_by_release=self.build_release_lookup(
+                self.settings.yanked,
+                value_key="reason",
+            ),
+            release_text_before_by_release=self.build_release_lookup(
+                self.settings.release_text_before,
+                value_key="text",
+                strip_value=True,
+            ),
+            release_text_by_release=self.build_release_lookup(
+                self.settings.release_text,
+                value_key="text",
+                strip_value=True,
+            ),
+            release_overrides_by_release=self.build_release_lookup(
+                self.settings.release_overrides,
+                value_key="text",
+            ),
+        )
+
+    @staticmethod
+    def build_release_lookup(
+        values: list[dict[str, str]] | None,
+        value_key: str,
+        *,
+        strip_value: bool = False,
+    ) -> dict[str, str]:
+        """Build a release-tag keyed lookup table for fast text lookups."""
+        if not values:
+            return {}
+
+        lookup: dict[str, str] = {}
+        for value in values:
+            release = value["release"].strip()
+            text = value[value_key].strip() if strip_value else value[value_key]
+            lookup[release] = text
+
+        return lookup
 
     def run(self) -> None:
         """Run the changelog.
@@ -363,20 +417,14 @@ class ChangeLog:
         # show any release text that is defined for this release
         self.show_release_text(f, release)
 
-        if self.settings.release_overrides and release.tag_name in [
-            release_override["release"].strip()
-            for release_override in self.settings.release_overrides
-        ]:
+        if (
+            release.tag_name
+            in self.release_text_cache.release_overrides_by_release
+        ):
             f.write(
-                next(
-                    (
-                        release_override["text"]
-                        for release_override in self.settings.release_overrides
-                        if release_override["release"].strip()
-                        == release.tag_name
-                    ),
-                    "",
-                )
+                self.release_text_cache.release_overrides_by_release[
+                    release.tag_name
+                ]
             )
             f.write("\n")
             return
@@ -390,40 +438,26 @@ class ChangeLog:
 
     def check_yanked(self, f: TextIOWrapper, release: GitRelease) -> None:
         """Note if this release has been yanked, and the reason why."""
-        if self.settings.yanked and release.tag_name in [
-            yanked["release"].strip() for yanked in self.settings.yanked
-        ]:
+        if release.tag_name in self.release_text_cache.yanked_by_release:
             f.write(" **[`YANKED`]**\n\n")
-            reason = next(
-                (
-                    yanked["reason"]
-                    for yanked in self.settings.yanked
-                    if yanked["release"].strip() == release.tag_name
-                ),
-                "",
-            )
             f.write(
                 "**This release has been removed for the following reason and "
                 "should not be used:**\n\n"
-                f"- {reason}"
+                f"- "
+                f"{self.release_text_cache.yanked_by_release[release.tag_name]}"
             )
 
     def show_before_text(self, f: TextIOWrapper, release: GitRelease) -> None:
         """Shows text before this release if it exists."""
-        if self.settings.release_text_before and release.tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text_before
-        ]:
+        if (
+            release.tag_name
+            in self.release_text_cache.release_text_before_by_release
+        ):
             f.write("---\n\n")
             f.write(
-                next(
-                    (
-                        release_text["text"].strip()
-                        for release_text in self.settings.release_text_before
-                        if release_text["release"].strip() == release.tag_name
-                    ),
-                    "",
-                )
+                self.release_text_cache.release_text_before_by_release[
+                    release.tag_name
+                ]
             )
             f.write("\n\n---\n\n")
 
@@ -438,20 +472,8 @@ class ChangeLog:
         else:
             tag_name = release
 
-        if self.settings.release_text and tag_name in [
-            release_text["release"].strip()
-            for release_text in self.settings.release_text
-        ]:
-            f.write(
-                next(
-                    (
-                        release_text["text"].strip()
-                        for release_text in self.settings.release_text
-                        if release_text["release"].strip() == tag_name
-                    ),
-                    "",
-                )
-            )
+        if tag_name in self.release_text_cache.release_text_by_release:
+            f.write(self.release_text_cache.release_text_by_release[tag_name])
             f.write("\n\n")
 
     def get_release_body(

@@ -9,7 +9,58 @@ import typer
 from github import GithubException
 
 from github_changelog_md.changelog.changelog import ChangeLog, git_error
-from github_changelog_md.constants import ExitErrors
+from github_changelog_md.constants import ChangelogOptions, ExitErrors
+
+
+def _default_options() -> ChangelogOptions:
+    return {
+        "user_name": "user",
+        "next_release": None,
+        "show_unreleased": True,
+        "show_depends": True,
+        "output_file": "CHANGELOG.md",
+        "contributors": False,
+        "quiet": False,
+        "skip_releases": None,
+        "show_issues": True,
+        "item_order": "newest-first",
+        "ignore_items": None,
+        "max_depends": 10,
+        "show_diff": True,
+        "show_patch": True,
+    }
+
+
+def _build_changelog(mocker, settings_overrides=None) -> ChangeLog:
+    settings = MagicMock()
+    settings.github_pat = "1234"
+    settings.yanked = None
+    settings.release_text_before = None
+    settings.release_text = None
+    settings.release_overrides = None
+    settings.date_format = "%Y-%m-%d"
+    settings.ignored_users = []
+    settings.intro_text = ""
+    settings.extend_sections = None
+    settings.extend_sections_index = None
+    settings.rename_sections = None
+    settings.ignored_labels = None
+    settings.extend_ignored = None
+    settings.allowed_labels = None
+    if settings_overrides:
+        for key, value in settings_overrides.items():
+            setattr(settings, key, value)
+
+    mocker.patch(
+        "github_changelog_md.changelog.changelog.get_settings",
+        return_value=settings,
+    )
+    mocker.patch(
+        "github_changelog_md.changelog.changelog.Github",
+        return_value=MagicMock(),
+    )
+
+    return ChangeLog("repo", _default_options())
 
 
 @pytest.fixture
@@ -269,3 +320,119 @@ class TestChangelog:
         changelog.link_pull_requests.assert_called_once()
         changelog.link_issues.assert_called_once()
         changelog.generate_changelog.assert_called_once()
+
+    def test_build_release_cache_maps_are_created(self, mocker) -> None:
+        """Test release lookup caches are built at initialization."""
+        changelog = _build_changelog(
+            mocker,
+            {
+                "yanked": [{"release": " v1.0.0 ", "reason": "bad build"}],
+                "release_text_before": [
+                    {"release": " v1.0.0 ", "text": " before text "}
+                ],
+                "release_text": [
+                    {"release": " v1.0.0 ", "text": " release text "}
+                ],
+                "release_overrides": [
+                    {"release": " v1.0.0 ", "text": "override text"}
+                ],
+            },
+        )
+
+        assert (
+            changelog.release_text_cache.yanked_by_release["v1.0.0"]
+            == "bad build"
+        )
+        assert (
+            changelog.release_text_cache.release_text_before_by_release[
+                "v1.0.0"
+            ]
+            == "before text"
+        )
+        assert (
+            changelog.release_text_cache.release_text_by_release["v1.0.0"]
+            == "release text"
+        )
+        assert (
+            changelog.release_text_cache.release_overrides_by_release[
+                "v1.0.0"
+            ]
+            == "override text"
+        )
+
+    def test_check_yanked_uses_cache(self, mocker) -> None:
+        """Test check_yanked reads from release_text_cache."""
+        changelog = _build_changelog(mocker)
+        changelog.release_text_cache.yanked_by_release = {"v1.0.0": "bad build"}
+        out = MagicMock()
+        release = MagicMock(tag_name="v1.0.0")
+
+        changelog.check_yanked(out, release)
+
+        assert any(
+            "`YANKED`" in call.args[0] for call in out.write.call_args_list
+        )
+        assert any(
+            "bad build" in call.args[0] for call in out.write.call_args_list
+        )
+
+    def test_show_before_text_uses_cache(self, mocker) -> None:
+        """Test show_before_text reads from release_text_cache."""
+        changelog = _build_changelog(mocker)
+        changelog.release_text_cache.release_text_before_by_release = {
+            "v1.0.0": "Before text"
+        }
+        out = MagicMock()
+        release = MagicMock(tag_name="v1.0.0")
+
+        changelog.show_before_text(out, release)
+
+        written = "".join(call.args[0] for call in out.write.call_args_list)
+        assert written == "---\n\nBefore text\n\n---\n\n"
+
+    def test_show_release_text_uses_cache(self, mocker) -> None:
+        """Test show_release_text reads from release_text_cache."""
+        changelog = _build_changelog(mocker)
+        changelog.release_text_cache.release_text_by_release = {
+            "v1.0.0": "Release text"
+        }
+        out = MagicMock()
+
+        changelog.show_release_text(out, "v1.0.0")
+
+        written = "".join(call.args[0] for call in out.write.call_args_list)
+        assert written == "Release text\n\n"
+
+    def test_process_release_uses_override_cache(self, mocker) -> None:
+        """Test process_release returns early when override text exists."""
+        changelog = _build_changelog(
+            mocker,
+            {"date_format": "%Y-%m-%d"},
+        )
+        changelog.prev_release = None
+        changelog.release_text_cache.release_overrides_by_release = {
+            "v1.0.0": "Override body"
+        }
+        changelog.pr_by_release = {}
+        changelog.issue_by_release = {}
+        changelog.rprint_issues = MagicMock()
+        changelog.rprint_prs = MagicMock()
+
+        release = MagicMock()
+        release.tag_name = "v1.0.0"
+        release.html_url = "https://github.com/user/repo/releases/tag/v1.0.0"
+        release.created_at = datetime.datetime(
+            2021,
+            1,
+            1,
+            tzinfo=datetime.timezone.utc,
+        )
+        release.title = "v1.0.0"
+
+        out = MagicMock()
+        changelog.process_release(out, release)
+
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "Override body\n" in rendered
+        changelog.rprint_issues.assert_not_called()
+        changelog.rprint_prs.assert_not_called()
