@@ -103,6 +103,7 @@ class ChangeLog:
         self.repo_issues: PaginatedList[Issue]
         self.pr_by_release: dict[int, list[PullRequest]]
         self.issue_by_release: dict[int, list[Issue]]
+        self.prev_release: GitRelease | Literal["HEAD"] | None = None
         self.filtered_repo_issues: list[Issue]
         self.unreleased: list[PullRequest]
         self.unreleased_issues: list[Issue]
@@ -315,7 +316,7 @@ class ChangeLog:
                     "check each `Full Changelog` for details.*\n\n "
                 )
 
-            self.prev_release: GitRelease | (Literal["HEAD"] | None) = None
+            self.prev_release = None
 
             if self.options["show_unreleased"]:
                 self.process_unreleased(f)
@@ -343,7 +344,7 @@ class ChangeLog:
         f: TextIOWrapper,
     ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
-        if len(self.unreleased) > 0 or len(self.unreleased_issues) > 0:
+        if self.unreleased or self.unreleased_issues:
             heading = self.options["next_release"] or "Unreleased"
             text_date = (
                 datetime.datetime.now(tz=datetime.timezone.utc)
@@ -429,7 +430,7 @@ class ChangeLog:
         self.rprint_prs(f, pr_list)
 
         # if no closed releases or PR's then get the release body instead
-        if len(issue_list) == 0 and len(pr_list) == 0:
+        if not issue_list and not pr_list:
             self.get_release_body(f, release)
 
     def check_yanked(self, f: TextIOWrapper, release: GitRelease) -> None:
@@ -507,17 +508,14 @@ class ChangeLog:
     ) -> None:
         """Print all the closed issues for a given release."""
         visible_issues = self.ignore_items(list(issue_list))
-        if len(visible_issues) == 0 or not self.options["show_issues"]:
+        if not visible_issues or not self.options["show_issues"]:
             return
 
         f.write("**Closed Issues**\n\n")
         for issue in self.get_sorted_items(visible_issues):
-            if (
-                any(
-                    label.name.lower() in self.ignored_labels
-                    for label in issue.labels
-                )
-                or "[no changelog]" in issue.title.lower()
+            if any(
+                label.name.lower() in self.ignored_labels
+                for label in issue.labels
             ):
                 continue
             escaped_title = cap_first_letter(
@@ -576,7 +574,7 @@ class ChangeLog:
 
         They are sorted into sections depending on the labels they have.
         """
-        if len(pr_list) == 0:
+        if not pr_list:
             return
 
         release_sections = self.get_release_sections(pr_list)
@@ -612,7 +610,7 @@ class ChangeLog:
 
             visible_prs = self.ignore_items(list(prs))
 
-            if len(visible_prs) > 0:
+            if visible_prs:
                 f.write(f"**{heading}**\n\n")
                 sorted_prs = self.get_sorted_items(visible_prs)
                 display_prs = (
