@@ -354,9 +354,7 @@ class TestChangelog:
             == "release text"
         )
         assert (
-            changelog.release_text_cache.release_overrides_by_release[
-                "v1.0.0"
-            ]
+            changelog.release_text_cache.release_overrides_by_release["v1.0.0"]
             == "override text"
         )
 

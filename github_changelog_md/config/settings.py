@@ -1,9 +1,9 @@
 """Handle the settings for the project."""
 
-import sys
 from pathlib import Path
 from typing import ClassVar, Optional
 
+import typer
 from rich import print as rprint
 from rich.prompt import Prompt
 from simple_toml_settings import TOMLSettings
@@ -67,7 +67,7 @@ def get_pat_input() -> str:
     user_pat = Prompt.ask("[green]\nPlease enter your GitHub PAT[/green] ")
     if not user_pat:
         rprint("[red]No PAT entered, exiting.[/red]")
-        sys.exit(ExitErrors.INVALID_ACTION)
+        raise typer.Exit(ExitErrors.INVALID_ACTION)
     return user_pat
 
 
@@ -88,7 +88,7 @@ def get_settings() -> Settings:
             get_pat = get_pat_input()
         except KeyboardInterrupt:
             rprint("\n[red]Exiting[/red]")
-            sys.exit(ExitErrors.USER_ABORT)
+            raise typer.Exit(ExitErrors.USER_ABORT) from None
 
         try:
             with Path(CONFIG_FILE).open("w") as f:
@@ -101,7 +101,7 @@ def get_settings() -> Settings:
                 "\n[red]Permission denied. Please run the command in a folder "
                 "you have write-access to.[/red]",
             )
-            sys.exit(ExitErrors.PERMISSION_DENIED)
+            raise typer.Exit(ExitErrors.PERMISSION_DENIED) from None
     except SettingsSchemaError as e:
         rprint(f"\n[red]Error in the settings file: [bold]{e}[/bold][/red]")
         rprint(
@@ -109,6 +109,6 @@ def get_settings() -> Settings:
             "check the website at [bold]http://changelog.seapagan.net/[/bold] "
             "for more information.[/purple]\n"
         )
-        sys.exit(ExitErrors.BAD_SCHEMA)
+        raise typer.Exit(ExitErrors.BAD_SCHEMA) from e
 
     return settings

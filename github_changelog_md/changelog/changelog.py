@@ -62,13 +62,9 @@ class ReleaseTextCache:
     """Cache release-text settings keyed by release tag."""
 
     yanked_by_release: dict[str, str] = field(default_factory=dict)
-    release_text_before_by_release: dict[str, str] = field(
-        default_factory=dict
-    )
+    release_text_before_by_release: dict[str, str] = field(default_factory=dict)
     release_text_by_release: dict[str, str] = field(default_factory=dict)
-    release_overrides_by_release: dict[str, str] = field(
-        default_factory=dict
-    )
+    release_overrides_by_release: dict[str, str] = field(default_factory=dict)
 
 
 class ChangeLog:
@@ -230,7 +226,7 @@ class ChangeLog:
                 "found \\[[reverse]rename_sections[/reverse]]\n",
                 file=sys.stderr,
             )
-            sys.exit(ExitErrors.INVALID_ACTION)
+            raise typer.Exit(ExitErrors.INVALID_ACTION) from None
 
         return sections
 

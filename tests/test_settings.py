@@ -3,6 +3,7 @@
 
 import pytest
 import pytest_mock
+import typer
 from simple_toml_settings.exceptions import SettingsNotFoundError
 
 from github_changelog_md.config.settings import (
@@ -59,7 +60,7 @@ class TestSettings:
     ) -> None:
         """Test when we get an invalid PAT from the user."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "")
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_pat_input()
 
         assert exc.value.args[0] == ExitErrors.INVALID_ACTION
@@ -80,7 +81,7 @@ class TestSettings:
         bad_schema,  # noqa: ARG002
     ) -> None:
         """Test we can get a settings object."""
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.BAD_SCHEMA
@@ -109,7 +110,7 @@ class TestSettings:
             MOCK_PROMPT_ASK,
             side_effect=KeyboardInterrupt,
         )
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.USER_ABORT
@@ -127,7 +128,7 @@ class TestSettings:
             "pathlib.Path.open",
             side_effect=PermissionError,
         )
-        with pytest.raises(SystemExit) as exc:
+        with pytest.raises(typer.Exit) as exc:
             get_settings()
 
         assert exc.value.args[0] == ExitErrors.PERMISSION_DENIED
