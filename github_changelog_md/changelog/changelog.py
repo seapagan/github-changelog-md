@@ -595,12 +595,13 @@ class ChangeLog:
             pr
             for pr in pr_list
             if not any(
-                label in [label.name.lower() for label in pr.labels]
-                for _, label in self.sections
+                section_label
+                in [pr_label.name.lower() for pr_label in pr.labels]
+                for _, section_label in self.sections
             )
             and not any(
-                label in self.ignored_labels
-                for label in [label.name.lower() for label in pr.labels]
+                pr_label.name.lower() in self.ignored_labels
+                for pr_label in pr.labels
             )
         ]
 
@@ -674,13 +675,14 @@ class ChangeLog:
             heading: [
                 pr
                 for pr in pr_list
-                if label in [label.name.lower() for label in pr.labels]
+                if section_label
+                in [pr_label.name.lower() for pr_label in pr.labels]
                 and not any(
-                    label in self.ignored_labels
-                    for label in [label.name.lower() for label in pr.labels]
+                    pr_label.name.lower() in self.ignored_labels
+                    for pr_label in pr.labels
                 )
             ]
-            for heading, label in self.sections
+            for heading, section_label in self.sections
         }
 
     def link_issues(self) -> dict[int, list[Issue]]:
