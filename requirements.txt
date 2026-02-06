@@ -32,7 +32,7 @@ pygments==2.19.2
     # via rich
 pyjwt==2.10.1
     # via pygithub
-pynacl==1.6.0
+pynacl==1.6.2
     # via pygithub
 requests==2.32.5
     # via pygithub
@@ -40,7 +40,11 @@ rich==14.2.0
     # via
     #   github-changelog-md
     #   typer
-rtoml==0.12.0
+rtoml==0.12.0 ; python_full_version < '3.10'
+    # via
+    #   github-changelog-md
+    #   simple-toml-settings
+rtoml==0.13.0 ; python_full_version >= '3.10'
     # via
     #   github-changelog-md
     #   simple-toml-settings
@@ -55,7 +59,7 @@ typing-extensions==4.15.0
     #   cryptography
     #   pygithub
     #   typer
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   pygithub
     #   requests
