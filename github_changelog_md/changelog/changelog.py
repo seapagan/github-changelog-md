@@ -6,6 +6,7 @@ This will encapsulate the logic for generating the changelog.
 # mypy: disable-error-code="no-untyped-def"
 from __future__ import annotations
 
+import contextlib
 import datetime
 import os
 import sys
@@ -101,39 +102,39 @@ class ChangeLog:
         Each individual step is a method that will be called in order, and
         contains it's own error handling.
         """
-        if self.options["quiet"]:
-            orig_stdout = sys.stdout
-            out = open(os.devnull, "w")  # noqa: SIM115, PTH123
-            sys.stdout = out
+        with contextlib.ExitStack() as stack:
+            if self.options["quiet"]:
+                devnull = stack.enter_context(
+                    Path(os.devnull).open("w")
+                )
+                stack.enter_context(
+                    contextlib.redirect_stdout(devnull)
+                )
 
-        header()
+            header()
 
-        self.sections = self.rename_sections(self.extend_sections())
-        self.ignored_labels = self.flatten_ignores()
+            self.sections = self.rename_sections(self.extend_sections())
+            self.ignored_labels = self.flatten_ignores()
 
-        self.repo_data = self.get_repo_data()
-        self.repo_releases = self.get_repo_releases()
-        self.repo_prs = self.get_closed_prs()
-        self.repo_issues = self.get_closed_issues()
-        # filter out PRs from actual issues (PR's are issues too but
-        # we don't want them in the list).
-        self.filtered_repo_issues = self.filter_issues()
+            self.repo_data = self.get_repo_data()
+            self.repo_releases = self.get_repo_releases()
+            self.repo_prs = self.get_closed_prs()
+            self.repo_issues = self.get_closed_issues()
+            # filter out PRs from actual issues (PR's are issues too but
+            # we don't want them in the list).
+            self.filtered_repo_issues = self.filter_issues()
 
-        self.pr_by_release = self.link_pull_requests()
-        self.issue_by_release = self.link_issues()
+            self.pr_by_release = self.link_pull_requests()
+            self.issue_by_release = self.link_issues()
 
-        # actually generate the changelog file from all the data we have
-        # collected.
-        self.generate_changelog()
+            # actually generate the changelog file from all the data we have
+            # collected.
+            self.generate_changelog()
 
-        # update the CONTRIBUTORS.md file if requested
-        if self.options["contributors"]:
-            self.contributors = self.get_contributors()
-            self.update_contributors()
-
-        if self.options["quiet"]:
-            sys.stdout = orig_stdout
-            out.close()
+            # update the CONTRIBUTORS.md file if requested
+            if self.options["contributors"]:
+                self.contributors = self.get_contributors()
+                self.update_contributors()
 
     def flatten_ignores(self) -> list[str]:
         """Process the ignored labels.
@@ -185,7 +186,7 @@ class ChangeLog:
     def extend_sections(self) -> list[SectionHeadings]:
         """Extend the default sections with any user defined ones."""
         if not self.settings.extend_sections:
-            return SECTIONS
+            return list(SECTIONS)
 
         extend_sections = [
             (section["title"], section["label"])
@@ -474,7 +475,7 @@ class ChangeLog:
                     body_lines.pop(i)
                     break
             body = "\n".join(body_lines)
-            if body.strip() and body[-2] != "\n":
+            if body.strip() and not body.endswith("\n"):
                 body += "\n"
             f.write(body)
         else:
