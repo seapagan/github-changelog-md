@@ -3,6 +3,7 @@
 # mypy: disable-error-code="no-untyped-def"
 import datetime
 from pathlib import Path
+from typing import Any, cast
 from unittest.mock import MagicMock
 
 import pytest
@@ -699,3 +700,227 @@ class TestChangelog:
         assert "Intro line\n\n" in rendered
         assert "This changelog was generated using" in rendered
         changelog.process_unreleased.assert_not_called()
+
+    def test_flatten_ignores_with_extend_and_allowlist(self, mocker) -> None:
+        """Test flatten_ignores combines defaults and removes allowed labels."""
+        changelog = _build_changelog(mocker)
+        changelog.settings.ignored_labels = None
+        changelog.settings.extend_ignored = ["bot-only"]
+        changelog.settings.allowed_labels = ["question"]
+
+        result = changelog.flatten_ignores()
+
+        assert "bot-only" in result
+        assert "question" not in result
+
+    def test_flatten_ignores_uses_explicit_list(self, mocker) -> None:
+        """Test flatten_ignores returns explicit ignored_labels unchanged."""
+        changelog = _build_changelog(mocker)
+        changelog.settings.ignored_labels = ["foo", "bar"]
+
+        assert changelog.flatten_ignores() == ["foo", "bar"]
+
+    def test_rename_sections_success(self, mocker) -> None:
+        """Test rename_sections updates matching headings."""
+        changelog = _build_changelog(mocker)
+        changelog.settings.rename_sections = [
+            {"old": "Bug Fixes", "new": "Fixes"}
+        ]
+        sections = cast(
+            "list[tuple[str, str | None]]",
+            [("Bug Fixes", "bug"), ("Merged Pull Requests", None)],
+        )
+
+        renamed = changelog.rename_sections(sections)
+
+        assert ("Fixes", "bug") in renamed
+
+    def test_rename_sections_invalid_raises_exit(self, mocker) -> None:
+        """Test rename_sections exits when old heading does not exist."""
+        changelog = _build_changelog(mocker)
+        changelog.settings.rename_sections = [{"old": "Nope", "new": "New"}]
+        sections = cast(
+            "list[tuple[str, str | None]]",
+            [("Bug Fixes", "bug")],
+        )
+
+        with pytest.raises(typer.Exit) as exc:
+            changelog.rename_sections(sections)
+
+        assert exc.value.args[0] == ExitErrors.INVALID_ACTION
+
+    def test_extend_sections_with_insert_index(self, mocker) -> None:
+        """Test extend_sections inserts custom sections at configured index."""
+        changelog = _build_changelog(mocker)
+        changelog.settings.extend_sections = [
+            {"title": "Security", "label": "security"}
+        ]
+        changelog.settings.extend_sections_index = 1
+
+        sections = changelog.extend_sections()
+
+        assert sections[1] == ("Security", "security")
+
+    def test_get_contributors_deduplicates_and_sorts(self, mocker) -> None:
+        """Test get_contributors removes duplicates and sorts by name/login."""
+        changelog = _build_changelog(mocker)
+        user_b = MagicMock(login="b-user")
+        user_b.name = "B User"
+        user_a = MagicMock(login="a-user")
+        user_a.name = "A User"
+        changelog.repo_prs = cast(
+            "Any",
+            [
+                MagicMock(user=user_b),
+                MagicMock(user=user_a),
+                MagicMock(user=user_b),
+            ],
+        )
+
+        contributors = changelog.get_contributors()
+
+        assert [u.login for u in contributors] == ["a-user", "b-user"]
+
+    def test_ignore_items_and_get_sorted_items(self, mocker) -> None:
+        """Test ignore_items filtering and get_sorted_items ordering."""
+        changelog = _build_changelog(mocker)
+        changelog.options["ignore_items"] = [2]
+        items = [
+            MagicMock(number=1, title="One"),
+            MagicMock(number=2, title="Two"),
+            MagicMock(number=3, title="[no changelog] hidden"),
+        ]
+
+        filtered = changelog.ignore_items(cast("Any", items))
+        assert [item.number for item in filtered] == [1]
+
+        changelog.options["item_order"] = "oldest-first"
+        sorted_items = changelog.get_sorted_items(
+            [MagicMock(number=3), MagicMock(number=1)]
+        )
+        assert [item.number for item in sorted_items] == [1, 3]
+
+    def test_get_release_sections_respects_ignored_labels(self, mocker) -> None:
+        """Test get_release_sections excludes PRs with ignored labels."""
+        changelog = _build_changelog(mocker)
+        changelog.sections = [("Bug Fixes", "bug")]
+        changelog.ignored_labels = ["wontfix"]
+
+        bug = MagicMock()
+        bug_label = MagicMock()
+        bug_label.name = "bug"
+        bug.labels = [bug_label]
+        ignored = MagicMock()
+        ignored_label_1 = MagicMock()
+        ignored_label_1.name = "bug"
+        ignored_label_2 = MagicMock()
+        ignored_label_2.name = "wontfix"
+        ignored.labels = [ignored_label_1, ignored_label_2]
+
+        grouped = changelog.get_release_sections([bug, ignored])
+
+        assert grouped["Bug Fixes"] == [bug]
+
+    def test_link_pull_requests_and_issues_assign_and_track_unreleased(
+        self,
+        mocker,
+    ) -> None:
+        """Test linking assigns items by release date and tracks unreleased."""
+        changelog = _build_changelog(mocker)
+        cast("Any", changelog.settings).ignored_users = ["ignored-bot"]
+
+        rel_old = MagicMock(
+            id=1,
+            created_at=datetime.datetime(
+                2021, 1, 1, tzinfo=datetime.timezone.utc
+            ),
+        )
+        rel_new = MagicMock(
+            id=2,
+            created_at=datetime.datetime(
+                2021, 1, 10, tzinfo=datetime.timezone.utc
+            ),
+        )
+        changelog.repo_releases = [rel_new, rel_old]
+        changelog.get_latest_release_date = MagicMock(
+            return_value=datetime.datetime(
+                2021, 1, 10, tzinfo=datetime.timezone.utc
+            )
+        )
+
+        pr_old = MagicMock(
+            id=101,
+            merged_at=datetime.datetime(
+                2021, 1, 1, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev1"),
+        )
+        pr_new = MagicMock(
+            id=102,
+            merged_at=datetime.datetime(
+                2021, 1, 5, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev2"),
+        )
+        pr_unreleased = MagicMock(
+            id=103,
+            merged_at=datetime.datetime(
+                2021, 1, 11, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev3"),
+        )
+        pr_ignored = MagicMock(
+            id=104,
+            merged_at=datetime.datetime(
+                2021, 1, 2, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="ignored-bot"),
+        )
+        changelog.repo_prs = cast(
+            "Any", [pr_old, pr_new, pr_unreleased, pr_ignored]
+        )
+
+        issue_old = MagicMock(
+            id=201,
+            closed_at=datetime.datetime(
+                2021, 1, 1, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev1"),
+        )
+        issue_new = MagicMock(
+            id=202,
+            closed_at=datetime.datetime(
+                2021, 1, 7, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev2"),
+        )
+        issue_unreleased = MagicMock(
+            id=203,
+            closed_at=datetime.datetime(
+                2021, 1, 12, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="dev3"),
+        )
+        issue_ignored = MagicMock(
+            id=204,
+            closed_at=datetime.datetime(
+                2021, 1, 2, tzinfo=datetime.timezone.utc
+            ),
+            user=MagicMock(login="ignored-bot"),
+        )
+        changelog.filtered_repo_issues = [
+            issue_old,
+            issue_new,
+            issue_unreleased,
+            issue_ignored,
+        ]
+
+        pr_by_release = changelog.link_pull_requests()
+        issue_by_release = changelog.link_issues()
+
+        assert pr_old in pr_by_release[1]
+        assert pr_new in pr_by_release[2]
+        assert changelog.unreleased == [pr_unreleased]
+        assert issue_old in issue_by_release[1]
+        assert issue_new in issue_by_release[2]
+        assert changelog.unreleased_issues == [issue_unreleased]
