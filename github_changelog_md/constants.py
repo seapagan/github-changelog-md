@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from enum import IntEnum
-from typing import TypedDict
+from typing import Optional, TypedDict
 
-SectionHeadings = tuple[str, str | None]
+SectionHeadings = tuple[str, Optional[str]]
 
 
 class ChangelogOptions(TypedDict):
