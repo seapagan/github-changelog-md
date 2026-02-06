@@ -6,6 +6,18 @@ project since the first release.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.9.8](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.8) (February 06, 2026)
+
+**New Features**
+
+- Fix: critical correctness and performance bugs ([#383](https://github.com/seapagan/github-changelog-md/pull/383)) by [seapagan](https://github.com/seapagan)
+
+**Testing**
+
+- Test: expand changelog coverage ([#384](https://github.com/seapagan/github-changelog-md/pull/384)) by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.7...0.9.8) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.7...0.9.8.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.7...0.9.8.patch)
+
 ## [0.9.7](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.7) (February 06, 2026)
 
 **New Features**

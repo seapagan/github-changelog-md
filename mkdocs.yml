@@ -37,7 +37,7 @@ extra:
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
 
-copyright: © 2023-2024 Grant Ramsay (Seapagan)
+copyright: © 2023-2026 Grant Ramsay (Seapagan)
 
 hooks:
   - docs/hooks/google_style_notes.py
