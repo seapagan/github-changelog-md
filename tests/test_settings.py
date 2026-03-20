@@ -35,7 +35,7 @@ class TestSettings:
             get_settings_object()
 
         assert (
-            exc.value.args[0] == "Cant find a Config File, please create one."
+            exc.value.args[0] == "Can't find a Config File, please create one."
         )
 
     def test_get_settings_object_suceeds(self, fs) -> None:
