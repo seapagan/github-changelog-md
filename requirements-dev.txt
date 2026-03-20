@@ -44,7 +44,7 @@ columnar==1.4.1
     # via pymarkdownlnt
 coverage==7.10.7
     # via pytest-cov
-cryptography==46.0.2
+cryptography==46.0.5
     # via pyjwt
 csscompressor==0.9.5
     # via mkdocs-minify-plugin
@@ -157,7 +157,7 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
 poethepoet==0.37.0
-prek==0.3.1
+prek==0.3.6
 pycparser==2.23 ; implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'
     # via cffi
 pydantic==2.12.0
@@ -174,7 +174,7 @@ pygments==2.19.2
     #   rich
 pyjson5==2.0.0
     # via application-properties
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via pygithub
 pymarkdownlnt==0.9.32
 pymdown-extensions==10.16.1
@@ -227,7 +227,7 @@ rtoml==0.13.0 ; python_full_version >= '3.10'
     # via
     #   github-changelog-md
     #   simple-toml-settings
-ruff==0.15.0
+ruff==0.15.7
 shellingham==1.5.4
     # via typer
 simple-toml-settings==0.9.1
@@ -267,6 +267,7 @@ typing-extensions==4.15.0
     #   pydantic
     #   pydantic-core
     #   pygithub
+    #   pyjwt
     #   pymarkdownlnt
     #   typer
     #   typing-inspection
