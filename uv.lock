@@ -2233,15 +2233,15 @@ wheels = [
 
 [[package]]
 name = "simple-toml-settings"
-version = "0.9.1"
+version = "0.12.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "rtoml", version = "0.12.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "rtoml", version = "0.13.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ad/cc/e04aafe9409660c95a2b24edbea85dc957d260d89e4a5d427c33a922162c/simple_toml_settings-0.9.1.tar.gz", hash = "sha256:f51a45ffe8d0e03de617237017529d42e7041625cf781110336021dc21199024", size = 114338, upload-time = "2025-08-10T10:05:10.625Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/6a/f62fdc215afe3c6dba22af144e1b5e430969840c1e86fef34a2e94a9997b/simple_toml_settings-0.12.0.tar.gz", hash = "sha256:bf375761386177c86b9cd87340d05a80f58990524a65d2392ee979acbfc2538f", size = 8554, upload-time = "2026-02-28T12:16:04.405Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/b9/bcf41ee447ca6338edc9e591940ccbaf6c7a9dc8f53da2e126b27da33378/simple_toml_settings-0.9.1-py3-none-any.whl", hash = "sha256:5e726f6516160530ade18caa136eaa42c04217b92755bc50b2c028b31d0056f0", size = 8353, upload-time = "2025-08-10T10:05:09.168Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/3d/7bf67f9158e77bb91a43cefb7753a6c177d92740905b1ed2f2af3a948ba1/simple_toml_settings-0.12.0-py3-none-any.whl", hash = "sha256:450a99e5b3624b218f492e2f5ec1b3954c86a47bb0537f905e1b09cea8a924b0", size = 8891, upload-time = "2026-02-28T12:16:02.823Z" },
 ]
 
 [[package]]

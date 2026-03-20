@@ -52,7 +52,7 @@ rtoml==0.13.0 ; python_full_version >= '3.10'
     #   simple-toml-settings
 shellingham==1.5.4
     # via typer
-simple-toml-settings==0.9.1
+simple-toml-settings==0.12.0
     # via github-changelog-md
 typer==0.23.2 ; python_full_version < '3.10'
     # via github-changelog-md
