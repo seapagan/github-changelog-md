@@ -38,7 +38,7 @@ pynacl==1.6.2
     # via pygithub
 requests==2.32.5
     # via pygithub
-rich==14.2.0
+rich==14.3.3
     # via
     #   github-changelog-md
     #   typer
