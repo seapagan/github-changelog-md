@@ -12,9 +12,13 @@ from github_changelog_md.constants import CONFIG_FILE
 @pytest.fixture(autouse=True)
 def _reset_settings_singleton() -> Generator[None]:
     """Clear the Settings singleton between tests."""
-    Settings._instances.pop(Settings, None)  # noqa: SLF001
+    Settings._instances.pop(  # noqa: SLF001
+        (Settings, "changelog_generator"), None
+    )
     yield
-    Settings._instances.pop(Settings, None)  # noqa: SLF001
+    Settings._instances.pop(  # noqa: SLF001
+        (Settings, "changelog_generator"), None
+    )
 
 
 @pytest.fixture
