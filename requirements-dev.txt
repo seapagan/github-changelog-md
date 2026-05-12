@@ -46,7 +46,7 @@ columnar==1.4.1
     # via pymarkdownlnt
 coverage==7.10.7
     # via pytest-cov
-cryptography==46.0.7
+cryptography==46.0.5
     # via pyjwt
 csscompressor==0.9.5
     # via mkdocs-minify-plugin
@@ -63,7 +63,7 @@ ghp-import==2.1.0
     # via mkdocs
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.50
+gitpython==3.1.45
     # via mkdocs-git-revision-date-localized-plugin
 h11==0.16.0
     # via httpcore
@@ -169,7 +169,7 @@ pydantic-core==2.41.1
 pyfakefs==5.10.0
 pygithub==2.8.1
     # via github-changelog-md
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   mkdocs-material
     #   pytest
@@ -179,7 +179,7 @@ pyjson5==2.0.0
 pyjwt==2.12.1
     # via pygithub
 pymarkdownlnt==0.9.32
-pymdown-extensions==10.16.1
+pymdown-extensions==10.21.2
     # via mkdocs-material
 pynacl==1.6.2
     # via pygithub
@@ -199,7 +199,9 @@ pytest-sugar==1.1.1
 pytest-xdist==3.8.0
 python-dateutil==2.9.0.post0
     # via ghp-import
-python-dotenv==1.1.1
+python-dotenv==1.2.1 ; python_full_version < '3.10'
+    # via mkdoc
+python-dotenv==1.2.2 ; python_full_version >= '3.10'
     # via mkdoc
 pytz==2025.2
     # via mkdocs-git-revision-date-localized-plugin
@@ -213,7 +215,11 @@ pyyaml==6.0.3
     #   pyyaml-env-tag
 pyyaml-env-tag==1.1
     # via mkdocs
-requests==2.32.5
+requests==2.32.5 ; python_full_version < '3.10'
+    # via
+    #   mkdocs-material
+    #   pygithub
+requests==2.34.0 ; python_full_version >= '3.10'
     # via
     #   mkdocs-material
     #   pygithub
@@ -278,7 +284,11 @@ typing-inspection==0.4.2
     # via pydantic
 tzdata==2025.2
     # via faker
-urllib3==2.6.3
+urllib3==2.6.3 ; python_full_version < '3.10'
+    # via
+    #   pygithub
+    #   requests
+urllib3==2.7.0 ; python_full_version >= '3.10'
     # via
     #   pygithub
     #   requests
