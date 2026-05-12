@@ -219,5 +219,7 @@ pyrightconfig.json
 
 # AI Stuff
 .claude/
+.codex/
+.agents/
 CLAUDE.md
 AGENTS.md
