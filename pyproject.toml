@@ -3,7 +3,7 @@ name = "github-changelog-md"
 version = "0.9.8"
 description = "Generate a Markdown Changelog from your Github repository."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
   "pygithub>=2.4.0",
   "rich>=13.9.4",
@@ -12,14 +12,13 @@ dependencies = [
   "typer>=0.12.5",
 ]
 license = "MIT"
+license-files = ["LICENSE.txt"]
 authors = [{ name = "Grant Ramsay", email = "seapagan@gmail.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -100,9 +99,9 @@ lint.help = "Run all linting checks"
 "docs:publish".help = "Publish documentation to GitHub Pages"
 "docs:build".cmd = "mkdocs build"
 "docs:build".help = "Build documentation locally to './site' folder"
-"docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md"
+"docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md --livereload"
 "docs:serve".help = "Serve documentation locally"
-"docs:serve:all".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:8000"
+"docs:serve:all".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:8000 --livereload"
 "docs:serve:all".help = "Serve documentation locally on all interfaces"
 
 changelog.cmd = "github-changelog-md"
@@ -128,7 +127,7 @@ omit = ["*/tests/*"]
 line-length = 80
 
 src = ["github_changelog_md"]
-target-version = "py39"       # minimum python version supported
+target-version = "py310"      # minimum python version supported
 
 [tool.ruff.lint]
 select = ["ALL"] # we are being very strict!

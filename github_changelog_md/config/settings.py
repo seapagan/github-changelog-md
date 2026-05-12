@@ -1,7 +1,7 @@
 """Handle the settings for the project."""
 
 from pathlib import Path
-from typing import ClassVar, Optional
+from typing import ClassVar
 
 import typer
 from rich import print as rprint
@@ -28,27 +28,27 @@ class Settings(TOMLSettings):
     depends: bool = True
     contrib: bool = False
     quiet: bool = False
-    skip_releases: Optional[list[str]] = None
-    extend_sections: Optional[list[dict[str, str]]] = None
-    extend_sections_index: Optional[int] = None
-    rename_sections: Optional[list[dict[str, str]]] = None
+    skip_releases: list[str] | None = None
+    extend_sections: list[dict[str, str]] | None = None
+    extend_sections_index: int | None = None
+    rename_sections: list[dict[str, str]] | None = None
     date_format: str = "%Y-%m-%d"
     show_issues: bool = True
     item_order: str = "newest-first"
-    ignore_items: Optional[list[int]] = None
-    extend_ignored: Optional[list[str]] = None
-    ignored_labels: Optional[list[str]] = None
-    allowed_labels: Optional[list[str]] = None
-    ignore_strings: Optional[list[str]] = None
+    ignore_items: list[int] | None = None
+    extend_ignored: list[str] | None = None
+    ignored_labels: list[str] | None = None
+    allowed_labels: list[str] | None = None
+    ignore_strings: list[str] | None = None
     ignored_users: ClassVar[list[str]] = []
     max_depends: int = 10
     show_diff: bool = True
     show_patch: bool = True
     intro_text: str = ""
-    yanked: Optional[list[dict[str, str]]] = None
-    release_text: Optional[list[dict[str, str]]] = None
-    release_text_before: Optional[list[dict[str, str]]] = None
-    release_overrides: Optional[list[dict[str, str]]] = None
+    yanked: list[dict[str, str]] | None = None
+    release_text: list[dict[str, str]] | None = None
+    release_text_before: list[dict[str, str]] | None = None
+    release_overrides: list[dict[str, str]] | None = None
 
 
 def get_settings_object() -> Settings:

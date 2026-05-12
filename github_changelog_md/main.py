@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import typer
 from rich import print as rprint
@@ -26,34 +26,34 @@ app = typer.Typer(
 
 @app.command()
 def main(
-    version: Optional[bool] = typer.Option(
+    version: bool | None = typer.Option(
         None,
         "-v",
         "--version",
         is_eager=True,
     ),
-    repo: Optional[str] = typer.Option(
+    repo: str | None = typer.Option(
         None,
         "--repo",
         "-r",
         help="Name of the repository to generate the Changelog for.",
         show_default=False,
     ),
-    user: Optional[str] = typer.Option(
+    user: str | None = typer.Option(
         None,
         "--user",
         "-u",
         help="Name of the user or organisation that owns the repository.",
         show_default=False,
     ),
-    next_release: Optional[str] = typer.Option(
+    next_release: str | None = typer.Option(
         None,
         "--next-release",
         "-n",
         help="Name of the next release to generate the changelog for.",
         show_default=False,
     ),
-    unreleased: Optional[bool] = typer.Option(
+    unreleased: bool | None = typer.Option(
         default=None,
         help=(
             "Show unreleased changes in the Changelog, defaults to [bold]True"
@@ -61,12 +61,12 @@ def main(
         ),
         show_default=False,
     ),
-    contrib: Optional[bool] = typer.Option(
+    contrib: bool | None = typer.Option(
         default=None,
         help="Update the CONTRIBUTORS.md file, defaults to [bold]False[/bold].",
         show_default=False,
     ),
-    depends: Optional[bool] = typer.Option(
+    depends: bool | None = typer.Option(
         default=None,
         help=(
             "Show dependency updates in the Changelog, defaults to [bold]True"
@@ -74,28 +74,28 @@ def main(
         ),
         show_default=False,
     ),
-    output: Optional[str] = typer.Option(
+    output: str | None = typer.Option(
         None,
         "--output",
         "-o",
         help="Output file to write the Changelog to.",
         show_default=False,
     ),
-    quiet: Optional[bool] = typer.Option(
+    quiet: bool | None = typer.Option(
         None,
         "--quiet",
         "-q",
         help="Suppress all output except errors.",
         show_default=False,
     ),
-    skip: Optional[list[str]] = typer.Option(  # noqa: B008
+    skip: list[str] | None = typer.Option(  # noqa: B008
         [],
         "--skip",
         "-s",
         help="Skip the suplied tag. Can be specified multiple times",
         show_default=False,
     ),
-    issues: Optional[bool] = typer.Option(
+    issues: bool | None = typer.Option(
         default=None,
         help=(
             "Show CLOSED issues in the Changelog, defaults to [bold]True"
@@ -103,7 +103,7 @@ def main(
         ),
         show_default=False,
     ),
-    item_order: Optional[str] = typer.Option(
+    item_order: str | None = typer.Option(
         None,
         "--item-order",
         "-i",
@@ -114,7 +114,7 @@ def main(
         ),
         show_default=False,
     ),
-    ignore: Optional[list[int]] = typer.Option(  # noqa: B008
+    ignore: list[int] | None = typer.Option(  # noqa: B008
         [],
         "--ignore",
         "-e",
@@ -124,7 +124,7 @@ def main(
         ),
         show_default=False,
     ),
-    max_depends: Optional[int] = typer.Option(
+    max_depends: int | None = typer.Option(
         None,
         "--max-depends",
         "-m",
@@ -134,7 +134,7 @@ def main(
         ),
         show_default=False,
     ),
-    show_diff: Optional[bool] = typer.Option(
+    show_diff: bool | None = typer.Option(
         default=None,
         help=(
             "Show the diff of the PRs and Issues in the Changelog, defaults "
@@ -142,7 +142,7 @@ def main(
         ),
         show_default=False,
     ),
-    show_patch: Optional[bool] = typer.Option(
+    show_patch: bool | None = typer.Option(
         default=None,
         help=(
             "Show the patch of the PRs and Issues in the Changelog, defaults "

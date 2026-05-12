@@ -35,10 +35,10 @@ development process and documentation.
 
 ## Prerequisites
 
-Since this is a [Python](https://www.python.org/) project, you will need to
-have Python installed on your machine. You can download the latest version of
-Python from the [official website](https://www.python.org/downloads/) or using
-your Operating system's package manager. This project requires **Python 3.9** or
+Since this is a [Python](https://www.python.org/) project, you will need to have
+Python installed on your machine. You can download the latest version of Python
+from the [official website](https://www.python.org/downloads/) or using your
+Operating system's package manager. This project requires **Python 3.10** or
 higher.
 
 I'd recommend using
