@@ -3,7 +3,7 @@ name = "github-changelog-md"
 version = "0.9.8"
 description = "Generate a Markdown Changelog from your Github repository."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
   "pygithub>=2.4.0",
   "rich>=13.9.4",
@@ -19,7 +19,6 @@ classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -128,7 +127,7 @@ omit = ["*/tests/*"]
 line-length = 80
 
 src = ["github_changelog_md"]
-target-version = "py39"       # minimum python version supported
+target-version = "py310"      # minimum python version supported
 
 [tool.ruff.lint]
 select = ["ALL"] # we are being very strict!
