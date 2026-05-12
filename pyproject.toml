@@ -12,12 +12,12 @@ dependencies = [
   "typer>=0.12.5",
 ]
 license = "MIT"
+license-files = ["LICENSE.txt"]
 authors = [{ name = "Grant Ramsay", email = "seapagan@gmail.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -99,9 +99,9 @@ lint.help = "Run all linting checks"
 "docs:publish".help = "Publish documentation to GitHub Pages"
 "docs:build".cmd = "mkdocs build"
 "docs:build".help = "Build documentation locally to './site' folder"
-"docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md"
+"docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md --livereload"
 "docs:serve".help = "Serve documentation locally"
-"docs:serve:all".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:8000"
+"docs:serve:all".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md -a 0.0.0.0:8000 --livereload"
 "docs:serve:all".help = "Serve documentation locally on all interfaces"
 
 changelog.cmd = "github-changelog-md"
