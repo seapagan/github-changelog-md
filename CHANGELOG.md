@@ -5,6 +5,26 @@ project since the first release.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.9](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.9) (May 12, 2026)
+
+**Closed Issues**
+
+- Add full Test suite ([#144](https://github.com/seapagan/github-changelog-md/issues/144)) by [seapagan](https://github.com/seapagan)
+
+**Dependency Updates**
+
+- Drop Python 3.9 support, close security alerts and update libraries as needed. ([#402](https://github.com/seapagan/github-changelog-md/pull/402)) by [seapagan](https://github.com/seapagan)
+- Build(deps-dev): bump gitpython from 3.1.45 to 3.1.50 ([#401](https://github.com/seapagan/github-changelog-md/pull/401)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Chore(deps): update actions/dependency-review-action action to v5 ([#400](https://github.com/seapagan/github-changelog-md/pull/400)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update astral-sh/setup-uv action to v8 ([#397](https://github.com/seapagan/github-changelog-md/pull/397)) by [renovate[bot]](https://github.com/apps/renovate)
+- Build(deps): bump cryptography from 46.0.5 to 46.0.7 ([#394](https://github.com/seapagan/github-changelog-md/pull/394)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Chore(deps): update dependency pygments to v2.20.0 [security] ([#393](https://github.com/seapagan/github-changelog-md/pull/393)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update dependency uv_build to >=0.11.13,<0.12.0 ([#390](https://github.com/seapagan/github-changelog-md/pull/390)) by [renovate[bot]](https://github.com/apps/renovate)
+- Update simple-toml-settings to 0.12.0 ([#389](https://github.com/seapagan/github-changelog-md/pull/389)) by [seapagan](https://github.com/seapagan)
+- Update deps, close related security alerts ([#388](https://github.com/seapagan/github-changelog-md/pull/388)) by [seapagan](https://github.com/seapagan)
+
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.8...0.9.9) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.8...0.9.9.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.8...0.9.9.patch)
+
 ## [0.9.8](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.8) (February 06, 2026)
 
 **New Features**
