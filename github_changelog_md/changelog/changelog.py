@@ -16,6 +16,11 @@ from typing import TYPE_CHECKING, Any, Literal, TypeAlias
 import typer
 from rich import print as rprint
 
+from github_changelog_md.changelog.bucketing import (
+    bucket_issues,
+    bucket_pull_requests,
+    get_unreleased_cutoff,
+)
 from github_changelog_md.changelog.models import (
     ChangelogIssue,
     ChangelogPullRequest,
@@ -678,44 +683,27 @@ class ChangeLog:
             end="",
         )
         issue_by_release: dict[int, list[IssueItem]] = {}
-        seen: set[int] = set()
-        for release in self.repo_releases[::-1]:
-            issue_by_release[release.id] = []
-            for issue in self.filtered_repo_issues:
-                if (
-                    issue.closed_at
-                    and issue.closed_at <= release.created_at
-                    and issue.id not in seen
-                    and issue.user.login not in self.settings.ignored_users
-                ):
-                    issue_by_release[release.id].append(issue)
-                    seen.add(issue.id)
-
-        # Add any issue more recent than the last release to a specific
-        # list. We need some special handling if there are no releases yet.
-        last_release_date = self.get_latest_release_date()
-
-        self.unreleased_issues = [
-            issue
-            for issue in self.filtered_repo_issues
-            if issue.closed_at
-            and issue.closed_at > last_release_date
-            and issue.id not in seen
-            and issue.user.login not in self.settings.ignored_users
-        ]
+        unreleased_cutoff = self.get_unreleased_cutoff()
+        bucketed = bucket_issues(
+            self.repo_releases,
+            self.filtered_repo_issues,
+            unreleased_cutoff,
+            self.settings.ignored_users,
+        )
+        issue_by_release.update(bucketed.by_release)
+        self.unreleased_issues = bucketed.unreleased
 
         rprint(self.done_str)
         return issue_by_release
 
-    def get_latest_release_date(self) -> datetime.datetime:
-        """Return the date of the latest release."""
-        try:
-            last_release_date = self.repo_releases[-1].created_at
-        except IndexError:
-            # there have been no releases yet, so we need to get the date of
-            # the first commit.
-            last_release_date = self.data_source.get_first_commit_date()
-        return last_release_date
+    def get_unreleased_cutoff(self) -> datetime.datetime:
+        """Return the date after which items are considered unreleased."""
+        if self.repo_releases:
+            return get_unreleased_cutoff(
+                self.repo_releases,
+                self.repo_releases[0].created_at,
+            )
+        return self.data_source.get_first_commit_date()
 
     def link_pull_requests(self) -> dict[int, list[PullRequestItem]]:
         """Link Pull Requests to their respective Release.
@@ -729,30 +717,15 @@ class ChangeLog:
             end="",
         )
         pr_by_release: dict[int, list[PullRequestItem]] = {}
-        seen: set[int] = set()
-        for release in self.repo_releases[::-1]:
-            pr_by_release[release.id] = []
-            for pr in self.repo_prs:
-                if (
-                    pr.merged_at
-                    and pr.merged_at <= release.created_at
-                    and pr.id not in seen
-                    and pr.user.login not in self.settings.ignored_users
-                ):
-                    pr_by_release[release.id].append(pr)
-                    seen.add(pr.id)
-        # Add any pull request more recent than the last release to a specific
-        # list. We need some special handling if there are no releases yet.
-        last_release_date = self.get_latest_release_date()
-
-        self.unreleased = [
-            pr
-            for pr in self.repo_prs
-            if pr.merged_at
-            and pr.merged_at > last_release_date
-            and pr.id not in seen
-            and pr.user.login not in self.settings.ignored_users
-        ]
+        unreleased_cutoff = self.get_unreleased_cutoff()
+        bucketed = bucket_pull_requests(
+            self.repo_releases,
+            self.repo_prs,
+            unreleased_cutoff,
+            self.settings.ignored_users,
+        )
+        pr_by_release.update(bucketed.by_release)
+        self.unreleased = bucketed.unreleased
         rprint(self.done_str)
         return pr_by_release
 

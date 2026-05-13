@@ -2,7 +2,7 @@
 
 import datetime
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any, cast
 from unittest.mock import MagicMock
@@ -12,6 +12,11 @@ import typer
 from github import GithubException
 from github.GitRelease import GitRelease
 
+from github_changelog_md.changelog.bucketing import (
+    bucket_issues,
+    bucket_pull_requests,
+    get_unreleased_cutoff,
+)
 from github_changelog_md.changelog.changelog import ChangeLog
 from github_changelog_md.changelog.github_data import (
     GitHubDataSource,
@@ -765,6 +770,96 @@ class TestGitHubDataSource:
 
         with pytest.raises(RuntimeError, match="Repository data"):
             data_source.get_first_commit_date()
+
+
+class TestChangelogBucketing:
+    """Tests for pure release bucketing logic."""
+
+    def test_unreleased_cutoff_uses_latest_release_date(self) -> None:
+        """Test cutoff is independent of release list order."""
+        fallback_date = _date(2020, 1, 1)
+        releases = [
+            _release(1, "v1.0.0", "Old", _date(2021, 1, 1)),
+            _release(2, "v2.0.0", "New", _date(2021, 1, 10)),
+        ]
+
+        assert get_unreleased_cutoff(releases[::-1], fallback_date) == _date(
+            2021, 1, 10
+        )
+
+    def test_unreleased_cutoff_uses_fallback_without_releases(self) -> None:
+        """Test cutoff uses first commit date when there are no releases."""
+        fallback_date = _date(2020, 1, 1)
+
+        assert get_unreleased_cutoff([], fallback_date) == fallback_date
+
+    def test_bucket_pull_requests_sorts_releases_and_tracks_unreleased(
+        self,
+    ) -> None:
+        """Test PRs are assigned by date regardless of release input order."""
+        releases = [
+            _release(2, "v2.0.0", "New", _date(2021, 1, 10)),
+            _release(1, "v1.0.0", "Old", _date(2021, 1, 1)),
+        ]
+        pr_old = replace(_pr(1, "old", "dev", []), merged_at=_date(2021, 1, 1))
+        pr_new = replace(_pr(2, "new", "dev", []), merged_at=_date(2021, 1, 5))
+        pr_unreleased = replace(
+            _pr(3, "unreleased", "dev", []),
+            merged_at=_date(2021, 1, 11),
+        )
+        pr_undated = _pr(4, "undated", "dev", [])
+
+        result = bucket_pull_requests(
+            releases,
+            [pr_unreleased, pr_undated, pr_new, pr_old],
+            _date(2021, 1, 10),
+            [],
+        )
+
+        assert result.by_release[1] == [pr_old]
+        assert result.by_release[2] == [pr_new]
+        assert result.unreleased == [pr_unreleased]
+
+    def test_bucket_pull_requests_handles_exact_release_timestamp(self) -> None:
+        """Test an item exactly on a release timestamp belongs to it."""
+        release = _release(1, "v1.0.0", "Release", _date(2021, 1, 1))
+        pull_request = replace(
+            _pr(1, "exact", "dev", []),
+            merged_at=release.created_at,
+        )
+
+        result = bucket_pull_requests(
+            [release],
+            [pull_request],
+            release.created_at,
+            [],
+        )
+
+        assert result.by_release[1] == [pull_request]
+        assert result.unreleased == []
+
+    def test_bucket_issues_ignores_users_and_no_release_unreleased(
+        self,
+    ) -> None:
+        """Test issue bucketing ignores configured users and no-release path."""
+        issue = replace(
+            _issue(1, "issue", "dev", []),
+            closed_at=_date(2021, 1, 2),
+        )
+        ignored = replace(
+            _issue(2, "ignored", "bot", []),
+            closed_at=_date(2021, 1, 3),
+        )
+
+        result = bucket_issues(
+            [],
+            [ignored, issue],
+            _date(2021, 1, 1),
+            ["bot"],
+        )
+
+        assert result.by_release == {}
+        assert result.unreleased == [issue]
 
 
 class TestChangelog:
@@ -1594,7 +1689,7 @@ class TestChangelog:
             ),
         )
         changelog.repo_releases = [rel_new, rel_old]
-        changelog.get_latest_release_date = MagicMock(
+        changelog.get_unreleased_cutoff = MagicMock(
             return_value=datetime.datetime(
                 2021, 1, 10, tzinfo=datetime.timezone.utc
             )
@@ -1895,17 +1990,27 @@ class TestChangelog:
         items = [MagicMock(number=2), MagicMock(number=1)]
         assert changelog.get_sorted_items(items) is items
 
-    def test_get_latest_release_date_uses_first_commit_when_no_releases(
+    def test_get_unreleased_cutoff_uses_first_commit_when_no_releases(
         self,
         mocker,
     ) -> None:
-        """Test get_latest_release_date falls back to first commit date."""
+        """Test get_unreleased_cutoff falls back to first commit date."""
         changelog = _build_changelog(mocker)
         changelog.repo_releases = []
         first_date = datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc)
         changelog.data_source.get_first_commit_date.return_value = first_date
 
-        assert changelog.get_latest_release_date() == first_date
+        assert changelog.get_unreleased_cutoff() == first_date
+
+    def test_get_unreleased_cutoff_uses_latest_release(self, mocker) -> None:
+        """Test get_unreleased_cutoff is independent of release list order."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_releases = [
+            _release(1, "v1.0.0", "Old", _date(2021, 1, 1)),
+            _release(2, "v2.0.0", "New", _date(2021, 1, 10)),
+        ]
+
+        assert changelog.get_unreleased_cutoff() == _date(2021, 1, 10)
 
     def test_filter_issues_drops_pull_requests(self, mocker) -> None:
         """Test filter_issues keeps only issues without pull_request marker."""
