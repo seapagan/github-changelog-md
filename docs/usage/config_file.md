@@ -36,13 +36,13 @@ Current available options are:
 | `extend_sections_index` | Index to insert custom sections    | dynamic [^1]  |
 | `rename_sections`       | Rename default section headers     | `[]`          |
 | `date_format`           | Date format for release dates      | `%Y-%m-%d`    |
-| `item_order`            | Order of PR/Issues in each section | `newest_first`|
+| `item_order`            | Order of PR/Issues in each section | `newest-first`|
 | `ignore_items`          | List of PRs/Issues to ignore       | `[]`          |
 | `ignored_labels`        | List of labels to ignore           | See above     |
 | `extend_ignored`        | List of labels to add to ignored   | `[]`          |
 | `allowed_labels`        | List of labels to allow            | `[]`          |
 | `ignored_users`         | List of usernames to ignore        | `[]`          |
-| `max_depends`           | Max dependency updates per Release | `10`          |
+| `max_depends`           | Max dependency updates per Release | `10` [^2]     |
 | `show_diff`             | Show diff links for each Release   | `True`        |
 | `show_patch`            | Show patch links for each Release  | `True`        |
 | `intro_text`            | Introductory paragraph             | `""`          |
@@ -83,7 +83,7 @@ extend_sections = [
 extend_sections_index = 3
 rename_sections = [{ old = "Enhancements", new = "New Features" }]
 date_format = "%d %B %Y" # (2)!
-item_order = "oldest_first"
+item_order = "oldest-first"
 ignore_items = [123, 456] # (3)!
 extend_ignored = ["testing"]
 allowed_labels = ["question"]
@@ -136,6 +136,10 @@ values specified on the command line).
     `Dependency Updates` section, but you can change this by setting the
     `extend_sections_index` value. See the
     [Custom Sections](options.md#custom-sections) section for more details.
+
+[^2]:
+    Set this to `0` to hide individual dependency update entries while still
+    showing the summary count for the release.
 
 ## Real-world Example
 
