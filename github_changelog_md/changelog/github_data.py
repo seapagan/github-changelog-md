@@ -66,11 +66,16 @@ def git_error(exc: GithubException) -> NoReturn:
 class GitHubDataSource:
     """Fetch and adapt GitHub repository data."""
 
-    def __init__(self, github_pat: str) -> None:
-        """Initialize the GitHub client."""
-        self.auth = Auth.Token(github_pat)
-        self.git = Github(auth=self.auth)
+    def __init__(self, git: Github) -> None:
+        """Initialize the data source with a GitHub client."""
+        self.git = git
         self.repo_data: Repository | None = None
+
+    @classmethod
+    def from_token(cls, github_pat: str) -> GitHubDataSource:
+        """Create a data source from a GitHub personal access token."""
+        auth = Auth.Token(github_pat)
+        return cls(Github(auth=auth))
 
     def get_repo_data(
         self, repo_name: str, user: str | None

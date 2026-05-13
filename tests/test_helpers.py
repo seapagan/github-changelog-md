@@ -82,6 +82,7 @@ class TestHelpers:
             "https://gitlab.com/user/repo.git",
             "https://github.com/user",
             "https://github.com/user/repo/extra",
+            "https://github.com/user/.git",
             "not-a-url",
         ],
     )

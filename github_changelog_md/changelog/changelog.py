@@ -65,6 +65,30 @@ class ReleaseTextCache:
     release_overrides_by_release: dict[str, str] = field(default_factory=dict)
 
 
+def build_release_text_cache(settings: Settings) -> ReleaseTextCache:
+    """Build release-text lookup caches from settings."""
+    return ReleaseTextCache(
+        yanked_by_release=ChangeLog.build_release_lookup(
+            settings.yanked,
+            value_key="reason",
+        ),
+        release_text_before_by_release=ChangeLog.build_release_lookup(
+            settings.release_text_before,
+            value_key="text",
+            strip_value=True,
+        ),
+        release_text_by_release=ChangeLog.build_release_lookup(
+            settings.release_text,
+            value_key="text",
+            strip_value=True,
+        ),
+        release_overrides_by_release=ChangeLog.build_release_lookup(
+            settings.release_overrides,
+            value_key="text",
+        ),
+    )
+
+
 class ChangeLog:
     """Define the Changelog class."""
 
@@ -76,6 +100,7 @@ class ChangeLog:
         options: ChangelogOptions,
         settings: Settings,
         data_source: GitHubDataSource,
+        release_text_cache: ReleaseTextCache | None = None,
     ) -> None:
         """Initialize the class."""
         self.settings = settings
@@ -98,26 +123,7 @@ class ChangeLog:
         self.unreleased: list[PullRequestItem]
         self.unreleased_issues: list[IssueItem]
         self.contributors: list[ChangelogUser]
-        self.release_text_cache = ReleaseTextCache(
-            yanked_by_release=self.build_release_lookup(
-                self.settings.yanked,
-                value_key="reason",
-            ),
-            release_text_before_by_release=self.build_release_lookup(
-                self.settings.release_text_before,
-                value_key="text",
-                strip_value=True,
-            ),
-            release_text_by_release=self.build_release_lookup(
-                self.settings.release_text,
-                value_key="text",
-                strip_value=True,
-            ),
-            release_overrides_by_release=self.build_release_lookup(
-                self.settings.release_overrides,
-                value_key="text",
-            ),
-        )
+        self.release_text_cache = release_text_cache or ReleaseTextCache()
 
     @staticmethod
     def build_release_lookup(

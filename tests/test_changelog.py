@@ -17,7 +17,10 @@ from github_changelog_md.changelog.bucketing import (
     bucket_pull_requests,
     get_unreleased_cutoff,
 )
-from github_changelog_md.changelog.changelog import ChangeLog
+from github_changelog_md.changelog.changelog import (
+    ChangeLog,
+    build_release_text_cache,
+)
 from github_changelog_md.changelog.github_data import (
     GitHubDataSource,
     ItemCountColumn,
@@ -88,7 +91,13 @@ def _build_changelog(
         for key, value in settings_overrides.items():
             setattr(settings, key, value)
 
-    return ChangeLog("repo", _default_options(), settings, data_source)
+    return ChangeLog(
+        "repo",
+        _default_options(),
+        settings,
+        data_source,
+        build_release_text_cache(settings),
+    )
 
 
 @pytest.fixture
@@ -514,6 +523,25 @@ class TestChangelogModels:
 class TestGitHubDataSource:
     """Tests for the GitHub data source boundary."""
 
+    def test_from_token_builds_github_client(self, mocker) -> None:
+        """Test token factory owns GitHub client construction."""
+        auth = MagicMock()
+        git = MagicMock()
+        auth_token = mocker.patch(
+            "github_changelog_md.changelog.github_data.Auth.Token",
+            return_value=auth,
+        )
+        github = mocker.patch(
+            "github_changelog_md.changelog.github_data.Github",
+            return_value=git,
+        )
+
+        data_source = GitHubDataSource.from_token("token")
+
+        auth_token.assert_called_once_with("token")
+        github.assert_called_once_with(auth=auth)
+        assert data_source.git is git
+
     def test_item_count_column_handles_unknown_total(self) -> None:
         """Test progress counts omit invalid totals."""
         expected_count = 7
@@ -524,7 +552,6 @@ class TestGitHubDataSource:
     def test_fetch_methods_report_progress(self, mocker) -> None:
         """Test GitHub item adaptation advances visible progress."""
         expected_total = 3
-        mocker.patch("github_changelog_md.changelog.github_data.Github")
         progress = MagicMock()
         progress.__enter__.return_value = progress
         progress.add_task.return_value = "task-id"
@@ -532,7 +559,7 @@ class TestGitHubDataSource:
             "github_changelog_md.changelog.github_data.Progress",
             return_value=progress,
         )
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(MagicMock())
         user = MagicMock()
         user.login = "dev"
         user.html_url = "https://github.com/dev"
@@ -566,7 +593,6 @@ class TestGitHubDataSource:
 
     def test_fetch_progress_handles_unknown_total(self, mocker) -> None:
         """Test progress uses an unknown total when GitHub count is invalid."""
-        mocker.patch("github_changelog_md.changelog.github_data.Github")
         progress = MagicMock()
         progress.__enter__.return_value = progress
         progress.add_task.return_value = "task-id"
@@ -574,7 +600,7 @@ class TestGitHubDataSource:
             "github_changelog_md.changelog.github_data.Progress",
             return_value=progress,
         )
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(MagicMock())
         user = MagicMock()
         user.login = "reporter"
         user.html_url = "https://github.com/reporter"
@@ -600,7 +626,7 @@ class TestGitHubDataSource:
             "Loading issue candidates", total=None
         )
 
-    def test_get_repo_data_returns_repository_model(self, mocker) -> None:
+    def test_get_repo_data_returns_repository_model(self) -> None:
         """Test repository lookup converts PyGithub data."""
         git = MagicMock()
         current_user = MagicMock(login="owner")
@@ -611,12 +637,8 @@ class TestGitHubDataSource:
         repo.html_url = "https://github.com/owner/repo"
         owner_user.get_repo.return_value = repo
         git.get_user.side_effect = [current_user, owner_user]
-        mocker.patch(
-            "github_changelog_md.changelog.github_data.Github",
-            return_value=git,
-        )
 
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(git)
 
         assert data_source.get_repo_data("repo", None) == ChangelogRepository(
             name="repo",
@@ -625,10 +647,9 @@ class TestGitHubDataSource:
         )
         owner_user.get_repo.assert_called_once_with("repo")
 
-    def test_fetch_methods_return_domain_models(self, mocker) -> None:
+    def test_fetch_methods_return_domain_models(self) -> None:
         """Test release, PR, issue, and first commit fetch paths."""
-        mocker.patch("github_changelog_md.changelog.github_data.Github")
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(MagicMock())
 
         label = MagicMock()
         label.name = "bug"
@@ -711,8 +732,7 @@ class TestGitHubDataSource:
 
     def test_fetch_methods_route_github_errors(self, mocker) -> None:
         """Test GitHub exceptions use the shared exit path."""
-        mocker.patch("github_changelog_md.changelog.github_data.Github")
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(MagicMock())
         data_source.repo_data = MagicMock()
         data_source.repo_data.get_issues.side_effect = GithubException(
             status=500,
@@ -736,15 +756,11 @@ class TestGitHubDataSource:
             status=404,
             data={"message": "missing"},
         )
-        mocker.patch(
-            "github_changelog_md.changelog.github_data.Github",
-            return_value=git,
-        )
         git_error_mock = mocker.patch(
             "github_changelog_md.changelog.github_data.git_error",
             side_effect=typer.Exit(ExitErrors.GIT_ERROR),
         )
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(git)
 
         with pytest.raises(typer.Exit):
             data_source.get_repo_data("repo", None)
@@ -767,10 +783,9 @@ class TestGitHubDataSource:
 
         assert git_error_mock.call_count == len(expected_errors)
 
-    def test_fetch_requires_repository_data(self, mocker) -> None:
+    def test_fetch_requires_repository_data(self) -> None:
         """Test fetch methods require repository lookup first."""
-        mocker.patch("github_changelog_md.changelog.github_data.Github")
-        data_source = GitHubDataSource("token")
+        data_source = GitHubDataSource(MagicMock())
 
         with pytest.raises(RuntimeError, match="Repository data"):
             data_source.get_first_commit_date()
@@ -928,42 +943,43 @@ class TestChangelog:
         changelog.link_issues.assert_called_once()
         changelog.generate_changelog.assert_called_once()
 
-    def test_build_release_cache_maps_are_created(self, mocker) -> None:
-        """Test release lookup caches are built at initialization."""
-        changelog = _build_changelog(
-            mocker,
-            {
-                "yanked": [{"release": " v1.0.0 ", "reason": "bad build"}],
-                "release_text_before": [
-                    {"release": " v1.0.0 ", "text": " before text "}
-                ],
-                "release_text": [
-                    {"release": " v1.0.0 ", "text": " release text "}
-                ],
-                "release_overrides": [
-                    {"release": " v1.0.0 ", "text": "override text"}
-                ],
-            },
+    def test_constructor_does_not_read_release_settings(self) -> None:
+        """Test release text config is supplied instead of read on init."""
+        settings = MagicMock(spec=[])
+        data_source = MagicMock(spec=GitHubDataSource)
+
+        changelog = ChangeLog(
+            "repo",
+            _default_options(),
+            settings,
+            data_source,
         )
 
-        assert (
-            changelog.release_text_cache.yanked_by_release["v1.0.0"]
-            == "bad build"
-        )
-        assert (
-            changelog.release_text_cache.release_text_before_by_release[
-                "v1.0.0"
-            ]
-            == "before text"
-        )
-        assert (
-            changelog.release_text_cache.release_text_by_release["v1.0.0"]
-            == "release text"
-        )
-        assert (
-            changelog.release_text_cache.release_overrides_by_release["v1.0.0"]
-            == "override text"
-        )
+        assert changelog.release_text_cache.yanked_by_release == {}
+        assert changelog.release_text_cache.release_text_before_by_release == {}
+        assert changelog.release_text_cache.release_text_by_release == {}
+        assert changelog.release_text_cache.release_overrides_by_release == {}
+
+    def test_build_release_cache_maps_are_created(self) -> None:
+        """Test release lookup caches are built from settings."""
+        settings = MagicMock()
+        settings.yanked = [{"release": " v1.0.0 ", "reason": "bad build"}]
+        settings.release_text_before = [
+            {"release": " v1.0.0 ", "text": " before text "}
+        ]
+        settings.release_text = [
+            {"release": " v1.0.0 ", "text": " release text "}
+        ]
+        settings.release_overrides = [
+            {"release": " v1.0.0 ", "text": "override text"}
+        ]
+
+        cache = build_release_text_cache(settings)
+
+        assert cache.yanked_by_release["v1.0.0"] == "bad build"
+        assert cache.release_text_before_by_release["v1.0.0"] == "before text"
+        assert cache.release_text_by_release["v1.0.0"] == "release text"
+        assert cache.release_overrides_by_release["v1.0.0"] == "override text"
 
     def test_build_release_lookup_rejects_missing_value_key(self) -> None:
         """Test release lookup config requires the expected value key."""
@@ -984,6 +1000,17 @@ class TestChangelog:
         ):
             ChangeLog.build_release_lookup(
                 [{"release": "  ", "text": "Release note"}],
+                value_key="text",
+            )
+
+    def test_build_release_lookup_rejects_non_string_value(self) -> None:
+        """Test release lookup config values must be strings."""
+        with pytest.raises(
+            ChangelogConfigError,
+            match="release entry 1 value 'text' must be a string",
+        ):
+            ChangeLog.build_release_lookup(
+                cast("Any", [{"release": "v1.0.0", "text": 123}]),
                 value_key="text",
             )
 
@@ -1995,6 +2022,14 @@ class TestChangelog:
             match="item_order must be one of",
         ):
             validate_changelog_options(options)
+
+    def test_get_sorted_items_rejects_unknown_order(self, mocker) -> None:
+        """Test renderer fails clearly if invalid ordering reaches it."""
+        changelog = _build_changelog(mocker)
+        changelog.options["item_order"] = "keep"
+
+        with pytest.raises(ValueError, match="Unknown item order: keep"):
+            changelog.get_sorted_items([MagicMock(number=1)])
 
     def test_get_unreleased_cutoff_uses_first_commit_when_no_releases(
         self,

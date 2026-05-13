@@ -72,7 +72,7 @@ def _assert_changelog_called(
     mock_changelog: MockType, repo: str, options: ChangelogOptions
 ) -> None:
     """Assert the CLI created the changelog with orchestration dependencies."""
-    mock_changelog.assert_called_once_with(repo, options, ANY, ANY)
+    mock_changelog.assert_called_once_with(repo, options, ANY, ANY, ANY)
 
 
 @pytest.mark.usefixtures("config_file")

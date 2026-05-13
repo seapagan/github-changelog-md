@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import typer
 from rich import print as rprint
 
-from github_changelog_md.changelog import ChangeLog
+from github_changelog_md.changelog import ChangeLog, build_release_text_cache
 from github_changelog_md.changelog.github_data import GitHubDataSource
 from github_changelog_md.config import get_settings
 from github_changelog_md.config.validation import (
@@ -231,7 +231,7 @@ def main(
         raise typer.Exit(ExitErrors.INVALID_ACTION) from exc
 
     try:
-        data_source = GitHubDataSource(settings.github_pat)
+        data_source = GitHubDataSource.from_token(settings.github_pat)
     except AttributeError as exc:
         rprint(
             "\n[red]  X  Error: No GitHub PAT found in settings file\n",
@@ -239,5 +239,11 @@ def main(
         )
         raise typer.Exit(ExitErrors.NO_PAT) from exc
 
-    changelog = ChangeLog(repo, options, settings, data_source)
+    changelog = ChangeLog(
+        repo,
+        options,
+        settings,
+        data_source,
+        build_release_text_cache(settings),
+    )
     changelog.run()

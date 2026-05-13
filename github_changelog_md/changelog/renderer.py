@@ -373,7 +373,8 @@ class ChangelogRenderer:
             return sorted(items, key=lambda x: x.number, reverse=True)
         if self.options["item_order"] == "oldest-first":
             return sorted(items, key=lambda x: x.number)
-        return items
+        msg = f"Unknown item order: {self.options['item_order']}"
+        raise ValueError(msg)
 
     def get_release_sections(
         self, pr_list: list[PullRequestItem]
