@@ -7,15 +7,24 @@ import sys
 from importlib import metadata, resources
 from pathlib import Path
 from shutil import which
-from typing import TYPE_CHECKING
+from typing import Protocol
 
 import rtoml
 from rich import print as rprint
 
 from github_changelog_md.constants import SECTIONS, ExitErrors, SectionHeadings
 
-if TYPE_CHECKING:  # pragma: no cover
-    from github.GitRelease import GitRelease
+
+class ReleaseTitle(Protocol):
+    """Release title/tag fields used to decide whether to show a title."""
+
+    @property
+    def title(self) -> str | None:
+        """Release display title."""
+
+    @property
+    def tag_name(self) -> str | None:
+        """Release tag name."""
 
 
 def get_toml_path() -> Path:
@@ -129,7 +138,7 @@ def strip_first_alpha_char(version_string: str) -> str:
     return version_string
 
 
-def title_unique(release: GitRelease) -> bool:
+def title_unique(release: ReleaseTitle) -> bool:
     """Ensures that the release title and tag name are not the same.
 
     It will remove the first alpha character from the title and tag (if it is a

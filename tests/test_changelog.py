@@ -12,6 +12,18 @@ from github import GithubException
 from github.GitRelease import GitRelease
 
 from github_changelog_md.changelog.changelog import ChangeLog, git_error
+from github_changelog_md.changelog.models import (
+    ChangelogIssue,
+    ChangelogLabel,
+    ChangelogPullRequest,
+    ChangelogRelease,
+    ChangelogUser,
+    issue_from_github,
+    label_from_github,
+    pull_request_from_github,
+    release_from_github,
+    user_from_github,
+)
 from github_changelog_md.constants import ChangelogOptions, ExitErrors
 
 
@@ -206,75 +218,87 @@ def mock_repo() -> MagicMock:
 
 
 @dataclass
-class _FakeLabel:
-    name: str
-
-
-@dataclass
-class _FakeUser:
-    login: str
-
-    @property
-    def html_url(self) -> str:
-        return f"https://github.com/{self.login}"
-
-
-@dataclass
-class _FakeIssue:
-    number: int
-    title: str
-    user: _FakeUser
-    labels: list[_FakeLabel]
-    closed_by: _FakeUser | None = None
-    id: int | None = None
-    closed_at: datetime.datetime | None = None
-    pull_request: None = None
-
-    @property
-    def html_url(self) -> str:
-        return f"https://github.com/user/repo/issues/{self.number}"
-
-
-@dataclass
-class _FakePullRequest:
-    number: int
-    title: str
-    user: _FakeUser
-    labels: list[_FakeLabel]
-    id: int | None = None
-    merged_at: datetime.datetime | None = None
-
-    @property
-    def html_url(self) -> str:
-        return f"https://github.com/user/repo/pull/{self.number}"
-
-
-@dataclass(frozen=True)
-class _FakeRelease:
-    id: int
-    tag_name: str
-    title: str
-    created_at: datetime.datetime
-    body: str = ""
-
-    @property
-    def html_url(self) -> str:
-        return f"https://github.com/user/repo/releases/tag/{self.tag_name}"
-
-
-@dataclass
 class _OutputScenario:
     releases: list[Any] = field(default_factory=list)
-    prs_by_release: dict[int, list[_FakePullRequest]] = field(
+    prs_by_release: dict[int, list[ChangelogPullRequest]] = field(
         default_factory=dict
     )
-    issues_by_release: dict[int, list[_FakeIssue]] = field(default_factory=dict)
-    unreleased_prs: list[_FakePullRequest] = field(default_factory=list)
-    unreleased_issues: list[_FakeIssue] = field(default_factory=list)
+    issues_by_release: dict[int, list[ChangelogIssue]] = field(
+        default_factory=dict
+    )
+    unreleased_prs: list[ChangelogPullRequest] = field(default_factory=list)
+    unreleased_issues: list[ChangelogIssue] = field(default_factory=list)
 
 
 def _date(year: int, month: int, day: int) -> datetime.datetime:
     return datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
+
+
+def _user(login: str, name: str | None = None) -> ChangelogUser:
+    return ChangelogUser(
+        login=login,
+        html_url=f"https://github.com/{login}",
+        name=name,
+    )
+
+
+def _label(name: str) -> ChangelogLabel:
+    return ChangelogLabel(name=name)
+
+
+def _release(
+    release_id: int,
+    tag_name: str,
+    title: str,
+    created_at: datetime.datetime,
+    body: str | None = "",
+) -> ChangelogRelease:
+    return ChangelogRelease(
+        id=release_id,
+        tag_name=tag_name,
+        title=title,
+        html_url=f"https://github.com/user/repo/releases/tag/{tag_name}",
+        created_at=created_at,
+        body=body,
+    )
+
+
+def _pr(
+    number: int,
+    title: str,
+    user_login: str,
+    labels: list[ChangelogLabel],
+) -> ChangelogPullRequest:
+    return ChangelogPullRequest(
+        id=number,
+        number=number,
+        title=title,
+        html_url=f"https://github.com/user/repo/pull/{number}",
+        user=_user(user_login),
+        labels=labels,
+        merged_at=None,
+    )
+
+
+def _issue(
+    number: int,
+    title: str,
+    user_login: str,
+    labels: list[ChangelogLabel],
+    *,
+    closed_by_login: str | None = None,
+) -> ChangelogIssue:
+    return ChangelogIssue(
+        id=number,
+        number=number,
+        title=title,
+        html_url=f"https://github.com/user/repo/issues/{number}",
+        user=_user(user_login),
+        labels=labels,
+        closed_at=None,
+        closed_by=_user(closed_by_login) if closed_by_login else None,
+        pull_request=None,
+    )
 
 
 def _github_release(
@@ -328,6 +352,129 @@ def _render_changelog(
     changelog.generate_changelog()
 
     return "".join(call.args[0] for call in file_handle.write.call_args_list)
+
+
+class TestChangelogModels:
+    """Tests for changelog domain model adapters."""
+
+    def test_github_user_and_label_adapters(self) -> None:
+        """Test PyGithub user and label conversion."""
+        user = MagicMock()
+        user.login = "dev-user"
+        user.html_url = "https://github.com/dev-user"
+        user.name = "Dev User"
+        label = MagicMock(name="bug")
+        label.name = "bug"
+
+        assert user_from_github(user) == ChangelogUser(
+            login="dev-user",
+            html_url="https://github.com/dev-user",
+            name="Dev User",
+        )
+        assert user_from_github(None) is None
+        assert label_from_github(label) == ChangelogLabel(name="bug")
+
+    def test_github_release_adapter(self) -> None:
+        """Test PyGithub release conversion."""
+        release = _github_release(
+            release_id=1,
+            tag_name="v1.0.0",
+            title="Version 1",
+            created_at=_date(2021, 1, 1),
+            body="Release notes",
+        )
+
+        assert release_from_github(release) == ChangelogRelease(
+            id=1,
+            tag_name="v1.0.0",
+            title="Version 1",
+            html_url="https://github.com/user/repo/releases/tag/v1.0.0",
+            created_at=_date(2021, 1, 1),
+            body="Release notes",
+        )
+
+    def test_github_pull_request_adapter(self) -> None:
+        """Test PyGithub pull request conversion."""
+        label = MagicMock()
+        label.name = "enhancement"
+        user = MagicMock()
+        user.login = "dev-user"
+        user.html_url = "https://github.com/dev-user"
+        user.name = None
+        pull_request = MagicMock()
+        pull_request.id = 10
+        pull_request.number = 5
+        pull_request.title = "add feature"
+        pull_request.html_url = "https://github.com/user/repo/pull/5"
+        pull_request.user = user
+        pull_request.labels = [label]
+        pull_request.merged_at = _date(2021, 1, 2)
+
+        assert pull_request_from_github(pull_request) == ChangelogPullRequest(
+            id=10,
+            number=5,
+            title="add feature",
+            html_url="https://github.com/user/repo/pull/5",
+            user=ChangelogUser(
+                login="dev-user",
+                html_url="https://github.com/dev-user",
+            ),
+            labels=[ChangelogLabel(name="enhancement")],
+            merged_at=_date(2021, 1, 2),
+        )
+
+    def test_github_issue_adapter(self) -> None:
+        """Test PyGithub issue conversion."""
+        label = MagicMock()
+        label.name = "bug"
+        user = MagicMock()
+        user.login = "reporter"
+        user.html_url = "https://github.com/reporter"
+        user.name = None
+        closed_by = MagicMock()
+        closed_by.login = "maintainer"
+        closed_by.html_url = "https://github.com/maintainer"
+        closed_by.name = "Maintainer"
+        issue = MagicMock()
+        issue.id = 20
+        issue.number = 7
+        issue.title = "fix bug"
+        issue.html_url = "https://github.com/user/repo/issues/7"
+        issue.user = user
+        issue.labels = [label]
+        issue.closed_at = _date(2021, 1, 3)
+        issue.closed_by = closed_by
+        issue.pull_request = None
+
+        assert issue_from_github(issue) == ChangelogIssue(
+            id=20,
+            number=7,
+            title="fix bug",
+            html_url="https://github.com/user/repo/issues/7",
+            user=ChangelogUser(
+                login="reporter",
+                html_url="https://github.com/reporter",
+            ),
+            labels=[ChangelogLabel(name="bug")],
+            closed_at=_date(2021, 1, 3),
+            closed_by=ChangelogUser(
+                login="maintainer",
+                html_url="https://github.com/maintainer",
+                name="Maintainer",
+            ),
+        )
+
+    def test_github_item_adapters_require_users(self) -> None:
+        """Test PR and issue conversion rejects missing users."""
+        pull_request = MagicMock(user=None)
+        issue = MagicMock(user=None)
+
+        with pytest.raises(
+            ValueError, match="Pull request user cannot be None"
+        ):
+            pull_request_from_github(pull_request)
+        with pytest.raises(ValueError, match="Issue user cannot be None"):
+            issue_from_github(issue)
 
 
 class TestChangelog:
@@ -836,54 +983,54 @@ class TestChangelog:
         changelog.options["ignore_items"] = [99]
         changelog.options["max_depends"] = 1
 
-        release = _FakeRelease(
-            id=1,
+        release = _release(
+            release_id=1,
             tag_name="v1.0.0",
             title="v1.0.0",
             created_at=_date(2021, 1, 10),
         )
-        issue = _FakeIssue(
+        issue = _issue(
             number=7,
             title="fixed issue",
-            user=_FakeUser("reporter"),
-            labels=[_FakeLabel("bug")],
-            closed_by=_FakeUser("maintainer"),
+            user_login="reporter",
+            labels=[_label("bug")],
+            closed_by_login="maintainer",
         )
-        ignored_issue = _FakeIssue(
+        ignored_issue = _issue(
             number=8,
             title="support request",
-            user=_FakeUser("reporter"),
-            labels=[_FakeLabel("question")],
-            closed_by=_FakeUser("maintainer"),
+            user_login="reporter",
+            labels=[_label("question")],
+            closed_by_login="maintainer",
         )
-        pr_plain = _FakePullRequest(
+        pr_plain = _pr(
             number=2,
             title="internal cleanup",
-            user=_FakeUser("dev-two"),
+            user_login="dev-two",
             labels=[],
         )
-        pr_feature = _FakePullRequest(
+        pr_feature = _pr(
             number=3,
             title="add feature",
-            user=_FakeUser("dev-three"),
-            labels=[_FakeLabel("enhancement")],
+            user_login="dev-three",
+            labels=[_label("enhancement")],
         )
-        pr_dep_old = _FakePullRequest(
+        pr_dep_old = _pr(
             number=4,
             title="bump dep old",
-            user=_FakeUser("dependabot[bot]"),
-            labels=[_FakeLabel("dependencies")],
+            user_login="dependabot[bot]",
+            labels=[_label("dependencies")],
         )
-        pr_dep_new = _FakePullRequest(
+        pr_dep_new = _pr(
             number=5,
             title="bump dep new",
-            user=_FakeUser("dependabot[bot]"),
-            labels=[_FakeLabel("dependencies")],
+            user_login="dependabot[bot]",
+            labels=[_label("dependencies")],
         )
-        pr_ignored = _FakePullRequest(
+        pr_ignored = _pr(
             number=99,
             title="hidden change",
-            user=_FakeUser("dev-hidden"),
+            user_login="dev-hidden",
             labels=[],
         )
 
@@ -941,20 +1088,19 @@ class TestChangelog:
             mocker,
             _OutputScenario(
                 unreleased_prs=[
-                    _FakePullRequest(
+                    _pr(
                         number=12,
                         title="prepare next work",
-                        user=_FakeUser("dev-next"),
+                        user_login="dev-next",
                         labels=[],
                     )
                 ],
                 unreleased_issues=[
-                    _FakeIssue(
+                    _issue(
                         number=11,
                         title="closed next issue",
-                        user=_FakeUser("reporter"),
+                        user_login="reporter",
                         labels=[],
-                        closed_by=None,
                     )
                 ],
             ),
@@ -995,13 +1141,13 @@ class TestChangelog:
             },
         )
         changelog.options["show_unreleased"] = False
-        release_two = _github_release(
+        release_two = _release(
             release_id=2,
             tag_name="v2.0.0",
             title="v2.0.0",
             created_at=_date(2021, 2, 1),
         )
-        release_one = _github_release(
+        release_one = _release(
             release_id=1,
             tag_name="v1.0.0",
             title="Release One",
@@ -1050,8 +1196,8 @@ class TestChangelog:
         changelog.options["show_unreleased"] = False
         changelog.options["show_depends"] = False
         changelog.options["skip_releases"] = ["v1.0.0"]
-        skipped = _FakeRelease(
-            id=1,
+        skipped = _release(
+            release_id=1,
             tag_name="v1.0.0",
             title="v1.0.0",
             created_at=_date(2021, 1, 1),

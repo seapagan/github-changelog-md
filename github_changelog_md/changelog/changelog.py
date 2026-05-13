@@ -11,13 +11,18 @@ import os
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, NoReturn
+from typing import TYPE_CHECKING, Any, Literal, NoReturn, TypeAlias
 
 import typer
 from github import Auth, Github, GithubException
 from github.GitRelease import GitRelease
 from rich import print as rprint
 
+from github_changelog_md.changelog.models import (
+    ChangelogIssue,
+    ChangelogPullRequest,
+    ChangelogRelease,
+)
 from github_changelog_md.config import get_settings
 from github_changelog_md.constants import (
     CONTRIBUTORS_FILE,
@@ -45,6 +50,15 @@ if TYPE_CHECKING:  # pragma: no cover
     from github.PaginatedList import PaginatedList
     from github.PullRequest import PullRequest
     from github.Repository import Repository
+
+if TYPE_CHECKING:
+    Release: TypeAlias = GitRelease | ChangelogRelease
+    PullRequestItem: TypeAlias = PullRequest | ChangelogPullRequest
+    IssueItem: TypeAlias = Issue | ChangelogIssue
+else:
+    Release = GitRelease | ChangelogRelease
+    PullRequestItem = ChangelogPullRequest
+    IssueItem = ChangelogIssue
 
 
 def git_error(exc: GithubException) -> NoReturn:
@@ -98,15 +112,15 @@ class ChangeLog:
         self.ignored_labels: list[str]
 
         self.repo_data: Repository
-        self.repo_releases: list[GitRelease]
+        self.repo_releases: list[Release]
         self.repo_prs: PaginatedList[PullRequest]
         self.repo_issues: PaginatedList[Issue]
-        self.pr_by_release: dict[int, list[PullRequest]]
-        self.issue_by_release: dict[int, list[Issue]]
-        self.prev_release: GitRelease | Literal["HEAD"] | None = None
-        self.filtered_repo_issues: list[Issue]
-        self.unreleased: list[PullRequest]
-        self.unreleased_issues: list[Issue]
+        self.pr_by_release: dict[int, list[PullRequestItem]]
+        self.issue_by_release: dict[int, list[IssueItem]]
+        self.prev_release: Release | Literal["HEAD"] | None = None
+        self.filtered_repo_issues: list[IssueItem]
+        self.unreleased: list[PullRequestItem]
+        self.unreleased_issues: list[IssueItem]
         self.contributors: list[NamedUser]
         self.release_text_cache = ReleaseTextCache(
             yanked_by_release=self.build_release_lookup(
@@ -378,7 +392,7 @@ class ChangeLog:
     def process_release(
         self,
         f: TextIOWrapper,
-        release: GitRelease,
+        release: Release,
     ) -> None:
         """Process a single release."""
         if (
@@ -408,8 +422,8 @@ class ChangeLog:
         if title_unique(release):
             f.write(f"**_{cap_first_letter(release.title.strip())}_**\n\n")
 
-        pr_list: list[PullRequest] = self.pr_by_release.get(release.id, [])
-        issue_list: list[Issue] = self.issue_by_release.get(release.id, [])
+        pr_list: list[PullRequestItem] = self.pr_by_release.get(release.id, [])
+        issue_list: list[IssueItem] = self.issue_by_release.get(release.id, [])
 
         # show any release text that is defined for this release
         self.show_release_text(f, release)
@@ -433,7 +447,7 @@ class ChangeLog:
         if not issue_list and not pr_list:
             self.get_release_body(f, release)
 
-    def check_yanked(self, f: TextIOWrapper, release: GitRelease) -> None:
+    def check_yanked(self, f: TextIOWrapper, release: Release) -> None:
         """Note if this release has been yanked, and the reason why."""
         if release.tag_name in self.release_text_cache.yanked_by_release:
             f.write(" **[`YANKED`]**\n\n")
@@ -444,7 +458,7 @@ class ChangeLog:
                 f"{self.release_text_cache.yanked_by_release[release.tag_name]}"
             )
 
-    def show_before_text(self, f: TextIOWrapper, release: GitRelease) -> None:
+    def show_before_text(self, f: TextIOWrapper, release: Release) -> None:
         """Shows text before this release if it exists."""
         if (
             release.tag_name
@@ -461,13 +475,10 @@ class ChangeLog:
     def show_release_text(
         self,
         f: TextIOWrapper,
-        release: str | GitRelease,
+        release: str | Release,
     ) -> None:
         """Print the release_text if it exists."""
-        if isinstance(release, GitRelease):
-            tag_name = release.tag_name
-        else:
-            tag_name = release
+        tag_name = release if isinstance(release, str) else release.tag_name
 
         if tag_name in self.release_text_cache.release_text_by_release:
             f.write(self.release_text_cache.release_text_by_release[tag_name])
@@ -476,7 +487,7 @@ class ChangeLog:
     def get_release_body(
         self,
         f: TextIOWrapper,
-        release: GitRelease,
+        release: Release,
     ) -> None:
         """Read the GitHub release body.
 
@@ -504,7 +515,7 @@ class ChangeLog:
     def rprint_issues(
         self,
         f: TextIOWrapper,
-        issue_list: list[Issue],
+        issue_list: list[IssueItem],
     ) -> None:
         """Print all the closed issues for a given release."""
         visible_issues = self.ignore_items(list(issue_list))
@@ -540,11 +551,11 @@ class ChangeLog:
     def generate_diff_url(
         self,
         f: TextIOWrapper,
-        prev_release: GitRelease | str,
-        release_tag: GitRelease,
+        prev_release: Release | str,
+        release_tag: Release,
     ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
-        if isinstance(prev_release, GitRelease):
+        if not isinstance(prev_release, str):
             prev_release = prev_release.tag_name
         elif self.options["next_release"]:
             prev_release = self.options["next_release"]
@@ -568,7 +579,7 @@ class ChangeLog:
     def rprint_prs(
         self,
         f: TextIOWrapper,
-        pr_list: list[PullRequest],
+        pr_list: list[PullRequestItem],
     ) -> None:
         """Print all the PRs for a given release.
 
@@ -640,8 +651,8 @@ class ChangeLog:
                 f.write("\n")
 
     def ignore_items(
-        self, items: list[PullRequest | Issue]
-    ) -> list[PullRequest | Issue]:
+        self, items: list[PullRequestItem | IssueItem]
+    ) -> list[PullRequestItem | IssueItem]:
         """Ignore any PRs or Issues that have been marked as hidden."""
         if not self.options["ignore_items"]:
             return items
@@ -662,8 +673,8 @@ class ChangeLog:
         return items
 
     def get_release_sections(
-        self, pr_list: list[PullRequest]
-    ) -> dict[str, list[PullRequest]]:
+        self, pr_list: list[PullRequestItem]
+    ) -> dict[str, list[PullRequestItem]]:
         """Return a dictionary of PRs sorted into sections.
 
         This handles the PRs that have a label, we handle the PRs that don't
@@ -683,7 +694,7 @@ class ChangeLog:
             for heading, section_label in self.sections
         }
 
-    def link_issues(self) -> dict[int, list[Issue]]:
+    def link_issues(self) -> dict[int, list[IssueItem]]:
         """Link Issues to their respective Release.
 
         This will create a dictionary with the key on the release id and
@@ -694,7 +705,7 @@ class ChangeLog:
             "Release ... ",
             end="",
         )
-        issue_by_release: dict[int, list[Issue]] = {}
+        issue_by_release: dict[int, list[IssueItem]] = {}
         seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             issue_by_release[release.id] = []
@@ -735,7 +746,7 @@ class ChangeLog:
             last_release_date = first_commit.commit.committer.date
         return last_release_date
 
-    def link_pull_requests(self) -> dict[int, list[PullRequest]]:
+    def link_pull_requests(self) -> dict[int, list[PullRequestItem]]:
         """Link Pull Requests to their respective Release.
 
         This will create a dictionary with the key on the release id and
@@ -746,7 +757,7 @@ class ChangeLog:
             "Release ... ",
             end="",
         )
-        pr_by_release: dict[int, list[PullRequest]] = {}
+        pr_by_release: dict[int, list[PullRequestItem]] = {}
         seen: set[int] = set()
         for release in self.repo_releases[::-1]:
             pr_by_release[release.id] = []
@@ -774,10 +785,10 @@ class ChangeLog:
         rprint(self.done_str)
         return pr_by_release
 
-    def filter_issues(self) -> list[Issue]:
+    def filter_issues(self) -> list[IssueItem]:
         """Filter out non-merged PRs and actual issues."""
         rprint("\n  [green]->[/green] Filtering Issues from PRs... ", end="")
-        filtered_repo_issues = [
+        filtered_repo_issues: list[IssueItem] = [
             issue for issue in self.repo_issues if not issue.pull_request
         ]
         rprint(self.done_str)
@@ -816,7 +827,7 @@ class ChangeLog:
             rprint(f"[green]{repo_prs.totalCount} Found[/green]")
             return repo_prs
 
-    def get_repo_releases(self) -> list[GitRelease]:
+    def get_repo_releases(self) -> list[Release]:
         """Get info on all the releases from GitHub."""
         rprint("  [green]->[/green] Getting Releases ... ", end="")
         try:
