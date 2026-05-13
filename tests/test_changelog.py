@@ -1069,11 +1069,8 @@ class TestChangelog:
         """Test process_unreleased writes heading and links to HEAD."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
-        changelog.unreleased = [MagicMock()]
+        changelog.unreleased = [_pr(1, "pending change", "dev", [])]
         changelog.unreleased_issues = []
-        changelog.show_release_text = MagicMock()
-        changelog.rprint_issues = MagicMock()
-        changelog.rprint_prs = MagicMock()
 
         out = MagicMock()
         changelog.process_unreleased(out)
@@ -1082,10 +1079,7 @@ class TestChangelog:
         assert "## [Unreleased]" in rendered
         assert "/tree/HEAD" in rendered
         assert changelog.prev_release == "HEAD"
-        changelog.show_release_text.assert_called_once_with(
-            out,
-            "unreleased",
-        )
+        assert "Pending change" in rendered
 
     def test_process_unreleased_with_next_release_uses_tag_link(
         self,
@@ -1095,11 +1089,8 @@ class TestChangelog:
         changelog = _build_changelog(mocker)
         changelog.options["next_release"] = "v2.0.0"
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
-        changelog.unreleased = []
-        changelog.unreleased_issues = [MagicMock()]
-        changelog.show_release_text = MagicMock()
-        changelog.rprint_issues = MagicMock()
-        changelog.rprint_prs = MagicMock()
+        changelog.unreleased = [_pr(1, "pending change", "dev", [])]
+        changelog.unreleased_issues = []
 
         out = MagicMock()
         changelog.process_unreleased(out)
@@ -1107,10 +1098,7 @@ class TestChangelog:
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "## [v2.0.0]" in rendered
         assert "/releases/tag/v2.0.0" in rendered
-        changelog.show_release_text.assert_called_once_with(
-            out,
-            "v2.0.0",
-        )
+        assert "Pending change" in rendered
 
     def test_generate_diff_url_with_diff_and_patch(self, mocker) -> None:
         """Test generate_diff_url renders changelog, diff, and patch links."""
@@ -1186,12 +1174,11 @@ class TestChangelog:
         assert "and 1 more dependency updates" in rendered
 
     def test_process_release_falls_back_to_release_body(self, mocker) -> None:
-        """Test process_release calls get_release_body when lists are empty."""
+        """Test process_release renders release body when lists are empty."""
         changelog = _build_changelog(mocker)
         changelog.prev_release = None
         changelog.pr_by_release = {}
         changelog.issue_by_release = {}
-        changelog.get_release_body = MagicMock()
 
         release = MagicMock()
         release.id = 1
@@ -1204,11 +1191,13 @@ class TestChangelog:
             1,
             tzinfo=datetime.timezone.utc,
         )
+        release.body = None
 
         out = MagicMock()
         changelog.process_release(out, release)
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
 
-        changelog.get_release_body.assert_called_once_with(out, release)
+        assert "There were no merged pull requests" in rendered
 
     def test_get_release_body_strips_compare_link_and_adds_newline(
         self,
@@ -1843,8 +1832,6 @@ class TestChangelog:
         changelog.options["skip_releases"] = ["v0.9.0"]
         changelog.options["show_depends"] = False
         changelog.options["show_unreleased"] = True
-        changelog.process_unreleased = MagicMock()
-        changelog.process_release = MagicMock()
 
         mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
         mock_path.cwd.return_value = Path("test_cwd")
@@ -1858,9 +1845,7 @@ class TestChangelog:
             call.args[0] for call in file_handle.write.call_args_list
         )
         assert "Dependency updates are excluded" in rendered
-        changelog.process_unreleased.assert_called_once()
-        changelog.process_release.assert_called_once()
-        assert changelog.prev_release == changelog.repo_releases[0]
+        assert "This changelog was generated using" in rendered
 
     def test_process_release_skip_prev_release_and_title(
         self,
@@ -1884,23 +1869,14 @@ class TestChangelog:
 
         changelog.options["skip_releases"] = None
         changelog.prev_release = "HEAD"
-        changelog.generate_diff_url = MagicMock()
-        changelog.show_before_text = MagicMock()
-        changelog.check_yanked = MagicMock()
-        changelog.show_release_text = MagicMock()
-        changelog.rprint_issues = MagicMock()
-        changelog.rprint_prs = MagicMock()
-        changelog.pr_by_release = {1: [MagicMock()]}
-        changelog.issue_by_release = {1: [MagicMock()]}
-        mocker.patch(
-            "github_changelog_md.changelog.changelog.title_unique",
-            return_value=True,
-        )
+        changelog.pr_by_release = {}
+        changelog.issue_by_release = {}
+        release.body = None
         out = MagicMock()
         changelog.process_release(out, release)
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "**_Release Title_**" in rendered
-        changelog.generate_diff_url.assert_called_once()
+        assert "[`Full Changelog`]" in rendered
 
     def test_show_release_text_accepts_release_instance(self, mocker) -> None:
         """Test show_release_text branch when given a release instance."""

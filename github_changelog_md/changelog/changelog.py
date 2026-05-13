@@ -6,7 +6,6 @@ This will encapsulate the logic for generating the changelog.
 from __future__ import annotations
 
 import contextlib
-import datetime
 import os
 import sys
 from dataclasses import dataclass, field
@@ -28,6 +27,7 @@ from github_changelog_md.changelog.models import (
     ChangelogRepository,
     ChangelogUser,
 )
+from github_changelog_md.changelog.renderer import ChangelogRenderer
 from github_changelog_md.constants import (
     CONTRIBUTORS_FILE,
     IGNORED_CONTRIBUTORS,
@@ -38,14 +38,12 @@ from github_changelog_md.constants import (
     SectionHeadings,
 )
 from github_changelog_md.helpers import (
-    cap_first_letter,
     get_index_of_tuple,
-    get_section_name,
     header,
-    title_unique,
 )
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
     from io import TextIOWrapper
 
     from github_changelog_md.changelog.github_data import GitHubDataSource
@@ -292,37 +290,12 @@ class ChangeLog:
 
         rprint("  [green]->[/green] Generating Changelog ... ", end="")
 
+        rendered_changelog = self._renderer().render()
         with Path(Path.cwd() / self.options["output_file"]).open(
             mode="w",
             encoding="utf-8",
         ) as f:
-            f.write("# Changelog\n\n")
-
-            if self.settings.intro_text:
-                f.write(f"{self.settings.intro_text}\n\n")
-
-            if not self.options["show_depends"]:
-                f.write(
-                    "*Dependency updates are excluded from this changelog, "
-                    "check each `Full Changelog` for details.*\n\n "
-                )
-
-            self.prev_release = None
-
-            if self.options["show_unreleased"]:
-                self.process_unreleased(f)
-
-            for release in self.repo_releases:
-                self.process_release(f, release)
-                self.prev_release = release
-
-            # add a link to this generator at the bottom of the changelog
-            f.write(
-                "---\n"
-                "*This changelog was generated using "
-                "[github-changelog-md](http://changelog.seapagan.net/) "
-                "by [Seapagan](https://github.com/seapagan)*\n",
-            )
+            f.write(rendered_changelog)
 
         rprint(self.done_str)
         rprint(
@@ -330,41 +303,39 @@ class ChangeLog:
             f"[bold]{Path.cwd() / self.options['output_file']}[/bold]\n",
         )
 
+    def _renderer(self) -> ChangelogRenderer:
+        """Create the Markdown renderer for the current changelog data."""
+        return ChangelogRenderer(
+            repo_data=getattr(
+                self,
+                "repo_data",
+                ChangelogRepository(
+                    name=self.repo_name,
+                    full_name=self.repo_name,
+                    html_url="",
+                ),
+            ),
+            repo_releases=getattr(self, "repo_releases", []),
+            pr_by_release=getattr(self, "pr_by_release", {}),
+            issue_by_release=getattr(self, "issue_by_release", {}),
+            unreleased=getattr(self, "unreleased", []),
+            unreleased_issues=getattr(self, "unreleased_issues", []),
+            release_text_cache=self.release_text_cache,
+            options=self.options,
+            settings=self.settings,
+            sections=getattr(self, "sections", SECTIONS),
+            ignored_labels=getattr(self, "ignored_labels", []),
+            prev_release=self.prev_release,
+        )
+
     def process_unreleased(
         self,
         f: TextIOWrapper,
     ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
-        if self.unreleased or self.unreleased_issues:
-            heading = self.options["next_release"] or "Unreleased"
-            text_date = (
-                datetime.datetime.now(tz=datetime.timezone.utc)
-                .date()
-                .strftime(self.settings.date_format)
-            )
-            release_date = (
-                f" ({text_date})" if self.options["next_release"] else ""
-            )
-            release_link = (
-                "tree/HEAD"
-                if not self.options["next_release"]
-                else f"releases/tag/{self.options['next_release']}"
-            )
-            f.write(
-                f"## [{heading}]({self.repo_data.html_url}/{release_link})"
-                f"{release_date}\n\n",
-            )
-
-            # show any release text that is defined for this release
-            self.show_release_text(
-                f,
-                self.options["next_release"] or "unreleased",
-            )
-
-            self.rprint_issues(f, self.unreleased_issues)
-            self.rprint_prs(f, self.unreleased)
-
-            self.prev_release = "HEAD"
+        renderer = self._renderer()
+        renderer.process_unreleased(f)
+        self.prev_release = renderer.prev_release
 
     def process_release(
         self,
@@ -372,82 +343,15 @@ class ChangeLog:
         release: Release,
     ) -> None:
         """Process a single release."""
-        if (
-            self.options["skip_releases"]
-            and release.tag_name.strip() in self.options["skip_releases"]
-        ):
-            return
-        if self.prev_release:
-            self.generate_diff_url(f, self.prev_release, release)
-
-        # show any text before this release if it exists
-        self.show_before_text(f, release)
-
-        text_date = release.created_at.date().strftime(
-            self.settings.date_format
-        )
-        f.write(
-            f"## [{release.tag_name}]({release.html_url}) ({text_date})",
-        )
-        self.check_yanked(f, release)
-
-        f.write("\n\n")
-
-        # write the release title if it is different from the tag name
-        # and it is not empty. We may need to strip any leading alpha character
-        # from the title (eg 'v' or 'V')
-        if title_unique(release):
-            f.write(f"**_{cap_first_letter(release.title.strip())}_**\n\n")
-
-        pr_list: list[PullRequestItem] = self.pr_by_release.get(release.id, [])
-        issue_list: list[IssueItem] = self.issue_by_release.get(release.id, [])
-
-        # show any release text that is defined for this release
-        self.show_release_text(f, release)
-
-        if (
-            release.tag_name
-            in self.release_text_cache.release_overrides_by_release
-        ):
-            f.write(
-                self.release_text_cache.release_overrides_by_release[
-                    release.tag_name
-                ]
-            )
-            f.write("\n")
-            return
-
-        self.rprint_issues(f, issue_list)
-        self.rprint_prs(f, pr_list)
-
-        # if no closed releases or PR's then get the release body instead
-        if not issue_list and not pr_list:
-            self.get_release_body(f, release)
+        self._renderer().process_release(f, release)
 
     def check_yanked(self, f: TextIOWrapper, release: Release) -> None:
         """Note if this release has been yanked, and the reason why."""
-        if release.tag_name in self.release_text_cache.yanked_by_release:
-            f.write(" **[`YANKED`]**\n\n")
-            f.write(
-                "**This release has been removed for the following reason and "
-                "should not be used:**\n\n"
-                f"- "
-                f"{self.release_text_cache.yanked_by_release[release.tag_name]}"
-            )
+        self._renderer().check_yanked(f, release)
 
     def show_before_text(self, f: TextIOWrapper, release: Release) -> None:
         """Shows text before this release if it exists."""
-        if (
-            release.tag_name
-            in self.release_text_cache.release_text_before_by_release
-        ):
-            f.write("---\n\n")
-            f.write(
-                self.release_text_cache.release_text_before_by_release[
-                    release.tag_name
-                ]
-            )
-            f.write("\n\n---\n\n")
+        self._renderer().show_before_text(f, release)
 
     def show_release_text(
         self,
@@ -455,39 +359,15 @@ class ChangeLog:
         release: str | Release,
     ) -> None:
         """Print the release_text if it exists."""
-        tag_name = release if isinstance(release, str) else release.tag_name
-
-        if tag_name in self.release_text_cache.release_text_by_release:
-            f.write(self.release_text_cache.release_text_by_release[tag_name])
-            f.write("\n\n")
+        self._renderer().show_release_text(f, release)
 
     def get_release_body(
         self,
         f: TextIOWrapper,
         release: Release,
     ) -> None:
-        """Read the GitHub release body.
-
-        first remove any existing diff links so we can add our
-        own. The auto-generated release notes on GitHub will
-        add a diff link to the release notes. We don't want that.
-        """
-        if release.body:
-            body_lines = release.body.split("\n")
-            for i, line in enumerate(body_lines):
-                if f"{self.repo_data.html_url}/compare/" in line:
-                    body_lines.pop(i)
-                    break
-            body = "\n".join(body_lines)
-            if body.strip() and not body.endswith("\n"):
-                body += "\n"
-            f.write(body)
-        else:
-            f.write(
-                "There were no merged pull requests or closed issues "
-                "for this release.\n\n"
-                "See the Full Changelog below for details.\n\n"
-            )
+        """Read the GitHub release body."""
+        self._renderer().get_release_body(f, release)
 
     def rprint_issues(
         self,
@@ -495,35 +375,7 @@ class ChangeLog:
         issue_list: list[IssueItem],
     ) -> None:
         """Print all the closed issues for a given release."""
-        visible_issues = self.ignore_items(list(issue_list))
-        if not visible_issues or not self.options["show_issues"]:
-            return
-
-        f.write("**Closed Issues**\n\n")
-        for issue in self.get_sorted_items(visible_issues):
-            if any(
-                label.name.lower() in self.ignored_labels
-                for label in issue.labels
-            ):
-                continue
-            escaped_title = cap_first_letter(
-                issue.title.replace("__", "\\_\\_").strip(),
-            )
-            try:
-                f.write(
-                    f"- {escaped_title} "
-                    f"([#{issue.number}]({issue.html_url})) "
-                    f"by [{issue.closed_by.login}]"
-                    f"({issue.closed_by.html_url})\n",
-                )
-            except AttributeError:
-                # this means the issue was closed by a user who has since been
-                # deleted, or it was converted to a discussion. We can't get any
-                # info on them.
-                f.write(
-                    f"- {escaped_title} ([#{issue.number}]({issue.html_url}))\n"
-                )
-        f.write("\n")
+        self._renderer().rprint_issues(f, issue_list)
 
     def generate_diff_url(
         self,
@@ -532,122 +384,25 @@ class ChangeLog:
         release_tag: Release,
     ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
-        if not isinstance(prev_release, str):
-            prev_release = prev_release.tag_name
-        elif self.options["next_release"]:
-            prev_release = self.options["next_release"]
-        f.write(
-            f"[`Full Changelog`]"
-            f"({self.repo_data.html_url}/compare/"
-            f"{release_tag.tag_name}...{prev_release})",
-        )
-        if self.options["show_diff"]:
-            f.write(
-                f" | [`Diff`]({self.repo_data.html_url}/compare/"
-                f"{release_tag.tag_name}...{prev_release}.diff)",
-            )
-        if self.options["show_patch"]:
-            f.write(
-                f" | [`Patch`]({self.repo_data.html_url}/compare/"
-                f"{release_tag.tag_name}...{prev_release}.patch)",
-            )
-        f.write("\n\n")
+        self._renderer().generate_diff_url(f, prev_release, release_tag)
 
     def rprint_prs(
         self,
         f: TextIOWrapper,
         pr_list: list[PullRequestItem],
     ) -> None:
-        """Print all the PRs for a given release.
-
-        They are sorted into sections depending on the labels they have.
-        """
-        if not pr_list:
-            return
-
-        release_sections = self.get_release_sections(pr_list)
-
-        # default section for PRs that don't have any of the specific labels we
-        # have defined for section headings. This may be able to be merged with
-        # the above dict comprehension?
-
-        # find the new section title
-
-        merged_section_title = next(
-            (section[0] for section in self.sections if section[1] is None),
-            "Merged Pull Requests",
-        )
-        release_sections[merged_section_title] = [
-            pr
-            for pr in pr_list
-            if not any(
-                section_label
-                in [pr_label.name.lower() for pr_label in pr.labels]
-                for _, section_label in self.sections
-            )
-            and not any(
-                pr_label.name.lower() in self.ignored_labels
-                for pr_label in pr.labels
-            )
-        ]
-
-        for heading, prs in release_sections.items():
-            is_dependencies = heading == get_section_name("dependencies")
-            if is_dependencies and not self.options["show_depends"]:
-                continue
-
-            visible_prs = self.ignore_items(list(prs))
-
-            if visible_prs:
-                f.write(f"**{heading}**\n\n")
-                sorted_prs = self.get_sorted_items(visible_prs)
-                display_prs = (
-                    sorted_prs[: self.options["max_depends"]]
-                    if is_dependencies
-                    else sorted_prs
-                )
-                for pr in display_prs:
-                    escaped_title = cap_first_letter(
-                        pr.title.replace("__", "\\_\\_").strip(),
-                    )
-                    f.write(
-                        f"- {escaped_title} "
-                        f"([#{pr.number}]({pr.html_url})) "
-                        f"by [{pr.user.login}]({pr.user.html_url})\n",
-                    )
-                if (
-                    is_dependencies
-                    and len(sorted_prs) > self.options["max_depends"]
-                ):
-                    hidden_updates = (
-                        len(sorted_prs) - self.options["max_depends"]
-                    )
-                    f.write(
-                        f"- *and {hidden_updates} more dependency updates*\n",
-                    )
-                f.write("\n")
+        """Print all the PRs for a given release."""
+        self._renderer().rprint_prs(f, pr_list)
 
     def ignore_items(
         self, items: list[PullRequestItem | IssueItem]
     ) -> list[PullRequestItem | IssueItem]:
         """Ignore any PRs or Issues that have been marked as hidden."""
-        if not self.options["ignore_items"]:
-            return items
-        return [
-            item
-            for item in items
-            if item.number not in self.options["ignore_items"]
-            and "[no changelog]" not in item.title.lower()
-        ]
+        return self._renderer().ignore_items(items)
 
     def get_sorted_items(self, items: list[Any]) -> list[Any]:
         """Sort the PRs or Issues into the required order."""
-        if self.options["item_order"] == "newest-first":
-            return sorted(items, key=lambda x: x.number, reverse=True)
-        if self.options["item_order"] == "oldest-first":
-            return sorted(items, key=lambda x: x.number)
-        # any other value will be ignored and the default order will be used
-        return items
+        return self._renderer().get_sorted_items(items)
 
     def get_release_sections(
         self, pr_list: list[PullRequestItem]
@@ -657,19 +412,7 @@ class ChangeLog:
         This handles the PRs that have a label, we handle the PRs that don't
         have a label separately.
         """
-        return {
-            heading: [
-                pr
-                for pr in pr_list
-                if section_label
-                in [pr_label.name.lower() for pr_label in pr.labels]
-                and not any(
-                    pr_label.name.lower() in self.ignored_labels
-                    for pr_label in pr.labels
-                )
-            ]
-            for heading, section_label in self.sections
-        }
+        return self._renderer().get_release_sections(pr_list)
 
     def link_issues(self) -> dict[int, list[IssueItem]]:
         """Link Issues to their respective Release.
