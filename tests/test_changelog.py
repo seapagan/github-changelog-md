@@ -1,6 +1,7 @@
 """Test the ChangeLog class."""
 
 import datetime
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, cast
 from unittest.mock import MagicMock
@@ -8,6 +9,7 @@ from unittest.mock import MagicMock
 import pytest
 import typer
 from github import GithubException
+from github.GitRelease import GitRelease
 
 from github_changelog_md.changelog.changelog import ChangeLog, git_error
 from github_changelog_md.constants import ChangelogOptions, ExitErrors
@@ -201,6 +203,131 @@ def mock_repo() -> MagicMock:
         ),
     ]
     return mock_repo
+
+
+@dataclass
+class _FakeLabel:
+    name: str
+
+
+@dataclass
+class _FakeUser:
+    login: str
+
+    @property
+    def html_url(self) -> str:
+        return f"https://github.com/{self.login}"
+
+
+@dataclass
+class _FakeIssue:
+    number: int
+    title: str
+    user: _FakeUser
+    labels: list[_FakeLabel]
+    closed_by: _FakeUser | None = None
+    id: int | None = None
+    closed_at: datetime.datetime | None = None
+    pull_request: None = None
+
+    @property
+    def html_url(self) -> str:
+        return f"https://github.com/user/repo/issues/{self.number}"
+
+
+@dataclass
+class _FakePullRequest:
+    number: int
+    title: str
+    user: _FakeUser
+    labels: list[_FakeLabel]
+    id: int | None = None
+    merged_at: datetime.datetime | None = None
+
+    @property
+    def html_url(self) -> str:
+        return f"https://github.com/user/repo/pull/{self.number}"
+
+
+@dataclass(frozen=True)
+class _FakeRelease:
+    id: int
+    tag_name: str
+    title: str
+    created_at: datetime.datetime
+    body: str = ""
+
+    @property
+    def html_url(self) -> str:
+        return f"https://github.com/user/repo/releases/tag/{self.tag_name}"
+
+
+@dataclass
+class _OutputScenario:
+    releases: list[Any] = field(default_factory=list)
+    prs_by_release: dict[int, list[_FakePullRequest]] = field(
+        default_factory=dict
+    )
+    issues_by_release: dict[int, list[_FakeIssue]] = field(default_factory=dict)
+    unreleased_prs: list[_FakePullRequest] = field(default_factory=list)
+    unreleased_issues: list[_FakeIssue] = field(default_factory=list)
+
+
+def _date(year: int, month: int, day: int) -> datetime.datetime:
+    return datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
+
+
+def _github_release(
+    release_id: int,
+    tag_name: str,
+    title: str,
+    created_at: datetime.datetime,
+    body: str = "",
+) -> GitRelease:
+    release = MagicMock(spec=GitRelease)
+    release.id = release_id
+    release.tag_name = tag_name
+    release.title = title
+    release.created_at = created_at
+    release.body = body
+    release.html_url = f"https://github.com/user/repo/releases/tag/{tag_name}"
+    return cast("GitRelease", release)
+
+
+def _render_changelog(
+    changelog: ChangeLog, mocker, scenario: _OutputScenario
+) -> str:
+    changelog.options["output_file"] = "CHANGELOG.md"
+    changelog.repo_data = MagicMock(
+        html_url="https://github.com/user/repo",
+        name="repo",
+    )
+    changelog.repo_releases = cast("Any", scenario.releases)
+    changelog.pr_by_release = cast("Any", scenario.prs_by_release)
+    changelog.issue_by_release = cast("Any", scenario.issues_by_release)
+    changelog.unreleased = cast("Any", scenario.unreleased_prs)
+    changelog.unreleased_issues = cast("Any", scenario.unreleased_issues)
+    changelog.sections = [
+        ("Breaking Changes", "breaking"),
+        ("Merged Pull Requests", None),
+        ("Enhancements", "enhancement"),
+        ("Bug Fixes", "bug"),
+        ("Refactoring", "refactor"),
+        ("Documentation", "documentation"),
+        ("Dependency Updates", "dependencies"),
+    ]
+    changelog.ignored_labels = ["duplicate", "invalid", "question", "wontfix"]
+
+    mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
+    mock_path.cwd.return_value = Path("test_cwd")
+    file_handle = MagicMock()
+    mock_path.return_value.open.return_value.__enter__.return_value = (
+        file_handle
+    )
+
+    changelog.generate_changelog()
+
+    return "".join(call.args[0] for call in file_handle.write.call_args_list)
 
 
 class TestChangelog:
@@ -699,6 +826,252 @@ class TestChangelog:
         assert "Intro line\n\n" in rendered
         assert "This changelog was generated using" in rendered
         changelog.process_unreleased.assert_not_called()
+
+    def test_generate_changelog_renders_release_sections_golden(
+        self, mocker
+    ) -> None:
+        """Test a release renders issues and PR sections as Markdown."""
+        changelog = _build_changelog(mocker)
+        changelog.options["show_unreleased"] = False
+        changelog.options["ignore_items"] = [99]
+        changelog.options["max_depends"] = 1
+
+        release = _FakeRelease(
+            id=1,
+            tag_name="v1.0.0",
+            title="v1.0.0",
+            created_at=_date(2021, 1, 10),
+        )
+        issue = _FakeIssue(
+            number=7,
+            title="fixed issue",
+            user=_FakeUser("reporter"),
+            labels=[_FakeLabel("bug")],
+            closed_by=_FakeUser("maintainer"),
+        )
+        ignored_issue = _FakeIssue(
+            number=8,
+            title="support request",
+            user=_FakeUser("reporter"),
+            labels=[_FakeLabel("question")],
+            closed_by=_FakeUser("maintainer"),
+        )
+        pr_plain = _FakePullRequest(
+            number=2,
+            title="internal cleanup",
+            user=_FakeUser("dev-two"),
+            labels=[],
+        )
+        pr_feature = _FakePullRequest(
+            number=3,
+            title="add feature",
+            user=_FakeUser("dev-three"),
+            labels=[_FakeLabel("enhancement")],
+        )
+        pr_dep_old = _FakePullRequest(
+            number=4,
+            title="bump dep old",
+            user=_FakeUser("dependabot[bot]"),
+            labels=[_FakeLabel("dependencies")],
+        )
+        pr_dep_new = _FakePullRequest(
+            number=5,
+            title="bump dep new",
+            user=_FakeUser("dependabot[bot]"),
+            labels=[_FakeLabel("dependencies")],
+        )
+        pr_ignored = _FakePullRequest(
+            number=99,
+            title="hidden change",
+            user=_FakeUser("dev-hidden"),
+            labels=[],
+        )
+
+        rendered = _render_changelog(
+            changelog,
+            mocker,
+            _OutputScenario(
+                releases=[release],
+                prs_by_release={
+                    release.id: [
+                        pr_plain,
+                        pr_feature,
+                        pr_dep_old,
+                        pr_dep_new,
+                        pr_ignored,
+                    ]
+                },
+                issues_by_release={release.id: [issue, ignored_issue]},
+            ),
+        )
+
+        assert rendered == (
+            "# Changelog\n\n"
+            "## [v1.0.0](https://github.com/user/repo/releases/tag/v1.0.0) "
+            "(2021-01-10)\n\n"
+            "**Closed Issues**\n\n"
+            "- Fixed issue ([#7](https://github.com/user/repo/issues/7)) "
+            "by [maintainer](https://github.com/maintainer)\n\n"
+            "**Merged Pull Requests**\n\n"
+            "- Internal cleanup ([#2](https://github.com/user/repo/pull/2)) "
+            "by [dev-two](https://github.com/dev-two)\n\n"
+            "**Enhancements**\n\n"
+            "- Add feature ([#3](https://github.com/user/repo/pull/3)) "
+            "by [dev-three](https://github.com/dev-three)\n\n"
+            "**Dependency Updates**\n\n"
+            "- Bump dep new ([#5](https://github.com/user/repo/pull/5)) "
+            "by [dependabot[bot]](https://github.com/dependabot[bot])\n"
+            "- *and 1 more dependency updates*\n\n"
+            "---\n"
+            "*This changelog was generated using "
+            "[github-changelog-md](http://changelog.seapagan.net/) "
+            "by [Seapagan](https://github.com/seapagan)*\n"
+        )
+
+    def test_generate_changelog_renders_unreleased_golden(self, mocker) -> None:
+        """Test unreleased changes render to the current HEAD link."""
+        changelog = _build_changelog(
+            mocker,
+            {"release_text": [{"release": "unreleased", "text": "Preview"}]},
+        )
+        changelog.options["show_unreleased"] = True
+
+        rendered = _render_changelog(
+            changelog,
+            mocker,
+            _OutputScenario(
+                unreleased_prs=[
+                    _FakePullRequest(
+                        number=12,
+                        title="prepare next work",
+                        user=_FakeUser("dev-next"),
+                        labels=[],
+                    )
+                ],
+                unreleased_issues=[
+                    _FakeIssue(
+                        number=11,
+                        title="closed next issue",
+                        user=_FakeUser("reporter"),
+                        labels=[],
+                        closed_by=None,
+                    )
+                ],
+            ),
+        )
+
+        assert rendered == (
+            "# Changelog\n\n"
+            "## [Unreleased](https://github.com/user/repo/tree/HEAD)\n\n"
+            "Preview\n\n"
+            "**Closed Issues**\n\n"
+            "- Closed next issue "
+            "([#11](https://github.com/user/repo/issues/11))\n\n"
+            "**Merged Pull Requests**\n\n"
+            "- Prepare next work "
+            "([#12](https://github.com/user/repo/pull/12)) "
+            "by [dev-next](https://github.com/dev-next)\n\n"
+            "---\n"
+            "*This changelog was generated using "
+            "[github-changelog-md](http://changelog.seapagan.net/) "
+            "by [Seapagan](https://github.com/seapagan)*\n"
+        )
+
+    def test_generate_changelog_renders_release_text_variants_golden(
+        self, mocker
+    ) -> None:
+        """Test configured release text, yanked notes, and overrides render."""
+        changelog = _build_changelog(
+            mocker,
+            {
+                "release_text_before": [
+                    {"release": "v1.0.0", "text": "Before release"}
+                ],
+                "release_text": [{"release": "v1.0.0", "text": "Release note"}],
+                "release_overrides": [
+                    {"release": "v2.0.0", "text": "Override body\n"}
+                ],
+                "yanked": [{"release": "v1.0.0", "reason": "bad artifact"}],
+            },
+        )
+        changelog.options["show_unreleased"] = False
+        release_two = _github_release(
+            release_id=2,
+            tag_name="v2.0.0",
+            title="v2.0.0",
+            created_at=_date(2021, 2, 1),
+        )
+        release_one = _github_release(
+            release_id=1,
+            tag_name="v1.0.0",
+            title="Release One",
+            created_at=_date(2021, 1, 1),
+        )
+
+        rendered = _render_changelog(
+            changelog,
+            mocker,
+            _OutputScenario(releases=[release_two, release_one]),
+        )
+
+        assert rendered == (
+            "# Changelog\n\n"
+            "## [v2.0.0](https://github.com/user/repo/releases/tag/v2.0.0) "
+            "(2021-02-01)\n\n"
+            "Override body\n\n"
+            "[`Full Changelog`](https://github.com/user/repo/compare/"
+            "v1.0.0...v2.0.0) | [`Diff`](https://github.com/user/repo/"
+            "compare/v1.0.0...v2.0.0.diff) | [`Patch`](https://github.com/"
+            "user/repo/compare/v1.0.0...v2.0.0.patch)\n\n"
+            "---\n\n"
+            "Before release\n\n"
+            "---\n\n"
+            "## [v1.0.0](https://github.com/user/repo/releases/tag/v1.0.0) "
+            "(2021-01-01) **[`YANKED`]**\n\n"
+            "**This release has been removed for the following reason and "
+            "should not be used:**\n\n"
+            "- bad artifact\n\n"
+            "**_Release One_**\n\n"
+            "Release note\n\n"
+            "There were no merged pull requests or closed issues "
+            "for this release.\n\n"
+            "See the Full Changelog below for details.\n\n"
+            "---\n"
+            "*This changelog was generated using "
+            "[github-changelog-md](http://changelog.seapagan.net/) "
+            "by [Seapagan](https://github.com/seapagan)*\n"
+        )
+
+    def test_generate_changelog_renders_skip_and_no_releases_golden(
+        self, mocker
+    ) -> None:
+        """Test skipped releases and an otherwise empty changelog output."""
+        changelog = _build_changelog(mocker)
+        changelog.options["show_unreleased"] = False
+        changelog.options["show_depends"] = False
+        changelog.options["skip_releases"] = ["v1.0.0"]
+        skipped = _FakeRelease(
+            id=1,
+            tag_name="v1.0.0",
+            title="v1.0.0",
+            created_at=_date(2021, 1, 1),
+        )
+
+        rendered = _render_changelog(
+            changelog,
+            mocker,
+            _OutputScenario(releases=[skipped]),
+        )
+
+        assert rendered == (
+            "# Changelog\n\n"
+            "*Dependency updates are excluded from this changelog, "
+            "check each `Full Changelog` for details.*\n\n "
+            "---\n"
+            "*This changelog was generated using "
+            "[github-changelog-md](http://changelog.seapagan.net/) "
+            "by [Seapagan](https://github.com/seapagan)*\n"
+        )
 
     def test_flatten_ignores_with_extend_and_allowlist(self, mocker) -> None:
         """Test flatten_ignores combines defaults and removes allowed labels."""
