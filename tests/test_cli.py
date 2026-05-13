@@ -9,6 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 from github_changelog_md.constants import ExitErrors
+from github_changelog_md.helpers import GitHubRemote
 from github_changelog_md.main import app
 
 if TYPE_CHECKING:
@@ -182,29 +183,60 @@ class TestCLI:
         _assert_changelog_called(mock_changelog, "test_repo", expected_options)
         mock_changelog_instance.run.assert_called_once()
 
-    def test_no_repo_specified_get_from_local_repo(
+    def test_no_repo_specified_get_from_local_github_repo(
         self,
         mocker: MockerFixture,
         mock_changelog: MockType,
     ) -> None:
         """Test the main function with no repo specified.
 
-        It should read the name from the local repo.
+        It should read the owner and repo from the local repo.
         """
         mock_changelog_instance = Mock()
         mock_changelog.return_value = mock_changelog_instance
 
         mocker.patch(
-            "github_changelog_md.main.get_repo_name",
-            return_value="test_local_repo",
+            "github_changelog_md.main.get_repo_remote",
+            return_value=GitHubRemote(owner="test_owner", repo="test_repo"),
         )
 
         runner = CliRunner()
         runner.invoke(app)
 
-        _assert_changelog_called(
-            mock_changelog, "test_local_repo", default_options
+        expected_options = cast(
+            "ChangelogOptions",
+            {**default_options, "user_name": "test_owner"},
         )
+        _assert_changelog_called(
+            mock_changelog,
+            "test_repo",
+            expected_options,
+        )
+        mock_changelog_instance.run.assert_called_once()
+
+    def test_explicit_repo_ignores_local_repo_owner(
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
+    ) -> None:
+        """Test explicit repo keeps authenticated-user owner fallback."""
+        mock_changelog_instance = Mock()
+        mock_changelog.return_value = mock_changelog_instance
+
+        get_repo_remote = mocker.patch(
+            "github_changelog_md.main.get_repo_remote",
+            return_value=GitHubRemote(owner="local_owner", repo="local_repo"),
+        )
+
+        runner = CliRunner()
+        runner.invoke(app, ["--repo", "explicit_repo"])
+
+        _assert_changelog_called(
+            mock_changelog,
+            "explicit_repo",
+            default_options,
+        )
+        get_repo_remote.assert_not_called()
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_and_no_local_repo_found(
@@ -220,7 +252,7 @@ class TestCLI:
         mock_changelog.return_value = mock_changelog_instance
 
         mocker.patch(
-            "github_changelog_md.main.get_repo_name",
+            "github_changelog_md.main.get_repo_remote",
             return_value=None,
         )
 

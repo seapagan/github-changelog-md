@@ -18,7 +18,7 @@ from github_changelog_md.config.validation import (
     validate_settings,
 )
 from github_changelog_md.constants import ExitErrors
-from github_changelog_md.helpers import get_app_version, get_repo_name
+from github_changelog_md.helpers import get_app_version, get_repo_remote
 
 if TYPE_CHECKING:
     from github_changelog_md.constants import ChangelogOptions
@@ -170,7 +170,10 @@ def main(
 
     if not repo:
         # Try to get the repo from the current directory.
-        repo = get_repo_name()
+        repo_remote = get_repo_remote()
+        if repo_remote:
+            repo = repo_remote.repo
+            user = user or repo_remote.owner
 
         if not repo:
             # cant find a local repo and none specified on the cmd line.

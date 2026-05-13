@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import subprocess
 import sys
+from dataclasses import dataclass
 from importlib import metadata, resources
 from pathlib import Path
 from shutil import which
 from typing import Protocol
+from urllib.parse import urlparse
 
 import rtoml
 from rich import print as rprint
 
 from github_changelog_md.constants import SECTIONS, ExitErrors, SectionHeadings
+
+REMOTE_PATH_PARTS = 2
 
 
 class ReleaseTitle(Protocol):
@@ -25,6 +29,14 @@ class ReleaseTitle(Protocol):
     @property
     def tag_name(self) -> str | None:
         """Release tag name."""
+
+
+@dataclass(frozen=True, slots=True)
+class GitHubRemote:
+    """Repository reference parsed from a GitHub remote URL."""
+
+    owner: str
+    repo: str
 
 
 def get_toml_path() -> Path:
@@ -78,8 +90,8 @@ def header() -> None:
     )
 
 
-def get_repo_name() -> str | None:
-    """Return the name of the repository from the current directory."""
+def get_repo_remote() -> GitHubRemote | None:
+    """Return the GitHub owner/repo from the current directory."""
     git_executable = which("git")
     if git_executable is None:
         return None
@@ -94,12 +106,36 @@ def get_repo_name() -> str | None:
     except (subprocess.CalledProcessError, FileNotFoundError, OSError):
         return None
 
-    # Support HTTPS and SSH forms:
-    # https://github.com/user/repo.git, git@github.com:user/repo.git
-    repo_part = remote_url.rstrip("/").rsplit("/", maxsplit=1)[-1]
-    repo_name = repo_part.rsplit(":", maxsplit=1)[-1]
-    repo_name = repo_name.removesuffix(".git")
-    return repo_name.strip() or None
+    return parse_github_remote(remote_url)
+
+
+def get_repo_name() -> str | None:
+    """Return the name of the repository from the current directory."""
+    remote = get_repo_remote()
+    if remote is None:
+        return None
+    return remote.repo
+
+
+def parse_github_remote(remote_url: str) -> GitHubRemote | None:
+    """Parse a GitHub remote URL into owner and repository name."""
+    if remote_url.startswith("git@github.com:"):
+        path = remote_url.removeprefix("git@github.com:")
+    else:
+        parsed = urlparse(remote_url)
+        if parsed.hostname != "github.com":
+            return None
+        path = parsed.path
+
+    parts = [part for part in path.strip("/").split("/") if part]
+    if len(parts) != REMOTE_PATH_PARTS:
+        return None
+
+    owner, repo = parts
+    repo = repo.removesuffix(".git")
+    if not owner or not repo:
+        return None
+    return GitHubRemote(owner=owner, repo=repo)
 
 
 def cap_first_letter(string: str) -> str:

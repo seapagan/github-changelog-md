@@ -36,8 +36,8 @@ $ github-changelog-md --repo <repo-name>
 !!! note "Automatic repository name detection"
 
     If you do not specify a repository name, the tool will try to determine the
-    repository name from the current folder if it is a git repository. Failing
-    that it will exit.
+    repository owner and name from the current folder if it is a git repository
+    with a GitHub `origin` remote. Failing that it will exit.
 
     Just run the command from the root of the repository you want to generate
     the changelog for, with no options:
