@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-from unittest.mock import Mock
+from typing import TYPE_CHECKING, cast
+from unittest.mock import ANY, Mock
 
 import pytest
 from typer.testing import CliRunner
 
+from github_changelog_md.constants import ExitErrors
 from github_changelog_md.main import app
 
 if TYPE_CHECKING:
@@ -41,6 +42,13 @@ default_options: ChangelogOptions = {
 }
 
 
+def _assert_changelog_called(
+    mock_changelog: MockType, repo: str, options: ChangelogOptions
+) -> None:
+    """Assert the CLI created the changelog with orchestration dependencies."""
+    mock_changelog.assert_called_once_with(repo, options, ANY, ANY)
+
+
 @pytest.mark.usefixtures("config_file")
 class TestCLI:
     """Test class for the CLI functionality."""
@@ -64,10 +72,7 @@ class TestCLI:
 
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo"])
-        mock_changelog.assert_called_once_with(
-            "test_repo",
-            default_options,
-        )
+        _assert_changelog_called(mock_changelog, "test_repo", default_options)
         mock_changelog_instance.run.assert_called_once()
 
     @pytest.mark.parametrize(
@@ -99,11 +104,10 @@ class TestCLI:
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo", *cli_options[0]])
 
-        expected_options = {**default_options, **cli_options[1]}
-        mock_changelog.assert_called_once_with(
-            "test_repo",
-            expected_options,
+        expected_options = cast(
+            "ChangelogOptions", {**default_options, **cli_options[1]}
         )
+        _assert_changelog_called(mock_changelog, "test_repo", expected_options)
         mock_changelog_instance.run.assert_called_once()
 
     def test_cli_with_repo_and_user(self, mock_changelog: MockType) -> None:
@@ -114,11 +118,11 @@ class TestCLI:
         runner = CliRunner()
         runner.invoke(app, ["--repo", "test_repo", "--user", "test_user"])
 
-        expected_options = {**default_options, "user_name": "test_user"}
-        mock_changelog.assert_called_once_with(
-            "test_repo",
-            expected_options,
+        expected_options = cast(
+            "ChangelogOptions",
+            {**default_options, "user_name": "test_user"},
         )
+        _assert_changelog_called(mock_changelog, "test_repo", expected_options)
         mock_changelog_instance.run.assert_called_once()
 
     def test_cli_with_repo_and_user_and_next_release(
@@ -142,15 +146,15 @@ class TestCLI:
             ],
         )
 
-        expected_options = {
-            **default_options,
-            "user_name": "test_user",
-            "next_release": "v1.0",
-        }
-        mock_changelog.assert_called_once_with(
-            "test_repo",
-            expected_options,
+        expected_options = cast(
+            "ChangelogOptions",
+            {
+                **default_options,
+                "user_name": "test_user",
+                "next_release": "v1.0",
+            },
         )
+        _assert_changelog_called(mock_changelog, "test_repo", expected_options)
         mock_changelog_instance.run.assert_called_once()
 
     def test_no_repo_specified_get_from_local_repo(
@@ -173,9 +177,8 @@ class TestCLI:
         runner = CliRunner()
         runner.invoke(app)
 
-        mock_changelog.assert_called_once_with(
-            "test_local_repo",
-            default_options,
+        _assert_changelog_called(
+            mock_changelog, "test_local_repo", default_options
         )
         mock_changelog_instance.run.assert_called_once()
 
@@ -201,3 +204,18 @@ class TestCLI:
         assert "Could not find a local repository" in result.output
         mock_changelog.assert_not_called()
         mock_changelog_instance.run.assert_not_called()
+
+    def test_no_pat_given(self, mocker, mock_changelog: MockType) -> None:
+        """Test missing PAT exits before constructing ChangeLog."""
+        settings = Mock()
+        del settings.github_pat
+        mocker.patch(
+            "github_changelog_md.main.get_settings", return_value=settings
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["--repo", "test_repo"])
+
+        assert result.exit_code == ExitErrors.NO_PAT
+        assert "No GitHub PAT found in settings file" in result.output
+        mock_changelog.assert_not_called()

@@ -13,6 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from github.Label import Label as GithubLabel
     from github.NamedUser import NamedUser
     from github.PullRequest import PullRequest as GithubPullRequest
+    from github.Repository import Repository
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +30,15 @@ class ChangelogLabel:
     """Label details needed while generating a changelog."""
 
     name: str
+
+
+@dataclass(frozen=True, slots=True)
+class ChangelogRepository:
+    """Repository details needed while generating a changelog."""
+
+    name: str
+    full_name: str
+    html_url: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -78,13 +88,21 @@ def user_from_github(user: NamedUser | None) -> ChangelogUser | None:
     return ChangelogUser(
         login=user.login,
         html_url=user.html_url,
-        name=user.name,
     )
 
 
 def label_from_github(label: GithubLabel) -> ChangelogLabel:
     """Convert a PyGithub label to an internal changelog label."""
     return ChangelogLabel(name=label.name)
+
+
+def repository_from_github(repository: Repository) -> ChangelogRepository:
+    """Convert a PyGithub repository to an internal changelog repository."""
+    return ChangelogRepository(
+        name=repository.name,
+        full_name=repository.full_name,
+        html_url=repository.html_url,
+    )
 
 
 def release_from_github(release: GitRelease) -> ChangelogRelease:

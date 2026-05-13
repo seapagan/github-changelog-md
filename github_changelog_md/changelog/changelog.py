@@ -11,19 +11,18 @@ import os
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, NoReturn, TypeAlias
+from typing import TYPE_CHECKING, Any, Literal, TypeAlias
 
 import typer
-from github import Auth, Github, GithubException
-from github.GitRelease import GitRelease
 from rich import print as rprint
 
 from github_changelog_md.changelog.models import (
     ChangelogIssue,
     ChangelogPullRequest,
     ChangelogRelease,
+    ChangelogRepository,
+    ChangelogUser,
 )
-from github_changelog_md.config import get_settings
 from github_changelog_md.constants import (
     CONTRIBUTORS_FILE,
     IGNORED_CONTRIBUTORS,
@@ -44,31 +43,12 @@ from github_changelog_md.helpers import (
 if TYPE_CHECKING:  # pragma: no cover
     from io import TextIOWrapper
 
-    from github.Commit import Commit
-    from github.Issue import Issue
-    from github.NamedUser import NamedUser
-    from github.PaginatedList import PaginatedList
-    from github.PullRequest import PullRequest
-    from github.Repository import Repository
+    from github_changelog_md.changelog.github_data import GitHubDataSource
+    from github_changelog_md.config.settings import Settings
 
-if TYPE_CHECKING:
-    Release: TypeAlias = GitRelease | ChangelogRelease
-    PullRequestItem: TypeAlias = PullRequest | ChangelogPullRequest
-    IssueItem: TypeAlias = Issue | ChangelogIssue
-else:
-    Release = GitRelease | ChangelogRelease
-    PullRequestItem = ChangelogPullRequest
-    IssueItem = ChangelogIssue
-
-
-def git_error(exc: GithubException) -> NoReturn:
-    """Handle a Git Exception."""
-    rprint(
-        f"\n[red]  X  Error {exc.status} while getting the "
-        f"Repo : {exc.data.get('message')}\n",
-        file=sys.stderr,
-    )
-    raise typer.Exit(ExitErrors.GIT_ERROR)
+Release: TypeAlias = ChangelogRelease
+PullRequestItem: TypeAlias = ChangelogPullRequest
+IssueItem: TypeAlias = ChangelogIssue
 
 
 @dataclass
@@ -90,20 +70,12 @@ class ChangeLog:
         self,
         repo_name: str,
         options: ChangelogOptions,
+        settings: Settings,
+        data_source: GitHubDataSource,
     ) -> None:
         """Initialize the class."""
-        self.settings = get_settings()
-
-        try:
-            self.auth = Auth.Token(self.settings.github_pat)
-            self.git = Github(auth=self.auth)
-        except AttributeError as exc:
-            rprint(
-                "\n[red]  X  Error: No GitHub PAT found in settings file\n",
-                file=sys.stderr,
-            )
-            raise typer.Exit(ExitErrors.NO_PAT) from exc
-
+        self.settings = settings
+        self.data_source = data_source
         self.repo_name: str = repo_name
         self.user: str | None = options["user_name"]
         self.options = options
@@ -111,17 +83,17 @@ class ChangeLog:
         self.sections: list[SectionHeadings]
         self.ignored_labels: list[str]
 
-        self.repo_data: Repository
+        self.repo_data: ChangelogRepository
         self.repo_releases: list[Release]
-        self.repo_prs: PaginatedList[PullRequest]
-        self.repo_issues: PaginatedList[Issue]
+        self.repo_prs: list[PullRequestItem]
+        self.repo_issues: list[IssueItem]
         self.pr_by_release: dict[int, list[PullRequestItem]]
         self.issue_by_release: dict[int, list[IssueItem]]
         self.prev_release: Release | Literal["HEAD"] | None = None
         self.filtered_repo_issues: list[IssueItem]
         self.unreleased: list[PullRequestItem]
         self.unreleased_issues: list[IssueItem]
-        self.contributors: list[NamedUser]
+        self.contributors: list[ChangelogUser]
         self.release_text_cache = ReleaseTextCache(
             yanked_by_release=self.build_release_lookup(
                 self.settings.yanked,
@@ -264,13 +236,13 @@ class ChangeLog:
             SECTIONS[:insert_index] + extend_sections + SECTIONS[insert_index:]
         )
 
-    def get_contributors(self) -> list[NamedUser]:
+    def get_contributors(self) -> list[ChangelogUser]:
         """This will get all the contributors to the repo.
 
         It will return a list of NamedUser objects, getting these from the list
         of PRs and Issues, removing any duplicates
         """
-        user_list: list[NamedUser] = []
+        user_list: list[ChangelogUser] = []
         rprint("  [green]->[/green] Getting Contributors ... ", end="")
         for pr in self.repo_prs:
             if pr.user not in user_list:
@@ -735,15 +707,14 @@ class ChangeLog:
         rprint(self.done_str)
         return issue_by_release
 
-    def get_latest_release_date(self) -> datetime.date:
+    def get_latest_release_date(self) -> datetime.datetime:
         """Return the date of the latest release."""
         try:
             last_release_date = self.repo_releases[-1].created_at
         except IndexError:
             # there have been no releases yet, so we need to get the date of
             # the first commit.
-            first_commit: Commit = self.repo_data.get_commits().reversed[0]
-            last_release_date = first_commit.commit.committer.date
+            last_release_date = self.data_source.get_first_commit_date()
         return last_release_date
 
     def link_pull_requests(self) -> dict[int, list[PullRequestItem]]:
@@ -800,57 +771,18 @@ class ChangeLog:
         )
         return filtered_repo_issues
 
-    def get_closed_issues(self) -> PaginatedList[Issue]:
+    def get_closed_issues(self) -> list[IssueItem]:
         """Get info on all the closed issues from GitHub."""
-        rprint("  [green]->[/green] Getting Closed Issues ... ", end="")
-        try:
-            repo_issues = self.repo_data.get_issues(
-                state="closed",
-                sort="created",
-            )
-        except GithubException as exc:
-            git_error(exc)
-        else:
-            rprint(f"[green]{repo_issues.totalCount} Found[/green]")
-            return repo_issues
+        return self.data_source.get_closed_issues()
 
-    def get_closed_prs(self) -> PaginatedList[PullRequest]:
+    def get_closed_prs(self) -> list[PullRequestItem]:
         """Get info on all the closed PRs from GitHub."""
-        rprint("  [green]->[/green] Getting Closed PRs ... ", end="")
-        try:
-            repo_prs = self.repo_data.get_pulls(
-                state="closed", sort="created", direction="desc"
-            )
-        except GithubException as exc:
-            git_error(exc)
-        else:
-            rprint(f"[green]{repo_prs.totalCount} Found[/green]")
-            return repo_prs
+        return self.data_source.get_closed_prs()
 
     def get_repo_releases(self) -> list[Release]:
         """Get info on all the releases from GitHub."""
-        rprint("  [green]->[/green] Getting Releases ... ", end="")
-        try:
-            repo_releases = self.repo_data.get_releases()
-        except GithubException as exc:
-            git_error(exc)
-        else:
-            rprint(f"[green]{repo_releases.totalCount} Found[/green]")
-            return list(repo_releases)
+        return self.data_source.get_repo_releases()
 
-    def get_repo_data(self) -> Repository:
+    def get_repo_data(self) -> ChangelogRepository:
         """Read the repository data from GitHub."""
-        rprint("  [green]->[/green] Getting Repository data ... ", end="")
-        try:
-            repo_user = self.user or self.git.get_user().login
-
-            repo_data = self.git.get_user(repo_user).get_repo(self.repo_name)
-        except GithubException as exc:
-            git_error(exc)
-        else:
-            rprint(self.done_str)
-            rprint(
-                "  [green]->[/green] Repository : "
-                f"[bold]{repo_data.full_name}[/bold]",
-            )
-            return repo_data
+        return self.data_source.get_repo_data(self.repo_name, self.user)

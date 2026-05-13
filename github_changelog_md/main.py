@@ -10,7 +10,9 @@ import typer
 from rich import print as rprint
 
 from github_changelog_md.changelog import ChangeLog
+from github_changelog_md.changelog.github_data import GitHubDataSource
 from github_changelog_md.config import get_settings
+from github_changelog_md.constants import ExitErrors
 from github_changelog_md.helpers import get_app_version, get_repo_name
 
 if TYPE_CHECKING:
@@ -197,5 +199,14 @@ def main(
         "show_patch": settings.show_patch if show_patch is None else show_patch,
     }
 
-    changelog = ChangeLog(repo, options)
+    try:
+        data_source = GitHubDataSource(settings.github_pat)
+    except AttributeError as exc:
+        rprint(
+            "\n[red]  X  Error: No GitHub PAT found in settings file\n",
+            file=sys.stderr,
+        )
+        raise typer.Exit(ExitErrors.NO_PAT) from exc
+
+    changelog = ChangeLog(repo, options, settings, data_source)
     changelog.run()
