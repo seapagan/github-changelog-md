@@ -1,10 +1,9 @@
 """Entry point for the main application loop."""
 
-# ruff: noqa: FBT001
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 from rich import print as rprint
@@ -33,130 +32,166 @@ app = typer.Typer(
 
 @app.command()
 def main(
-    version: bool | None = typer.Option(
-        None,
-        "-v",
-        "--version",
-        is_eager=True,
-    ),
-    repo: str | None = typer.Option(
-        None,
-        "--repo",
-        "-r",
-        help="Name of the repository to generate the Changelog for.",
-        show_default=False,
-    ),
-    user: str | None = typer.Option(
-        None,
-        "--user",
-        "-u",
-        help="Name of the user or organisation that owns the repository.",
-        show_default=False,
-    ),
-    next_release: str | None = typer.Option(
-        None,
-        "--next-release",
-        "-n",
-        help="Name of the next release to generate the changelog for.",
-        show_default=False,
-    ),
-    unreleased: bool | None = typer.Option(
-        default=None,
-        help=(
-            "Show unreleased changes in the Changelog, defaults to [bold]True"
-            "[/bold]."
+    version: Annotated[
+        bool | None,
+        typer.Option(
+            "-v",
+            "--version",
+            is_eager=True,
         ),
-        show_default=False,
-    ),
-    contrib: bool | None = typer.Option(
-        default=None,
-        help="Update the CONTRIBUTORS.md file, defaults to [bold]False[/bold].",
-        show_default=False,
-    ),
-    depends: bool | None = typer.Option(
-        default=None,
-        help=(
-            "Show dependency updates in the Changelog, defaults to [bold]True"
-            "[/bold]."
+    ] = None,
+    repo: Annotated[
+        str | None,
+        typer.Option(
+            "--repo",
+            "-r",
+            help="Name of the repository to generate the Changelog for.",
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    output: str | None = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help="Output file to write the Changelog to.",
-        show_default=False,
-    ),
-    quiet: bool | None = typer.Option(
-        None,
-        "--quiet",
-        "-q",
-        help="Suppress all output except errors.",
-        show_default=False,
-    ),
-    skip: list[str] | None = typer.Option(  # noqa: B008
-        [],
-        "--skip",
-        "-s",
-        help="Skip the suplied tag. Can be specified multiple times",
-        show_default=False,
-    ),
-    issues: bool | None = typer.Option(
-        default=None,
-        help=(
-            "Show CLOSED issues in the Changelog, defaults to [bold]True"
-            "[/bold]."
+    ] = None,
+    user: Annotated[
+        str | None,
+        typer.Option(
+            "--user",
+            "-u",
+            help="Name of the user or organisation that owns the repository.",
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    item_order: str | None = typer.Option(
-        None,
-        "--item-order",
-        "-i",
-        help=(
-            "Order of PRs and Issues in a release section. "
-            "Valid options are [bold]'newest-first'[/bold] or [bold]'oldest-"
-            "first'[/bold]. Defaults to [bold]'newest-first'[/bold]."
+    ] = None,
+    next_release: Annotated[
+        str | None,
+        typer.Option(
+            "--next-release",
+            "-n",
+            help="Name of the next release to generate the changelog for.",
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    ignore: list[int] | None = typer.Option(  # noqa: B008
-        [],
-        "--ignore",
-        "-e",
-        help=(
-            "Ignore the supplied PR or Issue by its number. Can be specified "
-            "multiple times."
+    ] = None,
+    unreleased: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Show unreleased changes in the Changelog, defaults to "
+                "[bold]True[/bold]."
+            ),
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    max_depends: int | None = typer.Option(
-        None,
-        "--max-depends",
-        "-m",
-        help=(
-            "Maximum number of dependency updates to show in the Changelog. "
-            "Defaults to [bold]10[/bold]."
+    ] = None,
+    contrib: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Update the CONTRIBUTORS.md file, defaults to "
+                "[bold]False[/bold]."
+            ),
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    show_diff: bool | None = typer.Option(
-        default=None,
-        help=(
-            "Show the diff of the PRs and Issues in the Changelog, defaults "
-            "to [bold]True[/bold]."
+    ] = None,
+    depends: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Show dependency updates in the Changelog, defaults to "
+                "[bold]True[/bold]."
+            ),
+            show_default=False,
         ),
-        show_default=False,
-    ),
-    show_patch: bool | None = typer.Option(
-        default=None,
-        help=(
-            "Show the patch of the PRs and Issues in the Changelog, defaults "
-            "to [bold]True[/bold]."
+    ] = None,
+    output: Annotated[
+        str | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file to write the Changelog to.",
+            show_default=False,
         ),
-        show_default=False,
-    ),
+    ] = None,
+    quiet: Annotated[
+        bool | None,
+        typer.Option(
+            "--quiet",
+            "-q",
+            help="Suppress all output except errors.",
+            show_default=False,
+        ),
+    ] = None,
+    skip: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--skip",
+            "-s",
+            help="Skip the supplied tag. Can be specified multiple times",
+            show_default=False,
+        ),
+    ] = None,
+    issues: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Show CLOSED issues in the Changelog, defaults to "
+                "[bold]True[/bold]."
+            ),
+            show_default=False,
+        ),
+    ] = None,
+    item_order: Annotated[
+        str | None,
+        typer.Option(
+            "--item-order",
+            "-i",
+            help=(
+                "Order of PRs and Issues in a release section. Valid options "
+                "are [bold]'newest-first'[/bold] or "
+                "[bold]'oldest-first'[/bold]."
+                " Defaults to [bold]'newest-first'[/bold]."
+            ),
+            show_default=False,
+        ),
+    ] = None,
+    ignore: Annotated[
+        list[int] | None,
+        typer.Option(
+            "--ignore",
+            "-e",
+            help=(
+                "Ignore the supplied PR or Issue by its number. Can be "
+                "specified multiple times."
+            ),
+            show_default=False,
+        ),
+    ] = None,
+    max_depends: Annotated[
+        int | None,
+        typer.Option(
+            "--max-depends",
+            "-m",
+            help=(
+                "Maximum number of dependency updates to show in the "
+                "Changelog. Defaults to [bold]10[/bold]."
+            ),
+            show_default=False,
+        ),
+    ] = None,
+    show_diff: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Show the diff of the PRs and Issues in the Changelog, "
+                "defaults to [bold]True[/bold]."
+            ),
+            show_default=False,
+        ),
+    ] = None,
+    show_patch: Annotated[
+        bool | None,
+        typer.Option(
+            help=(
+                "Show the patch of the PRs and Issues in the Changelog, "
+                "defaults to [bold]True[/bold]."
+            ),
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """Generate your CHANGELOG file Automatically from GitHub."""
     if version:
@@ -176,7 +211,6 @@ def main(
             user = user or repo_remote.owner
 
         if not repo:
-            # cant find a local repo and none specified on the cmd line.
             rprint(
                 "[red]  ->  Could not find a local repository, "
                 "Please use the --repo option.\n",
@@ -205,7 +239,9 @@ def main(
                     settings.contrib if contrib is None else contrib
                 ),
                 "quiet": settings.quiet if quiet is None else quiet,
-                "skip_releases": settings.skip_releases if skip == [] else skip,
+                "skip_releases": settings.skip_releases
+                if skip is None
+                else skip,
                 "show_issues": (
                     settings.show_issues if issues is None else issues
                 ),
@@ -213,7 +249,7 @@ def main(
                     settings.item_order if item_order is None else item_order
                 ),
                 "ignore_items": (
-                    settings.ignore_items if ignore == [] else ignore
+                    settings.ignore_items if ignore is None else ignore
                 ),
                 "max_depends": (
                     settings.max_depends if max_depends is None else max_depends
