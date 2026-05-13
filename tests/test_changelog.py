@@ -36,6 +36,10 @@ from github_changelog_md.changelog.models import (
     release_from_github,
     user_from_github,
 )
+from github_changelog_md.config.validation import (
+    ChangelogConfigError,
+    validate_changelog_options,
+)
 from github_changelog_md.constants import ChangelogOptions, ExitErrors
 
 
@@ -960,6 +964,28 @@ class TestChangelog:
             changelog.release_text_cache.release_overrides_by_release["v1.0.0"]
             == "override text"
         )
+
+    def test_build_release_lookup_rejects_missing_value_key(self) -> None:
+        """Test release lookup config requires the expected value key."""
+        with pytest.raises(
+            ChangelogConfigError,
+            match="release entry 1 is missing 'text'",
+        ):
+            ChangeLog.build_release_lookup(
+                [{"release": "v1.0.0"}],
+                value_key="text",
+            )
+
+    def test_build_release_lookup_rejects_empty_release(self) -> None:
+        """Test release lookup config requires a non-empty release tag."""
+        with pytest.raises(
+            ChangelogConfigError,
+            match="release entry 1 has an empty release tag",
+        ):
+            ChangeLog.build_release_lookup(
+                [{"release": "  ", "text": "Release note"}],
+                value_key="text",
+            )
 
     def test_check_yanked_uses_cache(self, mocker) -> None:
         """Test check_yanked reads from release_text_cache."""
@@ -1959,12 +1985,16 @@ class TestChangelog:
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "Dependency Updates" not in rendered
 
-    def test_get_sorted_items_unknown_order_returns_input(self, mocker) -> None:
-        """Test get_sorted_items returns input for unknown ordering value."""
-        changelog = _build_changelog(mocker)
-        changelog.options["item_order"] = "keep"
-        items = [MagicMock(number=2), MagicMock(number=1)]
-        assert changelog.get_sorted_items(items) is items
+    def test_validate_changelog_options_rejects_unknown_order(self) -> None:
+        """Test invalid ordering is rejected before changelog rendering."""
+        options = _default_options()
+        options["item_order"] = "keep"
+
+        with pytest.raises(
+            ChangelogConfigError,
+            match="item_order must be one of",
+        ):
+            validate_changelog_options(options)
 
     def test_get_unreleased_cutoff_uses_first_commit_when_no_releases(
         self,

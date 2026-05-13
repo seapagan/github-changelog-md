@@ -42,6 +42,31 @@ default_options: ChangelogOptions = {
 }
 
 
+def _settings_mock(**overrides: object) -> Mock:
+    """Return a settings-like mock with valid defaults."""
+    settings = Mock()
+    settings.github_pat = "1234"
+    settings.unreleased = True
+    settings.depends = True
+    settings.output_file = "CHANGELOG.md"
+    settings.contrib = False
+    settings.quiet = False
+    settings.skip_releases = None
+    settings.show_issues = True
+    settings.item_order = "newest-first"
+    settings.ignore_items = None
+    settings.max_depends = 10
+    settings.show_diff = True
+    settings.show_patch = True
+    settings.yanked = None
+    settings.release_text_before = None
+    settings.release_text = None
+    settings.release_overrides = None
+    for key, value in overrides.items():
+        setattr(settings, key, value)
+    return settings
+
+
 def _assert_changelog_called(
     mock_changelog: MockType, repo: str, options: ChangelogOptions
 ) -> None:
@@ -207,7 +232,7 @@ class TestCLI:
 
     def test_no_pat_given(self, mocker, mock_changelog: MockType) -> None:
         """Test missing PAT exits before constructing ChangeLog."""
-        settings = Mock()
+        settings = _settings_mock()
         del settings.github_pat
         mocker.patch(
             "github_changelog_md.main.get_settings", return_value=settings
@@ -218,4 +243,74 @@ class TestCLI:
 
         assert result.exit_code == ExitErrors.NO_PAT
         assert "No GitHub PAT found in settings file" in result.output
+        mock_changelog.assert_not_called()
+
+    def test_cli_rejects_invalid_item_order(
+        self,
+        mock_changelog: MockType,
+    ) -> None:
+        """Test invalid item ordering exits before constructing ChangeLog."""
+        runner = CliRunner()
+        result = runner.invoke(
+            app,
+            ["--repo", "test_repo", "--item-order", "sideways"],
+        )
+
+        assert result.exit_code == ExitErrors.INVALID_ACTION
+        assert "item_order must be one of" in result.output
+        mock_changelog.assert_not_called()
+
+    def test_cli_rejects_negative_max_depends(
+        self,
+        mock_changelog: MockType,
+    ) -> None:
+        """Test negative dependency limits exit before generation."""
+        runner = CliRunner()
+        result = runner.invoke(
+            app,
+            ["--repo", "test_repo", "--max-depends=-1"],
+        )
+
+        assert result.exit_code == ExitErrors.INVALID_ACTION
+        assert "max_depends must be greater than or equal to 0" in result.output
+        mock_changelog.assert_not_called()
+
+    def test_cli_accepts_zero_max_depends(
+        self,
+        mock_changelog: MockType,
+    ) -> None:
+        """Test zero is a valid dependency display limit."""
+        mock_changelog_instance = Mock()
+        mock_changelog.return_value = mock_changelog_instance
+
+        runner = CliRunner()
+        result = runner.invoke(
+            app,
+            ["--repo", "test_repo", "--max-depends=0"],
+        )
+
+        expected_options = cast(
+            "ChangelogOptions",
+            {**default_options, "max_depends": 0},
+        )
+        assert result.exit_code == 0
+        _assert_changelog_called(mock_changelog, "test_repo", expected_options)
+        mock_changelog_instance.run.assert_called_once()
+
+    def test_cli_rejects_invalid_release_text_config(
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
+    ) -> None:
+        """Test malformed release text settings exit before generation."""
+        settings = _settings_mock(release_text=[{"release": "v1.0.0"}])
+        mocker.patch(
+            "github_changelog_md.main.get_settings", return_value=settings
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["--repo", "test_repo"])
+
+        assert result.exit_code == ExitErrors.INVALID_ACTION
+        assert "release entry 1 is missing 'text'" in result.output
         mock_changelog.assert_not_called()

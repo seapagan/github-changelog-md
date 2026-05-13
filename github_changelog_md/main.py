@@ -12,6 +12,11 @@ from rich import print as rprint
 from github_changelog_md.changelog import ChangeLog
 from github_changelog_md.changelog.github_data import GitHubDataSource
 from github_changelog_md.config import get_settings
+from github_changelog_md.config.validation import (
+    ChangelogConfigError,
+    validate_changelog_options,
+    validate_settings,
+)
 from github_changelog_md.constants import ExitErrors
 from github_changelog_md.helpers import get_app_version, get_repo_name
 
@@ -178,26 +183,49 @@ def main(
 
     settings = get_settings()
 
-    options: ChangelogOptions = {
-        "user_name": user,
-        "next_release": next_release,
-        "show_unreleased": (
-            settings.unreleased if unreleased is None else unreleased
-        ),
-        "show_depends": settings.depends if depends is None else depends,
-        "output_file": settings.output_file if output is None else output,
-        "contributors": settings.contrib if contrib is None else contrib,
-        "quiet": settings.quiet if quiet is None else quiet,
-        "skip_releases": settings.skip_releases if skip == [] else skip,
-        "show_issues": settings.show_issues if issues is None else issues,
-        "item_order": settings.item_order if item_order is None else item_order,
-        "ignore_items": settings.ignore_items if ignore == [] else ignore,
-        "max_depends": settings.max_depends
-        if max_depends is None
-        else max_depends,
-        "show_diff": settings.show_diff if show_diff is None else show_diff,
-        "show_patch": settings.show_patch if show_patch is None else show_patch,
-    }
+    try:
+        validate_settings(settings)
+        options: ChangelogOptions = validate_changelog_options(
+            {
+                "user_name": user,
+                "next_release": next_release,
+                "show_unreleased": (
+                    settings.unreleased if unreleased is None else unreleased
+                ),
+                "show_depends": (
+                    settings.depends if depends is None else depends
+                ),
+                "output_file": (
+                    settings.output_file if output is None else output
+                ),
+                "contributors": (
+                    settings.contrib if contrib is None else contrib
+                ),
+                "quiet": settings.quiet if quiet is None else quiet,
+                "skip_releases": settings.skip_releases if skip == [] else skip,
+                "show_issues": (
+                    settings.show_issues if issues is None else issues
+                ),
+                "item_order": (
+                    settings.item_order if item_order is None else item_order
+                ),
+                "ignore_items": (
+                    settings.ignore_items if ignore == [] else ignore
+                ),
+                "max_depends": (
+                    settings.max_depends if max_depends is None else max_depends
+                ),
+                "show_diff": (
+                    settings.show_diff if show_diff is None else show_diff
+                ),
+                "show_patch": (
+                    settings.show_patch if show_patch is None else show_patch
+                ),
+            }
+        )
+    except ChangelogConfigError as exc:
+        rprint(f"\n[red]  X  Error: {exc}[/red]\n", file=sys.stderr)
+        raise typer.Exit(ExitErrors.INVALID_ACTION) from exc
 
     try:
         data_source = GitHubDataSource(settings.github_pat)

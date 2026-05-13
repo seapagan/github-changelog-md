@@ -28,6 +28,7 @@ from github_changelog_md.changelog.models import (
     ChangelogUser,
 )
 from github_changelog_md.changelog.renderer import ChangelogRenderer
+from github_changelog_md.config.validation import normalize_release_entries
 from github_changelog_md.constants import (
     CONTRIBUTORS_FILE,
     IGNORED_CONTRIBUTORS,
@@ -126,16 +127,11 @@ class ChangeLog:
         strip_value: bool = False,
     ) -> dict[str, str]:
         """Build a release-tag keyed lookup table for fast text lookups."""
-        if not values:
-            return {}
-
-        lookup: dict[str, str] = {}
-        for value in values:
-            release = value["release"].strip()
-            text = value[value_key].strip() if strip_value else value[value_key]
-            lookup[release] = text
-
-        return lookup
+        return normalize_release_entries(
+            values,
+            value_key,
+            strip_value=strip_value,
+        )
 
     def run(self) -> None:
         """Run the changelog.
