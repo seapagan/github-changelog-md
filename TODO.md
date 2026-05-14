@@ -12,8 +12,8 @@ in the next release.
 
 ## Features to Add
 
-- :fire: If there are no releases, say that at the bottom. Allow the text for this to
-  be customized in the config file.
+- :fire: If there are no releases, say that at the bottom. Allow the text for
+  this to be customized in the config file.
 - Add a list of releases that should be ignored.
 - Allow ignoring all alpha/beta releases and merge their changes into the next
   full release of the same version (or just the next release).
@@ -94,10 +94,7 @@ in the next release.
 
 ## Refactoring
 
-- The whole code base needs a bit of refactoring to tidy the code and remove
-  some of the duplication. This is a low priority but should be done at some
-  point. Priority to the actual 'ChangeLog' class. **Preferably this should wait
-  until we have full test coverage.**
+None.
 
 ## Documentation
 
@@ -136,15 +133,15 @@ be implemented.
   (configurable) to indicate that this is the first release and nothing to
   compare to. Optionally hide all PR, Issue and commit links in this release.
   \[`Easily done using the 'release_overrides' option.`\]
-- Set up versioned documentation on GitHub pages using 'mike' in conjunction with
-  MkDocs. I'd like to have an 'unreleased' branch to show ongoing docs for the
-  upcoming versions if possible. See the
-  [mkdocs-material versioning](https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/){:target="_blank"}
+- Set up verqsioned documentation on GitHub pages using 'mike' in conjunction
+  with MkDocs. I'd like to have an 'unreleased' branch to show ongoing docs for
+  the upcoming versions if possible. See the [mkdocs-material
+  versioning](https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/){:target="_blank"}
   page on this subject. \[`Honestly, I can't be bothered with this. I don't see
   the point of versioned docs for a tool like this. Just use the latest version
   and docs`]
-- Dump markdown code for a specific release to the terminal, so it can be copy /
-  pasted into other docs.
+- Dump markdown code for a specific release to the terminal, so it can be
+  copy/pasted/piped into other docs.
 
 ## Other
 
