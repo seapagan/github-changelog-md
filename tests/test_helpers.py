@@ -12,12 +12,15 @@ import pytest
 
 from github_changelog_md.constants import ExitErrors, SectionHeadings
 from github_changelog_md.helpers import (
+    GitHubRemote,
     cap_first_letter,
     get_app_version,
     get_index_of_tuple,
     get_repo_name,
+    get_repo_remote,
     get_section_name,
     header,
+    parse_github_remote,
     strip_first_alpha_char,
     title_unique,
 )
@@ -44,11 +47,68 @@ class TestHelpers:
     patch_get_toml = "github_changelog_md.helpers.get_toml_path"
     test_toml_path = "tests/data/pyproject.toml"
 
+    @pytest.mark.parametrize(
+        ("remote_url", "expected"),
+        [
+            (
+                "https://github.com/user/repo.git",
+                GitHubRemote(owner="user", repo="repo"),
+            ),
+            (
+                "https://github.com/user/repo",
+                GitHubRemote(owner="user", repo="repo"),
+            ),
+            (
+                "git@github.com:user/repo.git",
+                GitHubRemote(owner="user", repo="repo"),
+            ),
+            (
+                "ssh://git@github.com/user/repo.git",
+                GitHubRemote(owner="user", repo="repo"),
+            ),
+        ],
+    )
+    def test_parse_github_remote_supported_urls(
+        self,
+        remote_url: str,
+        expected: GitHubRemote,
+    ) -> None:
+        """Test supported GitHub remote URL forms."""
+        assert parse_github_remote(remote_url) == expected
+
+    @pytest.mark.parametrize(
+        "remote_url",
+        [
+            "https://gitlab.com/user/repo.git",
+            "https://github.com/user",
+            "https://github.com/user/repo/extra",
+            "https://github.com/user/.git",
+            "not-a-url",
+        ],
+    )
+    def test_parse_github_remote_rejects_invalid_urls(
+        self,
+        remote_url: str,
+    ) -> None:
+        """Test unsupported remote URLs are ignored."""
+        assert parse_github_remote(remote_url) is None
+
+    def test_get_repo_remote_with_origin_remote(
+        self,
+        mocker: MockerFixture,
+    ) -> None:
+        """Test get_repo_remote with a valid origin remote URL."""
+        mocker.patch(
+            "github_changelog_md.helpers.subprocess.run",
+            return_value=MagicMock(stdout="https://github.com/user/repo.git\n"),
+        )
+        assert get_repo_remote() == GitHubRemote(owner="user", repo="repo")
+
     def test_get_repo_name_with_origin_remote(
         self,
         mocker: MockerFixture,
     ) -> None:
-        """Test get_repo_name function with a valid origin remote URL."""
+        """Test get_repo_name returns the repo from a valid origin remote."""
         mocker.patch(
             "github_changelog_md.helpers.subprocess.run",
             return_value=MagicMock(stdout="https://github.com/user/repo.git\n"),

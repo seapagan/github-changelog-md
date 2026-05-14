@@ -71,9 +71,9 @@ def get_pat_input() -> str:
     return user_pat
 
 
-# not too happy with this method of doing it. Ideally I need to modify the
-# Settings class to allow for a default value of PAT to be set though the
-# constructor, then enable autocreate again.
+# Missing config files are created manually so the prompted PAT can be written
+# before loading Settings. A cleaner future version would seed that PAT through
+# the Settings constructor and re-enable library-managed auto-creation.
 def get_settings() -> Settings:
     """Actually return a settings object.
 

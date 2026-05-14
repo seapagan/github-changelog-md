@@ -142,8 +142,8 @@ $ github-changelog-md --ignore 123 --ignore 456
 ## `--item-order` / `-i`
 
 This option allows you to specify the order of the PRs and Issues in each
-section. By default the order is `newest_first`, but you can use the
-`--item-order` or `-i` option to change this to `oldest_first`.
+section. By default the order is `newest-first`, but you can use the
+`--item-order` or `-i` option to change this to `oldest-first`.
 
 !!! tip ""
 
@@ -154,6 +154,9 @@ section. By default the order is `newest_first`, but you can use the
 This option allows you to specify the maximum number of dependency updates to
 show for each release. By default this is set to `10`, but you can use the
 `--max-depends` or `-m` option to change this.
+
+Set this to `0` to hide individual dependency update entries while still
+showing the summary count for the release.
 
 If you use [Dependabot](https://github.com/apps/dependabot){:target="_blank"} to
 handle your dependency updates, this setting can be useful to limit the noise in
