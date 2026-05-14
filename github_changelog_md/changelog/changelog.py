@@ -336,7 +336,9 @@ class ChangeLog:
     ) -> None:
         """Process the unreleased PRs and Issues into the changelog."""
         renderer = self._renderer()
-        renderer.process_unreleased(f)
+        rendered = renderer.render_unreleased()
+        if rendered:
+            f.write(rendered)
         self.prev_release = renderer.prev_release
 
     def process_release(
@@ -345,15 +347,21 @@ class ChangeLog:
         release: Release,
     ) -> None:
         """Process a single release."""
-        self._renderer().process_release(f, release)
+        rendered = self._renderer().render_release(release)
+        if rendered:
+            f.write(rendered)
 
     def check_yanked(self, f: TextIOWrapper, release: Release) -> None:
         """Note if this release has been yanked, and the reason why."""
-        self._renderer().check_yanked(f, release)
+        rendered = self._renderer().render_yanked_notice(release)
+        if rendered:
+            f.write(rendered)
 
     def show_before_text(self, f: TextIOWrapper, release: Release) -> None:
         """Shows text before this release if it exists."""
-        self._renderer().show_before_text(f, release)
+        rendered = self._renderer().render_before_text(release)
+        if rendered:
+            f.write(rendered)
 
     def show_release_text(
         self,
@@ -361,7 +369,9 @@ class ChangeLog:
         release: str | Release,
     ) -> None:
         """Print the release_text if it exists."""
-        self._renderer().show_release_text(f, release)
+        rendered = self._renderer().render_release_text(release)
+        if rendered:
+            f.write(rendered)
 
     def get_release_body(
         self,
@@ -369,7 +379,9 @@ class ChangeLog:
         release: Release,
     ) -> None:
         """Read the GitHub release body."""
-        self._renderer().get_release_body(f, release)
+        rendered = self._renderer().render_release_body(release)
+        if rendered:
+            f.write(rendered)
 
     def rprint_issues(
         self,
@@ -377,7 +389,9 @@ class ChangeLog:
         issue_list: list[IssueItem],
     ) -> None:
         """Print all the closed issues for a given release."""
-        self._renderer().rprint_issues(f, issue_list)
+        rendered = self._renderer().render_issues(issue_list)
+        if rendered:
+            f.write(rendered)
 
     def generate_diff_url(
         self,
@@ -386,7 +400,9 @@ class ChangeLog:
         release_tag: Release,
     ) -> None:
         """Generate a GitHub 3-dots link to the diff between two releases."""
-        self._renderer().generate_diff_url(f, prev_release, release_tag)
+        rendered = self._renderer().render_diff_links(prev_release, release_tag)
+        if rendered:
+            f.write(rendered)
 
     def rprint_prs(
         self,
@@ -394,7 +410,9 @@ class ChangeLog:
         pr_list: list[PullRequestItem],
     ) -> None:
         """Print all the PRs for a given release."""
-        self._renderer().rprint_prs(f, pr_list)
+        rendered = self._renderer().render_pull_requests(pr_list)
+        if rendered:
+            f.write(rendered)
 
     def ignore_items(
         self, items: list[PullRequestItem | IssueItem]
