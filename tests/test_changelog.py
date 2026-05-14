@@ -971,7 +971,7 @@ class TestChangelog:
             {"release": " v1.0.0 ", "text": " release text "}
         ]
         settings.release_overrides = [
-            {"release": " v1.0.0 ", "text": "override text"}
+            {"release": " v1.0.0 ", "text": " override text\n"}
         ]
 
         cache = build_release_text_cache(settings)
@@ -1344,6 +1344,44 @@ class TestChangelog:
         assert "Intro line\n\n" in rendered
         assert "This changelog was generated using" in rendered
         changelog.process_unreleased.assert_not_called()
+
+    def test_generate_changelog_normalizes_multiline_intro_spacing(
+        self, mocker
+    ) -> None:
+        """Test multiline intro text does not add an extra blank line."""
+        changelog = _build_changelog(mocker)
+        changelog.repo_data = MagicMock(
+            html_url="https://github.com/user/repo",
+            name="repo",
+        )
+        changelog.repo_releases = [
+            _release(
+                release_id=1,
+                tag_name="v1.0.0",
+                title="v1.0.0",
+                created_at=_date(2021, 1, 10),
+            )
+        ]
+        changelog.options["output_file"] = "CHANGELOG.md"
+        changelog.options["show_unreleased"] = False
+        changelog.settings.intro_text = "First paragraph\n\nSecond paragraph\n"
+
+        mock_path = mocker.patch(
+            "github_changelog_md.changelog.changelog.Path",
+        )
+        mock_path.cwd.return_value = Path("test_cwd")
+        file_handle = MagicMock()
+        mock_path.return_value.open.return_value.__enter__.return_value = (
+            file_handle
+        )
+
+        changelog.generate_changelog()
+
+        rendered = "".join(
+            call.args[0] for call in file_handle.write.call_args_list
+        )
+        assert "Second paragraph\n\n## [v1.0.0]" in rendered
+        assert "Second paragraph\n\n\n## [v1.0.0]" not in rendered
 
     def test_generate_changelog_renders_release_sections_golden(
         self, mocker

@@ -50,7 +50,8 @@ class ChangelogRenderer:
         output = ["# Changelog\n\n"]
 
         if self.settings.intro_text:
-            output.append(f"{self.settings.intro_text}\n\n")
+            intro_text = self.settings.intro_text.rstrip("\n")
+            output.append(f"{intro_text}\n\n")
 
         if not self.options["show_depends"]:
             output.append(
@@ -145,12 +146,12 @@ class ChangelogRenderer:
             release.tag_name
             in self.release_text_cache.release_overrides_by_release
         ):
-            output.append(
+            override_text = (
                 self.release_text_cache.release_overrides_by_release[
                     release.tag_name
                 ]
             )
-            output.append("\n")
+            output.append(f"{override_text}\n\n")
             return "".join(output)
 
         output.append(self.render_issues(issue_list))

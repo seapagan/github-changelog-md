@@ -85,6 +85,7 @@ def build_release_text_cache(settings: Settings) -> ReleaseTextCache:
         release_overrides_by_release=ChangeLog.build_release_lookup(
             settings.release_overrides,
             value_key="text",
+            strip_value=True,
         ),
     )
 
