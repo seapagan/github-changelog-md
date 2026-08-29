@@ -73,6 +73,7 @@ dev = [
   "pymdown-extensions>=10.12",
   "pygments>=2.18.0",
   "prek>=0.3.1",
+  "ty>=0.0.75",
 ]
 
 [tool.poe.tasks]
@@ -81,6 +82,8 @@ pre.cmd = "prek run --all-files"
 pre.help = "Run pre-commit checks using 'prek'"
 mypy.cmd = "mypy . --strict --exclude site --exclude docs"
 mypy.help = "Run mypy checks"
+ty.cmd = "ty check --output-format concise"
+ty.help = "Run ty checks"
 format.help = "Format code with Ruff"
 format.cmd = "ruff format ."
 ruff.help = "Run Ruff checks"
@@ -90,9 +93,13 @@ test.cmd = "pytest"
 markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md CHANGELOG.md"
 markdown.help = "Run markdown checks"
 
+type.ignore_fail = "return_non_zero"
+type.sequence = ["ty", "mypy"]
+type.help = "Run ty and mypy type checkers"
+
 # run all linting checks in sequence. we want to run them all, even if one fails
 lint.ignore_fail = "return_non_zero"
-lint.sequence = ["format", "ruff", "mypy", "markdown"]
+lint.sequence = ["format", "ruff", "type", "markdown"]
 lint.help = "Run all linting checks"
 
 "docs:publish".cmd = "mkdocs gh-deploy"
@@ -168,5 +175,6 @@ indent-style = "space"
 quote-style = "double"
 
 [[tool.mypy.overrides]]
-disable_error_code = ["method-assign", "no-untyped-def", "attr-defined"]
+# disable_error_code = ["method-assign", "no-untyped-def", "attr-defined"]
+disable_error_code = ["method-assign", "no-untyped-def"]
 module = "tests.*"

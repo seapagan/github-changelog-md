@@ -247,6 +247,7 @@ toolz==1.0.0
     # via columnar
 tqdm==4.67.1
     # via openai
+ty==0.0.75
 typer==0.25.1
     # via github-changelog-md
 typing-extensions==4.15.0
