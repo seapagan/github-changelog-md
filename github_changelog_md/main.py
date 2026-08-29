@@ -32,6 +32,7 @@ app = typer.Typer(
 
 @app.command()
 def main(
+    *,
     version: Annotated[
         bool | None,
         typer.Option(

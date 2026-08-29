@@ -269,9 +269,11 @@ class ChangelogRenderer:
         elif self.options["next_release"]:
             prev_release = self.options["next_release"]
         output = [
-            f"[`Full Changelog`]"
-            f"({self.repo_data.html_url}/compare/"
-            f"{release_tag.tag_name}...{prev_release})"
+            (
+                f"[`Full Changelog`]"
+                f"({self.repo_data.html_url}/compare/"
+                f"{release_tag.tag_name}...{prev_release})"
+            )
         ]
         if self.options["show_diff"]:
             output.append(
