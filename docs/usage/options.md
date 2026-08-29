@@ -27,6 +27,29 @@ the PRs in the changelog for each release. These are taken from the GitHub
 | Documentation        | _documentation_ |                       |
 | Dependency Updates   |  _dependencies_ |                       |
 
+### Section Heading Style
+
+Generated section headings use H3 Markdown headings by default, underneath the
+H2 heading for each release:
+
+```markdown
+## 1.2.3
+
+### Closed Issues
+
+### Bug Fixes
+```
+
+To restore the legacy bold-text format, set `bold_sections = true` in the config
+file or pass `--bold-sections` (or `-b`) on the command line. The explicit
+`--no-bold-sections` option selects the default H3 style and overrides a `true`
+value from the config file.
+
+The selected style applies to `Closed Issues`, all default PR sections, renamed
+sections, and custom sections. It does not alter H2 release headings,
+release-title emphasis, yanked notices, user-supplied release text, or headings
+inside GitHub release bodies.
+
 You can tag each of your PRs with any of these labels to group them in the
 changelog - If you are using `Dependabot`, by default it will add the
 `dependencies` label.

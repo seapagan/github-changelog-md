@@ -72,9 +72,6 @@ in the next release.
   insertion index. This will be a breaking change in the config file format so
   require a `schema_version` bump. \[`This will not be needed if the option for
   custom ordering of sections is implemented, it can be folded into that.`\]
-- Add option to use Markdown header levels for the section headings instead of
-  the default **bold** text. This is more correct for Markdown and will pass
-  linters.
 - Add an option in the individual `changelog_generator.release_text`
   sections to hide the title for that release.
 
@@ -85,8 +82,8 @@ in the next release.
   gives :heart: in certain viewers (**though this does NOT happen in GitHub or
   MkDocs at least**). This is very obvious for 'pip' version numbers. It's not a
   priority to fix this for it's intended usage, but just for completeness.
-- When using the Release body, we need to normalize any headings to Bold text
-  instead so it does not grate so badly with the auto-generated headings.
+- When using the Release body, normalize its headings so they are visually
+  consistent with the selected auto-generated section-heading style.
 - In some cases the `full-changelog` does not get removed from the existing body
   properly depending on how it is formatted.
 - For closed issues, if there are no issues after filtering (for example if the
