@@ -1,5 +1,3 @@
-ci:
-  autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
 repos:
   - repo: builtin
     hooks:
@@ -17,6 +15,11 @@ repos:
         name: "lint with ruff"
       - id: ruff-format
         name: "format with ruff"
+
+  - repo: https://github.com/astral-sh/ty-pre-commit
+    rev: v0.0.75
+    hooks:
+      - id: ty
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v2.3.1" # Use the sha / tag you want to point at
