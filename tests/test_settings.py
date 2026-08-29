@@ -1,5 +1,4 @@
 """Test our manipulations of the TOMLSettings library."""
-# mypy: disable-error-code="no-untyped-def"
 
 from __future__ import annotations
 
@@ -18,6 +17,7 @@ from github_changelog_md.config.settings import (
 from github_changelog_md.constants import CONFIG_FILE, ExitErrors
 
 if TYPE_CHECKING:
+    from pyfakefs.fake_filesystem import FakeFileSystem
     from pytest_mock import MockerFixture
 
 MOCK_PROMPT_ASK = "rich.prompt.Prompt.ask"
@@ -28,7 +28,7 @@ class TestSettings:
 
     def test_get_settings_object_fails_no_file(
         self,
-        fs,  # noqa: ARG002
+        fs: FakeFileSystem,  # noqa: ARG002
     ) -> None:
         """Test we can't get a settings object without file existing."""
         with pytest.raises(SettingsNotFoundError) as exc:
@@ -38,7 +38,7 @@ class TestSettings:
             exc.value.args[0] == "Can't find a Config File, please create one."
         )
 
-    def test_get_settings_object_suceeds(self, fs) -> None:
+    def test_get_settings_object_suceeds(self, fs: FakeFileSystem) -> None:
         """Create a fake settings file and test we can get a settings object."""
         fs.create_file(
             CONFIG_FILE,
@@ -49,7 +49,9 @@ class TestSettings:
         assert settings.github_pat == "1234"
         assert settings.bold_sections is False
 
-    def test_get_settings_object_loads_bold_sections(self, fs) -> None:
+    def test_get_settings_object_loads_bold_sections(
+        self, fs: FakeFileSystem
+    ) -> None:
         """Test the legacy section style can be enabled in the config file."""
         fs.create_file(
             CONFIG_FILE,
@@ -67,8 +69,8 @@ class TestSettings:
 
     def test_get_pat_input(
         self,
-        fs,  # noqa: ARG002
-        monkeypatch,
+        fs: FakeFileSystem,  # noqa: ARG002
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test we can get a PAT from the user."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "1234")
@@ -78,8 +80,8 @@ class TestSettings:
 
     def test_get_pat_input_blank(
         self,
-        fs,  # noqa: ARG002
-        monkeypatch,
+        fs: FakeFileSystem,  # noqa: ARG002
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test when we get an invalid PAT from the user."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "")
@@ -90,7 +92,7 @@ class TestSettings:
 
     def test_get_settings_with_config_file(
         self,
-        config_file,  # noqa: ARG002
+        config_file: None,  # noqa: ARG002
     ) -> None:
         """Test we can get a settings object."""
         settings = get_settings()
@@ -102,7 +104,7 @@ class TestSettings:
 
     def test_get_settings_with_bad_schema(
         self,
-        bad_schema,  # noqa: ARG002
+        bad_schema: None,  # noqa: ARG002
     ) -> None:
         """Test we can get a settings object."""
         with pytest.raises(typer.Exit) as exc:
@@ -112,8 +114,8 @@ class TestSettings:
 
     def test_settings_with_no_config_file(
         self,
-        fs,
-        monkeypatch,
+        fs: FakeFileSystem,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test we can get a settings object."""
         monkeypatch.setattr(MOCK_PROMPT_ASK, lambda _: "1234")
@@ -126,7 +128,7 @@ class TestSettings:
 
     def test_settings_with_no_config_file_and_keyboard_interrupt(
         self,
-        fs,
+        fs: FakeFileSystem,
         mocker: MockerFixture,
     ) -> None:
         """Test we can get a settings object."""
@@ -142,8 +144,8 @@ class TestSettings:
 
     def test_settings_with_no_write_permission_for_current_folder(
         self,
-        fs,  # noqa: ARG002
-        monkeypatch,
+        fs: FakeFileSystem,  # noqa: ARG002
+        monkeypatch: pytest.MonkeyPatch,
         mocker: MockerFixture,
     ) -> None:
         """Test settings error if we dont have write permission."""
