@@ -223,3 +223,9 @@ pyrightconfig.json
 .agents/
 CLAUDE.md
 AGENTS.md
+packed-repo.xml
+packed-repo.xml.gz
+
+
+## patch files
+*.patch
