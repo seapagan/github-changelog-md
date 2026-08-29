@@ -87,7 +87,7 @@ ruff.help = "Run Ruff checks"
 ruff.cmd = "ruff check . --output-format concise"
 test.help = "Run tests using Pytest"
 test.cmd = "pytest"
-markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md"
+markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md CHANGELOG.md"
 markdown.help = "Run markdown checks"
 
 # run all linting checks in sequence. we want to run them all, even if one fails
