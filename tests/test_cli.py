@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, cast
 from unittest.mock import ANY, Mock
 
 import pytest
+from click import unstyle
 from typer.testing import CliRunner
 
 from github_changelog_md.constants import ExitErrors
@@ -177,11 +178,14 @@ class TestCLI:
     def test_bold_sections_options_are_shown_in_help(self) -> None:
         """Test help exposes both section styles and the short alias."""
         result = CliRunner().invoke(app, ["--help"])
+        # Typer forces ANSI styling under GitHub Actions, which inserts escape
+        # sequences inside option names in the captured output.
+        output = unstyle(result.output)
 
         assert result.exit_code == 0
-        assert "-b" in result.output
-        assert "--bold-sections" in result.output
-        assert "--no-bold-sections" in result.output
+        assert "-b" in output
+        assert "--bold-sections" in output
+        assert "--no-bold-sections" in output
 
     def test_cli_with_repo_and_user(self, mock_changelog: MockType) -> None:
         """Test the main function with the repo and user flags."""
