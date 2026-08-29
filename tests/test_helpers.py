@@ -26,7 +26,7 @@ from github_changelog_md.helpers import (
 )
 
 if TYPE_CHECKING:
-    from pyfakefs.fake_filesystem import FakeFileSystem
+    from pyfakefs.fake_filesystem import FakeFilesystem
     from pytest_mock import MockerFixture
 
 
@@ -145,7 +145,7 @@ class TestHelpers:
 
     def test_get_app_version_with_toml_file(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         mocker: MockerFixture,
     ) -> None:
         """Test get_app_version function with a valid pyproject.toml file."""
@@ -163,7 +163,7 @@ class TestHelpers:
 
     def test_get_app_version_bad_toml_file(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         mocker: MockerFixture,
     ) -> None:
         """Test get_app_version function with a bad pyproject.toml file."""

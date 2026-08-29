@@ -17,7 +17,7 @@ from github_changelog_md.config.settings import (
 from github_changelog_md.constants import CONFIG_FILE, ExitErrors
 
 if TYPE_CHECKING:
-    from pyfakefs.fake_filesystem import FakeFileSystem
+    from pyfakefs.fake_filesystem import FakeFilesystem
     from pytest_mock import MockerFixture
 
 MOCK_PROMPT_ASK = "rich.prompt.Prompt.ask"
@@ -28,7 +28,7 @@ class TestSettings:
 
     def test_get_settings_object_fails_no_file(
         self,
-        fs: FakeFileSystem,  # noqa: ARG002
+        fs: FakeFilesystem,  # noqa: ARG002
     ) -> None:
         """Test we can't get a settings object without file existing."""
         with pytest.raises(SettingsNotFoundError) as exc:
@@ -38,7 +38,7 @@ class TestSettings:
             exc.value.args[0] == "Can't find a Config File, please create one."
         )
 
-    def test_get_settings_object_suceeds(self, fs: FakeFileSystem) -> None:
+    def test_get_settings_object_suceeds(self, fs: FakeFilesystem) -> None:
         """Create a fake settings file and test we can get a settings object."""
         fs.create_file(
             CONFIG_FILE,
@@ -50,7 +50,7 @@ class TestSettings:
         assert settings.bold_sections is False
 
     def test_get_settings_object_loads_bold_sections(
-        self, fs: FakeFileSystem
+        self, fs: FakeFilesystem
     ) -> None:
         """Test the legacy section style can be enabled in the config file."""
         fs.create_file(
@@ -69,7 +69,7 @@ class TestSettings:
 
     def test_get_pat_input(
         self,
-        fs: FakeFileSystem,  # noqa: ARG002
+        fs: FakeFilesystem,  # noqa: ARG002
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test we can get a PAT from the user."""
@@ -80,7 +80,7 @@ class TestSettings:
 
     def test_get_pat_input_blank(
         self,
-        fs: FakeFileSystem,  # noqa: ARG002
+        fs: FakeFilesystem,  # noqa: ARG002
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test when we get an invalid PAT from the user."""
@@ -114,7 +114,7 @@ class TestSettings:
 
     def test_settings_with_no_config_file(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test we can get a settings object."""
@@ -128,7 +128,7 @@ class TestSettings:
 
     def test_settings_with_no_config_file_and_keyboard_interrupt(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         mocker: MockerFixture,
     ) -> None:
         """Test we can get a settings object."""
@@ -144,7 +144,7 @@ class TestSettings:
 
     def test_settings_with_no_write_permission_for_current_folder(
         self,
-        fs: FakeFileSystem,  # noqa: ARG002
+        fs: FakeFilesystem,  # noqa: ARG002
         monkeypatch: pytest.MonkeyPatch,
         mocker: MockerFixture,
     ) -> None:

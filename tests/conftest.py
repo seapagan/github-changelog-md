@@ -12,7 +12,7 @@ from github_changelog_md.constants import CONFIG_FILE
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from pyfakefs.fake_filesystem import FakeFileSystem
+    from pyfakefs.fake_filesystem import FakeFilesystem
 
 
 @pytest.fixture(autouse=True)
@@ -28,7 +28,7 @@ def _reset_settings_singleton() -> Generator[None]:
 
 
 @pytest.fixture
-def config_file(fs: FakeFileSystem) -> None:
+def config_file(fs: FakeFilesystem) -> None:
     """Create a fake config file."""
     fs.create_file(
         CONFIG_FILE,
@@ -45,7 +45,7 @@ def config_file(fs: FakeFileSystem) -> None:
 
 
 @pytest.fixture
-def bad_schema(fs: FakeFileSystem) -> None:
+def bad_schema(fs: FakeFilesystem) -> None:
     """Create a fake config file with a bad schema."""
     fs.create_file(
         CONFIG_FILE,

@@ -228,4 +228,4 @@ packed-repo.xml.gz
 
 
 ## patch files
-*.patch
+/*.patch
