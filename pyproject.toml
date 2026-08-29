@@ -176,5 +176,5 @@ quote-style = "double"
 
 [[tool.mypy.overrides]]
 # disable_error_code = ["method-assign", "no-untyped-def", "attr-defined"]
-disable_error_code = ["method-assign", "no-untyped-def"]
+disable_error_code = ["method-assign"]
 module = "tests.*"

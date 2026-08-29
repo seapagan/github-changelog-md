@@ -82,7 +82,7 @@ def _assert_changelog_called(
 class TestCLI:
     """Test class for the CLI functionality."""
 
-    def test_cli_with_version(self, mocker) -> None:
+    def test_cli_with_version(self, mocker: MockerFixture) -> None:
         """Test the main function with the version flag."""
         runner = CliRunner()
         mock_version = mocker.patch(
@@ -154,7 +154,8 @@ class TestCLI:
         mocker: MockerFixture,
         mock_changelog: MockType,
         cli_options: list[str],
-        expected,
+        *,
+        expected: bool,
     ) -> None:
         """Test explicit CLI values override the configured section style."""
         settings = _settings_mock(bold_sections=True)
@@ -313,7 +314,11 @@ class TestCLI:
         mock_changelog.assert_not_called()
         mock_changelog_instance.run.assert_not_called()
 
-    def test_no_pat_given(self, mocker, mock_changelog: MockType) -> None:
+    def test_no_pat_given(
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
+    ) -> None:
         """Test missing PAT exits before constructing ChangeLog."""
         settings = _settings_mock()
         del settings.github_pat

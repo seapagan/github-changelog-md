@@ -1,10 +1,12 @@
 """Test the ChangeLog class."""
 
+from __future__ import annotations
+
 import datetime
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 from unittest.mock import MagicMock
 
 import pytest
@@ -45,6 +47,9 @@ from github_changelog_md.config.validation import (
 )
 from github_changelog_md.constants import ChangelogOptions, ExitErrors
 
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
+
 
 def _default_options() -> ChangelogOptions:
     return {
@@ -71,7 +76,8 @@ class _MockChangeLog(ChangeLog):
 
 
 def _build_changelog(
-    _mocker=None, settings_overrides: Mapping[str, object] | None = None
+    _mocker: MockerFixture | Mapping[str, object] | None = None,
+    settings_overrides: Mapping[str, object] | None = None,
 ) -> _MockChangeLog:
     if settings_overrides is None and isinstance(_mocker, Mapping):
         settings_overrides = _mocker
@@ -106,7 +112,7 @@ def _build_changelog(
 
 
 @pytest.fixture
-def mock_repo_data(mocker) -> MagicMock:
+def mock_repo_data(mocker: MockerFixture) -> MagicMock:
     """Mock out the repo data object."""
     mock_repo_data = MagicMock()
     mock_repo_data.html_url = "https://github.com/user/repo"
@@ -357,7 +363,9 @@ def _github_release(
 
 
 def _render_changelog(
-    changelog: ChangeLog, mocker, scenario: _OutputScenario
+    changelog: ChangeLog,
+    mocker: MockerFixture,
+    scenario: _OutputScenario,
 ) -> str:
     changelog.options["output_file"] = "CHANGELOG.md"
     changelog.repo_data = MagicMock(
@@ -528,7 +536,9 @@ class TestChangelogModels:
 class TestGitHubDataSource:
     """Tests for the GitHub data source boundary."""
 
-    def test_from_token_builds_github_client(self, mocker) -> None:
+    def test_from_token_builds_github_client(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test token factory owns GitHub client construction."""
         auth = MagicMock()
         git = MagicMock()
@@ -554,7 +564,7 @@ class TestGitHubDataSource:
 
         assert ItemCountColumn().render(task) == str(expected_count)
 
-    def test_fetch_methods_report_progress(self, mocker) -> None:
+    def test_fetch_methods_report_progress(self, mocker: MockerFixture) -> None:
         """Test GitHub item adaptation advances visible progress."""
         expected_total = 3
         progress = MagicMock()
@@ -596,7 +606,9 @@ class TestGitHubDataSource:
         assert progress.advance.call_count == expected_total
         progress.advance.assert_called_with("task-id")
 
-    def test_fetch_progress_handles_unknown_total(self, mocker) -> None:
+    def test_fetch_progress_handles_unknown_total(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test progress uses an unknown total when GitHub count is invalid."""
         progress = MagicMock()
         progress.__enter__.return_value = progress
@@ -735,7 +747,9 @@ class TestGitHubDataSource:
         ]
         assert data_source.get_first_commit_date() == _date(2020, 1, 1)
 
-    def test_fetch_methods_route_github_errors(self, mocker) -> None:
+    def test_fetch_methods_route_github_errors(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test GitHub exceptions use the shared exit path."""
         data_source = GitHubDataSource(MagicMock())
         data_source.repo_data = MagicMock()
@@ -753,7 +767,9 @@ class TestGitHubDataSource:
 
         git_error_mock.assert_called_once()
 
-    def test_other_github_errors_use_shared_exit_path(self, mocker) -> None:
+    def test_other_github_errors_use_shared_exit_path(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test repository, release, and PR errors use shared error handling."""
         expected_errors = ["repo error", "release error", "pull error"]
         git = MagicMock()
@@ -903,10 +919,10 @@ class TestChangelog:
 
     def test_run(
         self,
-        mock_repo_data,
-        mock_repo,
-        mocker,
-        config_file,  # noqa: ARG002
+        mock_repo_data: MagicMock,
+        mock_repo: MagicMock,
+        mocker: MockerFixture,
+        config_file: None,  # noqa: ARG002
     ) -> None:
         """Test the overall run method."""
         mock_header = mocker.patch(
@@ -1019,7 +1035,7 @@ class TestChangelog:
                 value_key="text",
             )
 
-    def test_check_yanked_uses_cache(self, mocker) -> None:
+    def test_check_yanked_uses_cache(self, mocker: MockerFixture) -> None:
         """Test check_yanked reads from release_text_cache."""
         changelog = _build_changelog(mocker)
         changelog.release_text_cache.yanked_by_release = {"v1.0.0": "bad build"}
@@ -1035,7 +1051,7 @@ class TestChangelog:
             "bad build" in call.args[0] for call in out.write.call_args_list
         )
 
-    def test_show_before_text_uses_cache(self, mocker) -> None:
+    def test_show_before_text_uses_cache(self, mocker: MockerFixture) -> None:
         """Test show_before_text reads from release_text_cache."""
         changelog = _build_changelog(mocker)
         changelog.release_text_cache.release_text_before_by_release = {
@@ -1049,7 +1065,7 @@ class TestChangelog:
         written = "".join(call.args[0] for call in out.write.call_args_list)
         assert written == "---\n\nBefore text\n\n---\n\n"
 
-    def test_show_release_text_uses_cache(self, mocker) -> None:
+    def test_show_release_text_uses_cache(self, mocker: MockerFixture) -> None:
         """Test show_release_text reads from release_text_cache."""
         changelog = _build_changelog(mocker)
         changelog.release_text_cache.release_text_by_release = {
@@ -1062,7 +1078,9 @@ class TestChangelog:
         written = "".join(call.args[0] for call in out.write.call_args_list)
         assert written == "Release text\n\n"
 
-    def test_process_release_uses_override_cache(self, mocker) -> None:
+    def test_process_release_uses_override_cache(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test process_release returns early when override text exists."""
         changelog = _build_changelog(
             mocker,
@@ -1096,7 +1114,9 @@ class TestChangelog:
         changelog.rprint_issues.assert_not_called()
         changelog.rprint_prs.assert_not_called()
 
-    def test_update_contributors_preserves_name_casing(self, mocker) -> None:
+    def test_update_contributors_preserves_name_casing(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test update_contributors does not alter contributor name casing."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(name="repo_data")
@@ -1123,7 +1143,9 @@ class TestChangelog:
         )
         assert "- McDonald ([@mcd](https://github.com/mcd))" in rendered
 
-    def test_process_unreleased_writes_unreleased_heading(self, mocker) -> None:
+    def test_process_unreleased_writes_unreleased_heading(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test process_unreleased writes heading and links to HEAD."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
@@ -1141,7 +1163,7 @@ class TestChangelog:
 
     def test_process_unreleased_with_next_release_uses_tag_link(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test process_unreleased link and heading for next_release option."""
         changelog = _build_changelog(mocker)
@@ -1158,7 +1180,9 @@ class TestChangelog:
         assert "/releases/tag/v2.0.0" in rendered
         assert "Pending change" in rendered
 
-    def test_generate_diff_url_with_diff_and_patch(self, mocker) -> None:
+    def test_generate_diff_url_with_diff_and_patch(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test generate_diff_url renders changelog, diff, and patch links."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
@@ -1172,7 +1196,9 @@ class TestChangelog:
         assert "[`Diff`]" in rendered
         assert "[`Patch`]" in rendered
 
-    def test_generate_diff_url_uses_next_release_option(self, mocker) -> None:
+    def test_generate_diff_url_uses_next_release_option(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test generate_diff_url prefers next_release override."""
         changelog = _build_changelog(mocker)
         changelog.options["next_release"] = "v2.0.0"
@@ -1185,7 +1211,9 @@ class TestChangelog:
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "compare/v1.0.0...v2.0.0" in rendered
 
-    def test_rprint_prs_dependency_section_is_truncated(self, mocker) -> None:
+    def test_rprint_prs_dependency_section_is_truncated(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test dependency PRs are truncated with a summary line."""
         changelog = _build_changelog(mocker)
         changelog.options["max_depends"] = 1
@@ -1240,8 +1268,9 @@ class TestChangelog:
     )
     def test_rprint_prs_formats_section_heading(
         self,
-        mocker,
-        bold_sections,
+        mocker: MockerFixture,
+        *,
+        bold_sections: bool,
         expected: str,
     ) -> None:
         """Test generated section headings use the selected Markdown style."""
@@ -1260,7 +1289,7 @@ class TestChangelog:
         assert expected in rendered
 
     def test_rprint_prs_formats_renamed_and_custom_sections(
-        self, mocker
+        self, mocker: MockerFixture
     ) -> None:
         """Test all configured PR section titles use H3 headings by default."""
         changelog = _build_changelog(mocker)
@@ -1284,7 +1313,9 @@ class TestChangelog:
         assert "### Fixes\n\n" in rendered
         assert "### Security\n\n" in rendered
 
-    def test_legacy_bold_style_applies_to_issues_and_prs(self, mocker) -> None:
+    def test_legacy_bold_style_applies_to_issues_and_prs(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test legacy bold formatting covers both section renderer paths."""
         changelog = _build_changelog(mocker)
         changelog.options["bold_sections"] = True
@@ -1313,7 +1344,9 @@ class TestChangelog:
         assert "### " not in rendered_issues
         assert "### " not in rendered_prs
 
-    def test_process_release_falls_back_to_release_body(self, mocker) -> None:
+    def test_process_release_falls_back_to_release_body(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test process_release renders release body when lists are empty."""
         changelog = _build_changelog(mocker)
         changelog.prev_release = None
@@ -1341,7 +1374,7 @@ class TestChangelog:
 
     def test_get_release_body_strips_compare_link_and_adds_newline(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test get_release_body removes compare line and appends newline."""
         changelog = _build_changelog(mocker)
@@ -1361,7 +1394,9 @@ class TestChangelog:
         assert "Highlights" in rendered
         assert "More notes\n" in rendered
 
-    def test_get_release_body_preserves_markdown_headings(self, mocker) -> None:
+    def test_get_release_body_preserves_markdown_headings(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test release-body headings are outside section-style formatting."""
         changelog = _build_changelog(mocker)
         release = MagicMock(body="# Highlights\n\n## Details")
@@ -1374,7 +1409,7 @@ class TestChangelog:
 
     def test_get_release_body_without_notes_writes_fallback(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test get_release_body writes fallback text when body is empty."""
         changelog = _build_changelog(mocker)
@@ -1388,7 +1423,9 @@ class TestChangelog:
         assert "There were no merged pull requests or closed issues" in rendered
         assert "See the Full Changelog below for details." in rendered
 
-    def test_rprint_issues_handles_missing_closed_by(self, mocker) -> None:
+    def test_rprint_issues_handles_missing_closed_by(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test rprint_issues fallback when closed_by is unavailable."""
         changelog = _build_changelog(mocker)
         changelog.options["show_issues"] = True
@@ -1409,7 +1446,9 @@ class TestChangelog:
         assert "[#42](https://github.com/user/repo/issues/42)" in rendered
         assert "by [" not in rendered
 
-    def test_generate_changelog_writes_header_and_footer(self, mocker) -> None:
+    def test_generate_changelog_writes_header_and_footer(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test generate_changelog writes base structure and footer."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(
@@ -1444,7 +1483,7 @@ class TestChangelog:
         changelog.process_unreleased.assert_not_called()
 
     def test_generate_changelog_normalizes_multiline_intro_spacing(
-        self, mocker
+        self, mocker: MockerFixture
     ) -> None:
         """Test multiline intro text does not add an extra blank line."""
         changelog = _build_changelog(mocker)
@@ -1482,7 +1521,7 @@ class TestChangelog:
         assert "Second paragraph\n\n\n## [v1.0.0]" not in rendered
 
     def test_generate_changelog_renders_release_sections_golden(
-        self, mocker
+        self, mocker: MockerFixture
     ) -> None:
         """Test a release renders issues and PR sections as Markdown."""
         changelog = _build_changelog(mocker)
@@ -1582,7 +1621,9 @@ class TestChangelog:
             "by [Seapagan](https://github.com/seapagan)*\n"
         )
 
-    def test_generate_changelog_renders_unreleased_golden(self, mocker) -> None:
+    def test_generate_changelog_renders_unreleased_golden(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test unreleased changes render to the current HEAD link."""
         changelog = _build_changelog(
             mocker,
@@ -1631,7 +1672,7 @@ class TestChangelog:
         )
 
     def test_generate_changelog_renders_release_text_variants_golden(
-        self, mocker
+        self, mocker: MockerFixture
     ) -> None:
         """Test configured release text, yanked notes, and overrides render."""
         changelog = _build_changelog(
@@ -1696,7 +1737,7 @@ class TestChangelog:
         )
 
     def test_generate_changelog_renders_skip_and_no_releases_golden(
-        self, mocker
+        self, mocker: MockerFixture
     ) -> None:
         """Test skipped releases and an otherwise empty changelog output."""
         changelog = _build_changelog(mocker)
@@ -1726,7 +1767,9 @@ class TestChangelog:
             "by [Seapagan](https://github.com/seapagan)*\n"
         )
 
-    def test_flatten_ignores_with_extend_and_allowlist(self, mocker) -> None:
+    def test_flatten_ignores_with_extend_and_allowlist(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test flatten_ignores combines defaults and removes allowed labels."""
         changelog = _build_changelog(mocker)
         changelog.settings.ignored_labels = None
@@ -1738,14 +1781,16 @@ class TestChangelog:
         assert "bot-only" in result
         assert "question" not in result
 
-    def test_flatten_ignores_uses_explicit_list(self, mocker) -> None:
+    def test_flatten_ignores_uses_explicit_list(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test flatten_ignores returns explicit ignored_labels unchanged."""
         changelog = _build_changelog(mocker)
         changelog.settings.ignored_labels = ["foo", "bar"]
 
         assert changelog.flatten_ignores() == ["foo", "bar"]
 
-    def test_rename_sections_success(self, mocker) -> None:
+    def test_rename_sections_success(self, mocker: MockerFixture) -> None:
         """Test rename_sections updates matching headings."""
         changelog = _build_changelog(mocker)
         changelog.settings.rename_sections = [
@@ -1760,7 +1805,9 @@ class TestChangelog:
 
         assert ("Fixes", "bug") in renamed
 
-    def test_rename_sections_invalid_raises_exit(self, mocker) -> None:
+    def test_rename_sections_invalid_raises_exit(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test rename_sections exits when old heading does not exist."""
         changelog = _build_changelog(mocker)
         changelog.settings.rename_sections = [{"old": "Nope", "new": "New"}]
@@ -1774,7 +1821,9 @@ class TestChangelog:
 
         assert exc.value.args[0] == ExitErrors.INVALID_ACTION
 
-    def test_extend_sections_with_insert_index(self, mocker) -> None:
+    def test_extend_sections_with_insert_index(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test extend_sections inserts custom sections at configured index."""
         changelog = _build_changelog(mocker)
         changelog.settings.extend_sections = [
@@ -1786,7 +1835,9 @@ class TestChangelog:
 
         assert sections[1] == ("Security", "security")
 
-    def test_get_contributors_deduplicates_and_sorts(self, mocker) -> None:
+    def test_get_contributors_deduplicates_and_sorts(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test get_contributors removes duplicates and sorts by name/login."""
         changelog = _build_changelog(mocker)
         user_b = MagicMock(login="b-user")
@@ -1806,7 +1857,9 @@ class TestChangelog:
 
         assert [u.login for u in contributors] == ["a-user", "b-user"]
 
-    def test_ignore_items_and_get_sorted_items(self, mocker) -> None:
+    def test_ignore_items_and_get_sorted_items(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test ignore_items filtering and get_sorted_items ordering."""
         changelog = _build_changelog(mocker)
         changelog.options["ignore_items"] = [2]
@@ -1825,7 +1878,9 @@ class TestChangelog:
         )
         assert [item.number for item in sorted_items] == [1, 3]
 
-    def test_get_release_sections_respects_ignored_labels(self, mocker) -> None:
+    def test_get_release_sections_respects_ignored_labels(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test get_release_sections excludes PRs with ignored labels."""
         changelog = _build_changelog(mocker)
         changelog.sections = [("Bug Fixes", "bug")]
@@ -1848,7 +1903,7 @@ class TestChangelog:
 
     def test_link_pull_requests_and_issues_assign_and_track_unreleased(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test linking assigns items by release date and tracks unreleased."""
         changelog = _build_changelog(mocker)
@@ -1950,7 +2005,9 @@ class TestChangelog:
         assert issue_new in issue_by_release[2]
         assert changelog.unreleased_issues == [issue_unreleased]
 
-    def test_run_quiet_and_contributors_path(self, mocker) -> None:
+    def test_run_quiet_and_contributors_path(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test run covers quiet stdout redirect and contributors update."""
         changelog = _build_changelog(mocker)
         changelog.options["quiet"] = True
@@ -1983,7 +2040,9 @@ class TestChangelog:
         changelog.get_contributors.assert_called_once()
         changelog.update_contributors.assert_called_once()
 
-    def test_update_contributors_ignores_known_bots(self, mocker) -> None:
+    def test_update_contributors_ignores_known_bots(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test update_contributors skips IGNORED_CONTRIBUTORS logins."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(name="repo_data")
@@ -2013,7 +2072,9 @@ class TestChangelog:
         assert "dependabot[bot]" not in rendered
         assert "dev-user" in rendered
 
-    def test_generate_changelog_with_skip_and_no_depends(self, mocker) -> None:
+    def test_generate_changelog_with_skip_and_no_depends(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test generate_changelog skip message and depends warning block."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
@@ -2038,7 +2099,7 @@ class TestChangelog:
 
     def test_process_release_skip_prev_release_and_title(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test process_release skip branch and title/diff rendering branch."""
         changelog = _build_changelog(mocker)
@@ -2067,7 +2128,9 @@ class TestChangelog:
         assert "**_Release Title_**" in rendered
         assert "[`Full Changelog`]" in rendered
 
-    def test_show_release_text_accepts_release_instance(self, mocker) -> None:
+    def test_show_release_text_accepts_release_instance(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test show_release_text branch when given a release instance."""
         changelog = _build_changelog(mocker)
         changelog.release_text_cache.release_text_by_release = {
@@ -2083,7 +2146,9 @@ class TestChangelog:
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert rendered == "Text\n\n"
 
-    def test_rprint_issues_skips_ignored_labels(self, mocker) -> None:
+    def test_rprint_issues_skips_ignored_labels(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test rprint_issues drops issues with ignored labels."""
         changelog = _build_changelog(mocker)
         changelog.options["show_issues"] = True
@@ -2104,7 +2169,9 @@ class TestChangelog:
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "[#7]" not in rendered
 
-    def test_generate_diff_url_with_release_prev(self, mocker) -> None:
+    def test_generate_diff_url_with_release_prev(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test generate_diff_url branch when prev_release is release object."""
         changelog = _build_changelog(mocker)
         changelog.repo_data = MagicMock(html_url="https://github.com/user/repo")
@@ -2126,7 +2193,9 @@ class TestChangelog:
         assert "[`Diff`]" not in rendered
         assert "[`Patch`]" not in rendered
 
-    def test_rprint_prs_skips_dependencies_when_disabled(self, mocker) -> None:
+    def test_rprint_prs_skips_dependencies_when_disabled(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test rprint_prs skips dependency section when show_depends=False."""
         changelog = _build_changelog(mocker)
         changelog.options["show_depends"] = False
@@ -2159,7 +2228,9 @@ class TestChangelog:
         ):
             validate_changelog_options(options)
 
-    def test_get_sorted_items_rejects_unknown_order(self, mocker) -> None:
+    def test_get_sorted_items_rejects_unknown_order(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test renderer fails clearly if invalid ordering reaches it."""
         changelog = _build_changelog(mocker)
         changelog.options["item_order"] = "keep"
@@ -2169,7 +2240,7 @@ class TestChangelog:
 
     def test_get_unreleased_cutoff_uses_first_commit_when_no_releases(
         self,
-        mocker,
+        mocker: MockerFixture,
     ) -> None:
         """Test get_unreleased_cutoff falls back to first commit date."""
         changelog = _build_changelog(mocker)
@@ -2179,7 +2250,9 @@ class TestChangelog:
 
         assert changelog.get_unreleased_cutoff() == first_date
 
-    def test_get_unreleased_cutoff_uses_latest_release(self, mocker) -> None:
+    def test_get_unreleased_cutoff_uses_latest_release(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test get_unreleased_cutoff is independent of release list order."""
         changelog = _build_changelog(mocker)
         changelog.repo_releases = [
@@ -2189,7 +2262,9 @@ class TestChangelog:
 
         assert changelog.get_unreleased_cutoff() == _date(2021, 1, 10)
 
-    def test_filter_issues_drops_pull_requests(self, mocker) -> None:
+    def test_filter_issues_drops_pull_requests(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test filter_issues keeps only issues without pull_request marker."""
         changelog = _build_changelog(mocker)
         issue = MagicMock(pull_request=None)
@@ -2199,7 +2274,9 @@ class TestChangelog:
         filtered = changelog.filter_issues()
         assert filtered == [issue]
 
-    def test_api_wrapper_methods_success_and_error_paths(self, mocker) -> None:
+    def test_api_wrapper_methods_success_and_error_paths(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test API wrapper methods delegate to the data source."""
         changelog = _build_changelog(mocker)
         issues = [_issue(1, "issue", "dev", [])]
@@ -2213,7 +2290,9 @@ class TestChangelog:
         assert changelog.get_closed_prs() == pulls
         assert changelog.get_repo_releases() == releases
 
-    def test_get_repo_data_delegates_to_data_source(self, mocker) -> None:
+    def test_get_repo_data_delegates_to_data_source(
+        self, mocker: MockerFixture
+    ) -> None:
         """Test get_repo_data uses the configured data source."""
         changelog = _build_changelog(mocker)
         changelog.repo_name = "repo"
