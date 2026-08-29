@@ -25,6 +25,7 @@ class ChangelogOptions(TypedDict):
     max_depends: int
     show_diff: bool
     show_patch: bool
+    bold_sections: bool
 
 
 class ExitErrors(IntEnum):

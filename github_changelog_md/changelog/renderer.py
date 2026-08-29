@@ -45,6 +45,12 @@ class ChangelogRenderer:
     ignored_labels: list[str]
     prev_release: Release | Literal["HEAD"] | None = None
 
+    def format_section_heading(self, heading: str) -> str:
+        """Format a generated section heading."""
+        if self.options["bold_sections"]:
+            return f"**{heading}**\n\n"
+        return f"### {heading}\n\n"
+
     def render(self) -> str:
         """Render the complete changelog Markdown."""
         output = ["# Changelog\n\n"]
@@ -228,7 +234,7 @@ class ChangelogRenderer:
         if not visible_issues or not self.options["show_issues"]:
             return ""
 
-        output = ["**Closed Issues**\n\n"]
+        output = [self.format_section_heading("Closed Issues")]
         for issue in self.get_sorted_items(visible_issues):
             if any(
                 label.name.lower() in self.ignored_labels
@@ -316,7 +322,7 @@ class ChangelogRenderer:
             visible_prs = self.ignore_items(list(prs))
 
             if visible_prs:
-                output.append(f"**{heading}**\n\n")
+                output.append(self.format_section_heading(heading))
                 sorted_prs = self.get_sorted_items(visible_prs)
                 display_prs = (
                     sorted_prs[: self.options["max_depends"]]
