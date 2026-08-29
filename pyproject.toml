@@ -87,7 +87,7 @@ ruff.help = "Run Ruff checks"
 ruff.cmd = "ruff check . --output-format concise"
 test.help = "Run tests using Pytest"
 test.cmd = "pytest"
-markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md"
+markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md CHANGELOG.md"
 markdown.help = "Run markdown checks"
 
 # run all linting checks in sequence. we want to run them all, even if one fails
@@ -110,6 +110,7 @@ changelog.help = "Generate the CHANGELOG.md file"
 # configure assorted tools and linters
 [tool.pymarkdown]
 plugins.md014.enabled = false
+plugins.md024.siblings_only = true
 plugins.md036.enabled = false
 plugins.md046.enabled = false
 
@@ -136,6 +137,7 @@ ignore = [
   "FBT002",
   "FBT003",
   "B006",
+  "CPY001", # copyright in each file is overkill for this project.
 ] # These rules are too strict even for us 😝
 extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
 

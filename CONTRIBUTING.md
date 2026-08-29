@@ -41,12 +41,12 @@ from the [official website](https://www.python.org/downloads/) or using your
 Operating system's package manager. This project requires **Python 3.10** or
 higher.
 
-I'd recommend using
-[pyenv](https://github.com/pyenv/pyenv) to manage your Python installations, the
+I'd recommend using [pyenv](https://github.com/pyenv/pyenv) to manage your
+Python installations, the
 [pyenv-installer](https://github.com/pyenv/pyenv-installer) works for Linux and
 Mac OS X. For Windows, you can use the
-[pyenv-win](https://github.com/pyenv-win/pyenv-win) port. See
-[here](https://github.com/pyenv-win/pyenv-win#installation ) for installation
+[pyenv-win](https://github.com/pyenv-win/pyenv-win) port. See the [Pyenv-Win
+Website](https://github.com/pyenv-win/pyenv-win#installation ) for installation
 instructions.
 
 > [!IMPORTANT]

@@ -1,3 +1,3 @@
-<!-- pyml disable-next-line first-line-heading -->
+<!-- pyml disable MD041 -->
 <!-- markdownlint-disable MD041 -->
 --8<-- "CHANGELOG.md"

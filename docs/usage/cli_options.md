@@ -70,6 +70,21 @@ use the `--no-issues` option to hide it.
     :sparkles: Equivalent to the `show_issues` setting in the config file.
 ---
 
+## `--bold-sections` / `--no-bold-sections` / `-b`
+
+Choose how generated section headings such as `Closed Issues`, `Merged Pull
+Requests`, and PR categories are formatted. By default, the tool uses H3
+Markdown headings (`--no-bold-sections`). Use `--bold-sections` or its `-b`
+alias to restore the legacy bold-text format.
+
+This option applies to default, renamed, and custom PR sections. It does not
+change H2 release headings or user-supplied release text.
+
+!!! tip ""
+
+    :sparkles: Equivalent to the `bold_sections` setting in the config file.
+---
+
 ## `--contrib` / `--no-contrib`
 
 Choose whether to create the `CONTRIBUTORS.md` file. By default this will be

@@ -44,6 +44,7 @@ class Settings(TOMLSettings):
     max_depends: int = 10
     show_diff: bool = True
     show_patch: bool = True
+    bold_sections: bool = False
     intro_text: str = ""
     yanked: list[dict[str, str]] | None = None
     release_text: list[dict[str, str]] | None = None

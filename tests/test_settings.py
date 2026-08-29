@@ -47,6 +47,23 @@ class TestSettings:
         settings = get_settings_object()
 
         assert settings.github_pat == "1234"
+        assert settings.bold_sections is False
+
+    def test_get_settings_object_loads_bold_sections(self, fs) -> None:
+        """Test the legacy section style can be enabled in the config file."""
+        fs.create_file(
+            CONFIG_FILE,
+            contents=(
+                "[changelog_generator]\n"
+                "github_pat = '1234'\n"
+                "schema_version = '1'\n"
+                "bold_sections = true\n"
+            ),
+        )
+
+        settings = get_settings_object()
+
+        assert settings.bold_sections is True
 
     def test_get_pat_input(
         self,
@@ -81,6 +98,7 @@ class TestSettings:
         assert settings.github_pat == "1234"
         assert settings.settings_file_name == CONFIG_FILE
         assert isinstance(settings, Settings)
+        assert settings.bold_sections is False
 
     def test_get_settings_with_bad_schema(
         self,
