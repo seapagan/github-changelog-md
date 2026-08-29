@@ -140,10 +140,6 @@ target-version = "py310"      # minimum python version supported
 [tool.ruff.lint]
 select = ["ALL"] # we are being very strict!
 ignore = [
-  "PGH003",
-  "FBT002",
-  "FBT003",
-  "B006",
   "CPY001", # copyright in each file is overkill for this project.
 ] # These rules are too strict even for us 😝
 extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
@@ -163,7 +159,6 @@ convention = "google"
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = [
   "S101", # we can (and MUST!) use 'assert' in test files.
-  # "ANN001", # annotations for fixtures are sometimes a pain for test files.
 ]
 "github_changelog_md/main.py" = [
   "UP007",
