@@ -136,6 +136,7 @@ ignore = [
   "FBT002",
   "FBT003",
   "B006",
+  "CPY001" # copyright in each file is overkill for this project.
 ] # These rules are too strict even for us 😝
 extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
 
