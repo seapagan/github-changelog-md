@@ -66,9 +66,13 @@ def _default_options() -> ChangelogOptions:
     }
 
 
+class _MockChangeLog(ChangeLog):
+    data_source: MagicMock
+
+
 def _build_changelog(
     _mocker=None, settings_overrides: Mapping[str, object] | None = None
-) -> ChangeLog:
+) -> _MockChangeLog:
     if settings_overrides is None and isinstance(_mocker, Mapping):
         settings_overrides = _mocker
 
@@ -92,7 +96,7 @@ def _build_changelog(
         for key, value in settings_overrides.items():
             setattr(settings, key, value)
 
-    return ChangeLog(
+    return _MockChangeLog(
         "repo",
         _default_options(),
         settings,
