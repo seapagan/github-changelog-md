@@ -25,9 +25,26 @@ $ poetry add git+https://github.com/seapagan/github-changelog-md
 
 Everything in this section will be included in the next official release.
 
+### New Features
+
+- Feat: add configurable section heading styles ([#423](https://github.com/seapagan/github-changelog-md/pull/423)) by [seapagan](https://github.com/seapagan)
+
+### Security
+
+- Chore(deps): update packages for security alerts ([#424](https://github.com/seapagan/github-changelog-md/pull/424)) by [seapagan](https://github.com/seapagan)
+
 ### Refactoring
 
 - Refactor changelog core architecture ([#404](https://github.com/seapagan/github-changelog-md/pull/404)) by [seapagan](https://github.com/seapagan)
+
+### Dependency Updates
+
+- Chore(deps): update astral-sh/setup-uv action to v10 ([#422](https://github.com/seapagan/github-changelog-md/pull/422)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update dependency uv_build to >=0.12.7,<0.13.0 ([#421](https://github.com/seapagan/github-changelog-md/pull/421)) by [renovate[bot]](https://github.com/apps/renovate)
+- Chore(deps): update actions/checkout action to v7 ([#410](https://github.com/seapagan/github-changelog-md/pull/410)) by [renovate[bot]](https://github.com/apps/renovate)
+- Build(deps): bump pyjwt from 2.12.1 to 2.13.0 ([#409](https://github.com/seapagan/github-changelog-md/pull/409)) by [dependabot[bot]](https://github.com/apps/dependabot)
+- Chore(deps): update dependency pymdown-extensions to v11 [security] ([#406](https://github.com/seapagan/github-changelog-md/pull/406)) by [renovate[bot]](https://github.com/apps/renovate)
+- Build(deps): bump idna from 3.10 to 3.15 ([#405](https://github.com/seapagan/github-changelog-md/pull/405)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
 [`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD.patch)
 
