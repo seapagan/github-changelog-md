@@ -50,6 +50,17 @@ sections, and custom sections. It does not alter H2 release headings,
 release-title emphasis, yanked notices, user-supplied release text, or headings
 inside GitHub release bodies.
 
+!!! note "Markdown linting"
+
+    If a Markdown linter checks the generated changelog, configure `MD024`
+    (`no-duplicate-heading`) with `siblings_only`. Section names repeat beneath
+    different H2 release headings, but remain unique within each release.
+
+    The legacy bold style intentionally conflicts with `MD036`
+    (`no-emphasis-as-heading`), so disable that rule for the generated file or
+    exclude the file from the rule. Existing release-title emphasis can also
+    trigger `MD036`, regardless of the selected section heading style.
+
 You can tag each of your PRs with any of these labels to group them in the
 changelog - If you are using `Dependabot`, by default it will add the
 `dependencies` label.
