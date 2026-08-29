@@ -173,7 +173,7 @@ pyjson5==2.0.0
 pyjwt==2.13.0
     # via pygithub
 pymarkdownlnt==0.9.37
-pymdown-extensions==10.21.2
+pymdown-extensions==11.0.1
     # via mkdocs-material
 pynacl==1.6.2
     # via pygithub
