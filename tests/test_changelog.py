@@ -62,6 +62,7 @@ def _default_options() -> ChangelogOptions:
         "max_depends": 10,
         "show_diff": True,
         "show_patch": True,
+        "bold_sections": False,
     }
 
 
@@ -1226,6 +1227,88 @@ class TestChangelog:
         assert "#1" not in rendered
         assert "and 1 more dependency updates" in rendered
 
+    @pytest.mark.parametrize(
+        ("bold_sections", "expected"),
+        [
+            (False, "### Security\n\n"),
+            (True, "**Security**\n\n"),
+        ],
+    )
+    def test_rprint_prs_formats_section_heading(
+        self,
+        mocker,
+        bold_sections,
+        expected: str,
+    ) -> None:
+        """Test generated section headings use the selected Markdown style."""
+        changelog = _build_changelog(mocker)
+        changelog.options["bold_sections"] = bold_sections
+        changelog.sections = [("Security", "security")]
+        changelog.ignored_labels = []
+        out = MagicMock()
+
+        changelog.rprint_prs(
+            out,
+            [_pr(1, "security change", "dev", [_label("security")])],
+        )
+
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert expected in rendered
+
+    def test_rprint_prs_formats_renamed_and_custom_sections(
+        self, mocker
+    ) -> None:
+        """Test all configured PR section titles use H3 headings by default."""
+        changelog = _build_changelog(mocker)
+        changelog.sections = [
+            ("Merged Pull Requests", None),
+            ("Fixes", "bug"),
+            ("Security", "security"),
+        ]
+        changelog.ignored_labels = []
+        pull_requests = [
+            _pr(1, "plain change", "dev", []),
+            _pr(2, "fixed bug", "dev", [_label("bug")]),
+            _pr(3, "security change", "dev", [_label("security")]),
+        ]
+        out = MagicMock()
+
+        changelog.rprint_prs(out, pull_requests)
+
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert "### Merged Pull Requests\n\n" in rendered
+        assert "### Fixes\n\n" in rendered
+        assert "### Security\n\n" in rendered
+
+    def test_legacy_bold_style_applies_to_issues_and_prs(self, mocker) -> None:
+        """Test legacy bold formatting covers both section renderer paths."""
+        changelog = _build_changelog(mocker)
+        changelog.options["bold_sections"] = True
+        changelog.sections = [("Merged Pull Requests", None)]
+        changelog.ignored_labels = []
+        issue_out = MagicMock()
+        pr_out = MagicMock()
+
+        changelog.rprint_issues(
+            issue_out,
+            [_issue(1, "closed issue", "reporter", [])],
+        )
+        changelog.rprint_prs(
+            pr_out,
+            [_pr(2, "merged change", "dev", [])],
+        )
+
+        rendered_issues = "".join(
+            call.args[0] for call in issue_out.write.call_args_list
+        )
+        rendered_prs = "".join(
+            call.args[0] for call in pr_out.write.call_args_list
+        )
+        assert "**Closed Issues**\n\n" in rendered_issues
+        assert "**Merged Pull Requests**\n\n" in rendered_prs
+        assert "### " not in rendered_issues
+        assert "### " not in rendered_prs
+
     def test_process_release_falls_back_to_release_body(self, mocker) -> None:
         """Test process_release renders release body when lists are empty."""
         changelog = _build_changelog(mocker)
@@ -1274,6 +1357,17 @@ class TestChangelog:
         assert "Highlights" in rendered
         assert "More notes\n" in rendered
 
+    def test_get_release_body_preserves_markdown_headings(self, mocker) -> None:
+        """Test release-body headings are outside section-style formatting."""
+        changelog = _build_changelog(mocker)
+        release = MagicMock(body="# Highlights\n\n## Details")
+        out = MagicMock()
+
+        changelog.get_release_body(out, release)
+
+        rendered = "".join(call.args[0] for call in out.write.call_args_list)
+        assert rendered == "# Highlights\n\n## Details\n"
+
     def test_get_release_body_without_notes_writes_fallback(
         self,
         mocker,
@@ -1307,7 +1401,7 @@ class TestChangelog:
         changelog.rprint_issues(out, [issue])
 
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
-        assert "**Closed Issues**" in rendered
+        assert "### Closed Issues" in rendered
         assert "[#42](https://github.com/user/repo/issues/42)" in rendered
         assert "by [" not in rendered
 
@@ -1465,16 +1559,16 @@ class TestChangelog:
             "# Changelog\n\n"
             "## [v1.0.0](https://github.com/user/repo/releases/tag/v1.0.0) "
             "(2021-01-10)\n\n"
-            "**Closed Issues**\n\n"
+            "### Closed Issues\n\n"
             "- Fixed issue ([#7](https://github.com/user/repo/issues/7)) "
             "by [maintainer](https://github.com/maintainer)\n\n"
-            "**Merged Pull Requests**\n\n"
+            "### Merged Pull Requests\n\n"
             "- Internal cleanup ([#2](https://github.com/user/repo/pull/2)) "
             "by [dev-two](https://github.com/dev-two)\n\n"
-            "**Enhancements**\n\n"
+            "### Enhancements\n\n"
             "- Add feature ([#3](https://github.com/user/repo/pull/3)) "
             "by [dev-three](https://github.com/dev-three)\n\n"
-            "**Dependency Updates**\n\n"
+            "### Dependency Updates\n\n"
             "- Bump dep new ([#5](https://github.com/user/repo/pull/5)) "
             "by [dependabot[bot]](https://github.com/dependabot[bot])\n"
             "- *and 1 more dependency updates*\n\n"
@@ -1519,10 +1613,10 @@ class TestChangelog:
             "# Changelog\n\n"
             "## [Unreleased](https://github.com/user/repo/tree/HEAD)\n\n"
             "Preview\n\n"
-            "**Closed Issues**\n\n"
+            "### Closed Issues\n\n"
             "- Closed next issue "
             "([#11](https://github.com/user/repo/issues/11))\n\n"
-            "**Merged Pull Requests**\n\n"
+            "### Merged Pull Requests\n\n"
             "- Prepare next work "
             "([#12](https://github.com/user/repo/pull/12)) "
             "by [dev-next](https://github.com/dev-next)\n\n"

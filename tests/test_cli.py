@@ -40,6 +40,7 @@ default_options: ChangelogOptions = {
     "max_depends": 10,
     "show_diff": True,
     "show_patch": True,
+    "bold_sections": False,
 }
 
 
@@ -59,6 +60,7 @@ def _settings_mock(**overrides: object) -> Mock:
     settings.max_depends = 10
     settings.show_diff = True
     settings.show_patch = True
+    settings.bold_sections = False
     settings.yanked = None
     settings.release_text_before = None
     settings.release_text = None
@@ -113,6 +115,9 @@ class TestCLI:
             (["--contrib"], {"contributors": True}),
             (["--no-contrib"], {"contributors": False}),
             (["--quiet"], {"quiet": True}),
+            (["-b"], {"bold_sections": True}),
+            (["--bold-sections"], {"bold_sections": True}),
+            (["--no-bold-sections"], {"bold_sections": False}),
         ],
     )
     def test_different_cli_options(
@@ -135,6 +140,48 @@ class TestCLI:
         )
         _assert_changelog_called(mock_changelog, "test_repo", expected_options)
         mock_changelog_instance.run.assert_called_once()
+
+    @pytest.mark.parametrize(
+        ("cli_options", "expected"),
+        [
+            ([], True),
+            (["--no-bold-sections"], False),
+        ],
+    )
+    def test_bold_sections_cli_overrides_config(
+        self,
+        mocker: MockerFixture,
+        mock_changelog: MockType,
+        cli_options: list[str],
+        expected,
+    ) -> None:
+        """Test explicit CLI values override the configured section style."""
+        settings = _settings_mock(bold_sections=True)
+        mocker.patch(
+            "github_changelog_md.main.get_settings", return_value=settings
+        )
+        mock_changelog.return_value = Mock()
+
+        result = CliRunner().invoke(
+            app,
+            ["--repo", "test_repo", *cli_options],
+        )
+
+        expected_options = cast(
+            "ChangelogOptions",
+            {**default_options, "bold_sections": expected},
+        )
+        assert result.exit_code == 0
+        _assert_changelog_called(mock_changelog, "test_repo", expected_options)
+
+    def test_bold_sections_options_are_shown_in_help(self) -> None:
+        """Test help exposes both section styles and the short alias."""
+        result = CliRunner().invoke(app, ["--help"])
+
+        assert result.exit_code == 0
+        assert "-b" in result.output
+        assert "--bold-sections" in result.output
+        assert "--no-bold-sections" in result.output
 
     def test_cli_with_repo_and_user(self, mock_changelog: MockType) -> None:
         """Test the main function with the repo and user flags."""
