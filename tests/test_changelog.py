@@ -936,33 +936,45 @@ class TestChangelog:
             MagicMock()
         )
         changelog = _build_changelog(mocker)
-        changelog.get_repo_data = MagicMock(return_value=mock_repo_data)
-        changelog.get_closed_prs = MagicMock(
-            return_value=mock_repo.get_pulls.return_value,
-        )
-        changelog.get_closed_issues = MagicMock(
-            return_value=mock_repo.get_issues.return_value,
-        )
-        changelog.get_repo_releases = MagicMock(
-            return_value=mock_repo.get_releases.return_value,
-        )
-        changelog.filter_issues = MagicMock(
-            return_value=mock_repo.get_issues.return_value,
-        )
-        changelog.link_pull_requests = MagicMock(return_value={})
-        changelog.link_issues = MagicMock(return_value={})
-        changelog.generate_changelog = MagicMock()
+        run_methods = [
+            mocker.patch.object(
+                changelog,
+                "get_repo_data",
+                return_value=mock_repo_data,
+            ),
+            mocker.patch.object(
+                changelog,
+                "get_closed_prs",
+                return_value=mock_repo.get_pulls.return_value,
+            ),
+            mocker.patch.object(
+                changelog,
+                "get_closed_issues",
+                return_value=mock_repo.get_issues.return_value,
+            ),
+            mocker.patch.object(
+                changelog,
+                "get_repo_releases",
+                return_value=mock_repo.get_releases.return_value,
+            ),
+            mocker.patch.object(
+                changelog,
+                "filter_issues",
+                return_value=mock_repo.get_issues.return_value,
+            ),
+            mocker.patch.object(
+                changelog,
+                "link_pull_requests",
+                return_value={},
+            ),
+            mocker.patch.object(changelog, "link_issues", return_value={}),
+            mocker.patch.object(changelog, "generate_changelog"),
+        ]
         changelog.run()
 
         mock_header.assert_called_once()
-        changelog.get_repo_data.assert_called_once()
-        changelog.get_closed_prs.assert_called_once()
-        changelog.get_closed_issues.assert_called_once()
-        changelog.get_repo_releases.assert_called_once()
-        changelog.filter_issues.assert_called_once()
-        changelog.link_pull_requests.assert_called_once()
-        changelog.link_issues.assert_called_once()
-        changelog.generate_changelog.assert_called_once()
+        for run_method in run_methods:
+            run_method.assert_called_once()
 
     def test_constructor_does_not_read_release_settings(self) -> None:
         """Test release text config is supplied instead of read on init."""
@@ -1092,8 +1104,10 @@ class TestChangelog:
         }
         changelog.pr_by_release = {}
         changelog.issue_by_release = {}
-        changelog.rprint_issues = MagicMock()
-        changelog.rprint_prs = MagicMock()
+        render_methods = [
+            mocker.patch.object(changelog, "rprint_issues"),
+            mocker.patch.object(changelog, "rprint_prs"),
+        ]
 
         release = MagicMock()
         release.tag_name = "v1.0.0"
@@ -1111,8 +1125,8 @@ class TestChangelog:
 
         rendered = "".join(call.args[0] for call in out.write.call_args_list)
         assert "Override body\n" in rendered
-        changelog.rprint_issues.assert_not_called()
-        changelog.rprint_prs.assert_not_called()
+        for render_method in render_methods:
+            render_method.assert_not_called()
 
     def test_update_contributors_preserves_name_casing(
         self, mocker: MockerFixture
@@ -1246,8 +1260,10 @@ class TestChangelog:
         )
         pr_new.labels = [dep_label_2]
 
-        changelog.get_release_sections = MagicMock(
-            return_value={"Dependency Updates": [pr_old, pr_new]}
+        mocker.patch.object(
+            changelog,
+            "get_release_sections",
+            return_value={"Dependency Updates": [pr_old, pr_new]},
         )
 
         out = MagicMock()
@@ -1460,8 +1476,11 @@ class TestChangelog:
         changelog.options["show_unreleased"] = False
         changelog.options["show_depends"] = True
         changelog.settings.intro_text = "Intro line"
-        changelog.process_unreleased = MagicMock()
-        changelog.process_release = MagicMock()
+        process_unreleased = mocker.patch.object(
+            changelog,
+            "process_unreleased",
+        )
+        mocker.patch.object(changelog, "process_release")
 
         mock_path = mocker.patch(
             "github_changelog_md.changelog.changelog.Path",
@@ -1480,7 +1499,7 @@ class TestChangelog:
         assert rendered.startswith("# Changelog\n\n")
         assert "Intro line\n\n" in rendered
         assert "This changelog was generated using" in rendered
-        changelog.process_unreleased.assert_not_called()
+        process_unreleased.assert_not_called()
 
     def test_generate_changelog_normalizes_multiline_intro_spacing(
         self, mocker: MockerFixture
@@ -1922,10 +1941,12 @@ class TestChangelog:
             ),
         )
         changelog.repo_releases = [rel_new, rel_old]
-        changelog.get_unreleased_cutoff = MagicMock(
+        mocker.patch.object(
+            changelog,
+            "get_unreleased_cutoff",
             return_value=datetime.datetime(
                 2021, 1, 10, tzinfo=datetime.timezone.utc
-            )
+            ),
         )
 
         pr_old = MagicMock(
@@ -2014,19 +2035,38 @@ class TestChangelog:
         changelog.options["contributors"] = True
 
         mocker.patch("github_changelog_md.changelog.changelog.header")
-        changelog.rename_sections = MagicMock(return_value=[("Merged", None)])
-        changelog.extend_sections = MagicMock(return_value=[("Merged", None)])
-        changelog.flatten_ignores = MagicMock(return_value=[])
-        changelog.get_repo_data = MagicMock(return_value=MagicMock())
-        changelog.get_repo_releases = MagicMock(return_value=[])
-        changelog.get_closed_prs = MagicMock(return_value=[])
-        changelog.get_closed_issues = MagicMock(return_value=[])
-        changelog.filter_issues = MagicMock(return_value=[])
-        changelog.link_pull_requests = MagicMock(return_value={})
-        changelog.link_issues = MagicMock(return_value={})
-        changelog.generate_changelog = MagicMock()
-        changelog.get_contributors = MagicMock(return_value=[])
-        changelog.update_contributors = MagicMock()
+        mocker.patch.object(
+            changelog,
+            "rename_sections",
+            return_value=[("Merged", None)],
+        )
+        mocker.patch.object(
+            changelog,
+            "extend_sections",
+            return_value=[("Merged", None)],
+        )
+        mocker.patch.object(changelog, "flatten_ignores", return_value=[])
+        mocker.patch.object(
+            changelog,
+            "get_repo_data",
+            return_value=MagicMock(),
+        )
+        mocker.patch.object(changelog, "get_repo_releases", return_value=[])
+        mocker.patch.object(changelog, "get_closed_prs", return_value=[])
+        mocker.patch.object(changelog, "get_closed_issues", return_value=[])
+        mocker.patch.object(changelog, "filter_issues", return_value=[])
+        mocker.patch.object(changelog, "link_pull_requests", return_value={})
+        mocker.patch.object(changelog, "link_issues", return_value={})
+        mocker.patch.object(changelog, "generate_changelog")
+        get_contributors = mocker.patch.object(
+            changelog,
+            "get_contributors",
+            return_value=[],
+        )
+        update_contributors = mocker.patch.object(
+            changelog,
+            "update_contributors",
+        )
 
         mock_path = mocker.patch("github_changelog_md.changelog.changelog.Path")
         devnull_handle = MagicMock()
@@ -2037,8 +2077,8 @@ class TestChangelog:
 
         changelog.run()
 
-        changelog.get_contributors.assert_called_once()
-        changelog.update_contributors.assert_called_once()
+        get_contributors.assert_called_once()
+        update_contributors.assert_called_once()
 
     def test_update_contributors_ignores_known_bots(
         self, mocker: MockerFixture
@@ -2209,8 +2249,10 @@ class TestChangelog:
         dep_pr.html_url = "https://github.com/user/repo/pull/1"
         dep_pr.user = MagicMock(login="bot", html_url="https://github.com/bot")
 
-        changelog.get_release_sections = MagicMock(
-            return_value={"Dependency Updates": [dep_pr]}
+        mocker.patch.object(
+            changelog,
+            "get_release_sections",
+            return_value={"Dependency Updates": [dep_pr]},
         )
         out = MagicMock()
         changelog.rprint_prs(out, [dep_pr])
