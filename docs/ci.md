@@ -37,11 +37,7 @@ $ poe zizmor
 ```
 
 Zizmor is pinned as a development dependency, a Prek hook, and in the dedicated
-hosted workflow. Keep all three versions synchronized when updating it. The Poe
-task and hosted workflow restrict collection to `workflows,actions` because the
-repository's native `prek.toml` is Prek-specific and uses the `builtin`
-repository. The Prek hook receives only matching workflow and action files
-directly, so it does not parse the Prek configuration.
+hosted workflow. Keep all three versions synchronized when updating it.
 
 Local audits run offline unless a suitable GitHub token is already available
 through `ZIZMOR_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN`. A read-only token
