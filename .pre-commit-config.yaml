@@ -20,16 +20,26 @@ repos:
     rev: v0.0.75
     hooks:
       - id: ty
+        name: "type-check with ty"
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v2.3.1" # Use the sha / tag you want to point at
     hooks:
       - id: mypy
-        name: "run mypy"
+        name: "type-check with mypy"
         additional_dependencies:
           - pydantic
           - sqladmin
           - types-markdown
+
+  - repo: local
+    hooks:
+      - id: docs-build
+        name: "build documentation"
+        entry: uv run poe docs:build
+        language: system
+        pass_filenames: false
+        files: ^(docs/|mkdocs\.yml$|CHANGELOG\.md$|CONTRIBUTING\.md$|TODO\.md$|pyproject\.toml$|uv\.lock$)
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
@@ -37,8 +47,9 @@ repos:
     hooks:
       # Update the uv lockfile
       - id: uv-lock
+        name: "ensure the lockfile is up-to-date"
       - id: uv-export
-        name: "Export dependencies to 'requirements.txt'"
+        name: "export dependencies to 'requirements.txt'"
         args:
           [
             "--no-hashes",
@@ -47,7 +58,7 @@ repos:
             "--output-file=requirements.txt",
           ]
       - id: uv-export
-        name: "Export dev dependencies to 'requirements-dev.txt'"
+        name: "export dev dependencies to 'requirements-dev.txt'"
         args:
           [
             "--no-hashes",
