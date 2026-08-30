@@ -3,7 +3,7 @@
 As mentioned in the [Installation](../installation.md) section, this tool uses a
 configuration file to store your GitHub PAT and other settings. This file is
 created in the current folder the first time you run the tool, and is named
-`.changelog-generator.toml`. The only required setting is the **`github_pat`**
+`.changelog_generator.toml`. The only required setting is the **`github_pat`**
 setting. The other settings are optional, and can be set on the command line
 (see the next section) instead of in the config file. Any settings in the
 config file will be overridden by the command line options.
@@ -187,16 +187,16 @@ release = "unreleased"
 text = """
 These are the changes that have been merged to the repository since the last
 release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+version from the main branch with `uv` by running:
+
+```console
+$ uv add --dev git+https://github.com/seapagan/github-changelog-md
+```
+
+or, from inside a virtual environment:
 
 ```console
 $ pip install git+https://github.com/seapagan/github-changelog-md
-```
-
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
 ```
 Everything in this section will be included in the next official release.
 """

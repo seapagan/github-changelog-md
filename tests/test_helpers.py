@@ -26,7 +26,7 @@ from github_changelog_md.helpers import (
 )
 
 if TYPE_CHECKING:
-    from pyfakefs.fake_filesystem import FakeFileSystem
+    from pyfakefs.fake_filesystem import FakeFilesystem
     from pytest_mock import MockerFixture
 
 
@@ -145,7 +145,7 @@ class TestHelpers:
 
     def test_get_app_version_with_toml_file(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         mocker: MockerFixture,
     ) -> None:
         """Test get_app_version function with a valid pyproject.toml file."""
@@ -163,7 +163,7 @@ class TestHelpers:
 
     def test_get_app_version_bad_toml_file(
         self,
-        fs: FakeFileSystem,
+        fs: FakeFilesystem,
         mocker: MockerFixture,
     ) -> None:
         """Test get_app_version function with a bad pyproject.toml file."""
@@ -223,13 +223,17 @@ class TestHelpers:
         assert get_section_name("not_a_label") is None
         assert get_section_name(None) == "Merged Pull Requests"
 
-    def test_get_index_of_tuple_found(self, sample_section_headings) -> None:
+    def test_get_index_of_tuple_found(
+        self,
+        sample_section_headings: list[SectionHeadings],
+    ) -> None:
         """Test get_index_of_tuple returns correct index when value is found."""
         index = get_index_of_tuple(sample_section_headings, 0, "Methods")
         assert index == 1, "Expected index of 1"
 
     def test_get_index_of_tuple_not_found(
-        self, sample_section_headings
+        self,
+        sample_section_headings: list[SectionHeadings],
     ) -> None:
         """Test get_index_of_tuple raises ValueError when value is not found."""
         with pytest.raises(
@@ -241,7 +245,8 @@ class TestHelpers:
         ), "Expected a ValueError indicating 'Conclusion' was not found"
 
     def test_get_index_of_tuple_with_none_value(
-        self, sample_section_headings
+        self,
+        sample_section_headings: list[SectionHeadings],
     ) -> None:
         """Test get_index_of_tuple when searching for None value."""
         index = get_index_of_tuple(sample_section_headings, 1, None)
@@ -276,7 +281,14 @@ class TestHelpers:
             ("", "1.0.0", False),
         ],
     )
-    def test_title_unique(self, mocker, title, tag_name, expected) -> None:
+    def test_title_unique(
+        self,
+        mocker: MockerFixture,
+        title: str,
+        tag_name: str,
+        *,
+        expected: bool,
+    ) -> None:
         """Test the title_unique function."""
         release = mocker.Mock()
         release.title = title

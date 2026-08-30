@@ -1,12 +1,18 @@
 """Setup some fixtures for the tests."""
 
-# mypy: disable-error-code="no-untyped-def"
-from collections.abc import Generator
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import pytest
 
 from github_changelog_md.config.settings import Settings
 from github_changelog_md.constants import CONFIG_FILE
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from pyfakefs.fake_filesystem import FakeFilesystem
 
 
 @pytest.fixture(autouse=True)
@@ -22,7 +28,7 @@ def _reset_settings_singleton() -> Generator[None]:
 
 
 @pytest.fixture
-def config_file(fs) -> None:
+def config_file(fs: FakeFilesystem) -> None:
     """Create a fake config file."""
     fs.create_file(
         CONFIG_FILE,
@@ -39,7 +45,7 @@ def config_file(fs) -> None:
 
 
 @pytest.fixture
-def bad_schema(fs) -> None:
+def bad_schema(fs: FakeFilesystem) -> None:
     """Create a fake config file with a bad schema."""
     fs.create_file(
         CONFIG_FILE,
