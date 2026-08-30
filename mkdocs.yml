@@ -83,5 +83,6 @@ nav:
       - "Command Line Options": usage/cli_options.md
   - Todo List: todo.md
   - Contributing: contributing.md
+  - Continuous Integration: ci.md
   - Changelog: changelog.md
   - License: license.md

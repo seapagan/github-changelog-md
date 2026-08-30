@@ -32,6 +32,13 @@ repos:
           - sqladmin
           - types-markdown
 
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    # Keep in sync with pyproject.toml and .github/workflows/zizmor.yml.
+    rev: v1.29.0
+    hooks:
+      - id: zizmor
+        args: ["--no-progress", "--persona=pedantic"]
+
   - repo: local
     hooks:
       - id: docs-build
