@@ -105,7 +105,7 @@ lint.help = "Run all linting checks"
 
 "docs:publish".cmd = "mkdocs gh-deploy"
 "docs:publish".help = "Publish documentation to GitHub Pages"
-"docs:build".cmd = "mkdocs build"
+"docs:build".cmd = "mkdocs build --strict"
 "docs:build".help = "Build documentation locally to './site' folder"
 "docs:serve".cmd = "mkdocs serve -w TODO.md -w CHANGELOG.md -w CONTRIBUTING.md --livereload"
 "docs:serve".help = "Serve documentation locally"
