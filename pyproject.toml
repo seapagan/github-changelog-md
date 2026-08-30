@@ -171,5 +171,8 @@ convention = "google"
 indent-style = "space"
 quote-style = "double"
 
+[tool.tombi.format.rules]
+line-width = 80
+
 [tool.uv.build-backend]
 module-root = ""
