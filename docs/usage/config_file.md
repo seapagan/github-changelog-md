@@ -3,7 +3,7 @@
 As mentioned in the [Installation](../installation.md) section, this tool uses a
 configuration file to store your GitHub PAT and other settings. This file is
 created in the current folder the first time you run the tool, and is named
-`.changelog-generator.toml`. The only required setting is the **`github_pat`**
+`.changelog_generator.toml`. The only required setting is the **`github_pat`**
 setting. The other settings are optional, and can be set on the command line
 (see the next section) instead of in the config file. Any settings in the
 config file will be overridden by the command line options.

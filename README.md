@@ -5,9 +5,9 @@ version](https://badge.fury.io/py/github-changelog-md.svg)](https://badge.fury.i
 ![PyPI - License](https://img.shields.io/pypi/l/github-changelog-md)
 [![Ruff](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml)
 [![Tests](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/seapagan/github-changelog-md/graph/badge.svg?token=27D8PGNX0E)](https://codecov.io/gh/seapagan/github-changelog-md)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dca64980e10444f6b0b8d66369e64082)](https://app.codacy.com/gh/seapagan/github-changelog-md/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/dca64980e10444f6b0b8d66369e64082)](https://app.codacy.com/gh/seapagan/github-changelog-md/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![Dependency Review](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/seapagan/github-changelog-md/main.svg)](https://results.pre-commit.ci/latest/github/seapagan/github-changelog-md/main)
 [![CodeQL](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml)
 [![Weekly Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=week&units=international_system&left_color=black&right_color=green&left_text=Weekly%20Downloads)](https://pepy.tech/project/github-changelog-md)
 [![Total Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=total&units=international_system&left_color=black&right_color=green&left_text=Total%20Downloads)](https://pepy.tech/project/github-changelog-md)
@@ -43,7 +43,7 @@ latest to oldest in this release.
 It is possible to install this package both locally within your projects and
 globally so it can be used in every project. You also need to generate a GitHub
 Personal Access Token (PAT) to use this tool or use an existing one. This should
-be stored in a config file `.changelog-generator.toml` in the directory you run
+be stored in a config file `.changelog_generator.toml` in the directory you run
 the tool from.
 
 ## Install Locally for a project
@@ -104,7 +104,7 @@ use this on private repositories).
 
 ## Create a config file
 
-This tool will look for a config file `.changelog-generator.toml` in the
+This tool will look for a config file `.changelog_generator.toml` in the
 location it is run from. The config file is a simple [TOML](https://toml.io/en/)
 file with the following format:
 

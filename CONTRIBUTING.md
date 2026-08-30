@@ -2,7 +2,8 @@
 
 [![Ruff](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/linting.yml)&nbsp;
 [![Tests](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/tests.yml)&nbsp;
-[![codecov](https://codecov.io/gh/seapagan/github-changelog-md/graph/badge.svg?token=27D8PGNX0E)](https://codecov.io/gh/seapagan/github-changelog-md)&nbsp;
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dca64980e10444f6b0b8d66369e64082)](https://app.codacy.com/gh/seapagan/github-changelog-md/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)&nbsp;
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/dca64980e10444f6b0b8d66369e64082)](https://app.codacy.com/gh/seapagan/github-changelog-md/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)&nbsp;
 [![Dependency Review](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/dependency-review.yml)&nbsp;
 [![CodeQL](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml/badge.svg)](https://github.com/seapagan/github-changelog-md/actions/workflows/codeql.yml)&nbsp;
 [![Weekly Downloads](https://static.pepy.tech/personalized-badge/github-changelog-md?period=week&units=international_system&left_color=black&right_color=green&left_text=Weekly%20Downloads)](https://pepy.tech/project/github-changelog-md)&nbsp;

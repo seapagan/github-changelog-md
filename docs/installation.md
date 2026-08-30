@@ -3,7 +3,7 @@
 It is possible to install this package both locally within your projects and
 globally so it can be used in every project. You also need to generate a GitHub
 Personal Access Token (PAT) to use this tool or use an existing one. This should
-be stored in a config file `.changelog-generator.toml` in the directory you run
+be stored in a config file `.changelog_generator.toml` in the directory you run
 the tool from.
 
 ## Locally for a project
@@ -85,7 +85,7 @@ use this on private repositories).
     PAT and you will need to create a new one anyway, but there is a small
     chance someone could use it to access your repositories.
 
-This tool will look for a config file `.changelog-generator.toml` in the
+This tool will look for a config file `.changelog_generator.toml` in the
 location it is run from. The config file is a simple
 [TOML](https://toml.io/en/){:target="_blank"} file with the following format:
 
