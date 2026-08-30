@@ -1,0 +1,110 @@
+# Configuration file for `prek`, a git hook framework written in Rust.
+# See https://prek.j178.dev for more information.
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "check-yaml" },
+  { id = "trailing-whitespace" },
+  { id = "check-toml" },
+  { id = "check-merge-conflict" },
+  { id = "end-of-file-fixer" }
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.16.5"
+hooks = [
+  {
+    id = "ruff",
+    args = ["--output-format=concise"],
+    name = "lint with ruff"
+  },
+  {
+    id = "ruff-format",
+    name = "format with ruff"
+  }
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ty-pre-commit"
+rev = "v0.0.75"
+hooks = [
+  {
+    id = "ty",
+    name = "type-check with ty"
+  }
+]
+
+[[repos]]
+repo = "https://github.com/pre-commit/mirrors-mypy"
+rev = "v2.3.1"
+hooks = [
+  {
+    id = "mypy",
+    name = "type-check with mypy",
+    additional_dependencies = [
+      "pydantic",
+      "sqladmin",
+      "types-markdown"
+    ]
+  }
+]
+
+[[repos]]
+repo = "https://github.com/zizmorcore/zizmor-pre-commit"
+# Keep in sync with pyproject.toml and .github/workflows/zizmor.yml.
+rev = "v1.29.0"
+hooks = [
+  {
+    id = "zizmor",
+    args = [
+      "--no-progress",
+      "--persona=pedantic"
+    ]
+  }
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  {
+    id = "docs-build",
+    name = "build documentation",
+    entry = "uv run poe docs:build",
+    language = "system",
+    pass_filenames = false,
+    files = '^(docs/|mkdocs\.yml$|CHANGELOG\.md$|CONTRIBUTING\.md$|TODO\.md$|pyproject\.toml$|uv\.lock$)'
+  }
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/uv-pre-commit"
+# uv version.
+rev = "0.12.7"
+hooks = [
+  {
+    id = "uv-lock",
+    name = "ensure the lockfile is up-to-date"
+  },
+  {
+    id = "uv-export",
+    name = "export dependencies to 'requirements.txt'",
+    args = [
+      "--no-hashes",
+      "--no-dev",
+      "--no-emit-project",
+      "--output-file=requirements.txt"
+    ]
+  },
+  {
+    id = "uv-export",
+    name = "export dev dependencies to 'requirements-dev.txt'",
+    args = [
+      "--no-hashes",
+      "--no-emit-project",
+      "--output-file=requirements-dev.txt"
+    ]
+  }
+]
