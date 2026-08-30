@@ -229,3 +229,4 @@ watchdog==6.0.0
     # via mkdocs
 wcwidth==0.8.3
     # via columnar
+zizmor==1.29.0
