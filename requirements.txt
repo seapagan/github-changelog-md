@@ -10,10 +10,8 @@ cffi==2.0.0 ; platform_python_implementation != 'PyPy'
     #   pynacl
 charset-normalizer==3.4.3
     # via requests
-click==8.3.0
-    # via typer
 colorama==0.4.6 ; sys_platform == 'win32'
-    # via click
+    # via typer
 cryptography==50.0.1
     # via pyjwt
 idna==3.19
@@ -24,7 +22,7 @@ mdurl==0.1.2
     # via markdown-it-py
 pycparser==2.23 ; implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'
     # via cffi
-pygithub==2.8.1
+pygithub==2.10.0
     # via github-changelog-md
 pygments==2.20.0
     # via rich
@@ -44,9 +42,9 @@ rtoml==0.13.0
     #   simple-toml-settings
 shellingham==1.5.4
     # via typer
-simple-toml-settings==0.12.0
+simple-toml-settings==0.13.0
     # via github-changelog-md
-typer==0.25.1
+typer==0.27.2
     # via github-changelog-md
 typing-extensions==4.15.0
     # via
