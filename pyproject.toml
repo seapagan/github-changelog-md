@@ -4,13 +4,6 @@ version = "0.9.9"
 description = "Generate a Markdown Changelog from your Github repository."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-  "pygithub>=2.10.0",
-  "rich>=15.0.0",
-  "rtoml>=0.13.0",
-  "simple-toml-settings>=0.13.0",
-  "typer>=0.27.2",
-]
 license = "MIT"
 license-files = ["LICENSE.txt"]
 authors = [{ name = "Grant Ramsay", email = "seapagan@gmail.com" }]
@@ -31,32 +24,40 @@ classifiers = [
   "Topic :: Terminals",
   "Topic :: Utilities",
 ]
+dependencies = [
+  "pygithub>=2.10.0",
+  "rich>=15.0.0",
+  "rtoml>=0.13.0",
+  "simple-toml-settings>=0.13.0",
+  "typer>=0.27.2",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/seapagan/github-changelog-md/issues"
+"Changelog" = "https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md"
+"Pull Requests" = "https://github.com/seapagan/github-changelog-md/pulls"
+"homepage" = "https://changelog.seapagan.net"
+"repository" = "https://github.com/seapagan/github-changelog-md"
 
 [project.scripts]
 github-changelog-md = "github_changelog_md.main:app"
 
-[project.urls]
-"homepage" = "https://changelog.seapagan.net"
-"repository" = "https://github.com/seapagan/github-changelog-md"
-"Pull Requests" = "https://github.com/seapagan/github-changelog-md/pulls"
-"Bug Tracker" = "https://github.com/seapagan/github-changelog-md/issues"
-"Changelog" = "https://github.com/seapagan/github-changelog-md/blob/main/CHANGELOG.md"
-
-[build-system]
-requires = ["uv_build>=0.12.7,<0.13.0"]
-build-backend = "uv_build"
-
-[tool.uv.build-backend]
-module-root = ""
-
 [dependency-groups]
 dev = [
   "faker>=40.37.0",
+  "mkdocs>=1.6.1,<2.0.0",
+  "mkdocs-autorefs>=1.4.4",
+  "mkdocs-git-revision-date-localized-plugin>=1.5.4",
+  "mkdocs-material>=9.7.7",
+  "mkdocs-minify-plugin>=0.8.0",
   "mock>=5.2.0",
   "mypy>=2.3.1",
   "poethepoet>=0.48.0",
+  "prek>=0.5.0",
   "pyfakefs>=6.2.0",
+  "pygments>=2.21.0",
   "pymarkdownlnt>=0.9.39",
+  "pymdown-extensions>=11.0.2",
   "pytest>=9.1.1",
   "pytest-cov>=7.1.0",
   "pytest-mock>=3.15.1",
@@ -65,18 +66,18 @@ dev = [
   "pytest-sugar>=1.1.1",
   "pytest-xdist>=3.8.0",
   "ruff>=0.16.5",
-  "mkdocs>=1.6.1,<2.0.0",
-  "mkdocs-git-revision-date-localized-plugin>=1.5.4",
-  "mkdocs-autorefs>=1.4.4",
-  "mkdocs-material>=9.7.7",
-  "mkdocs-minify-plugin>=0.8.0",
-  "pymdown-extensions>=11.0.2",
-  "pygments>=2.21.0",
-  "prek>=0.5.0",
   "ty>=0.0.75",
   "types-markdown>=3.10.2.20260712",
-  "zizmor==1.29.0", # Keep in sync with .github/workflows/zizmor.yml.
+  "zizmor==1.29.0",  # Keep in sync with .github/workflows/zizmor.yml.
 ]
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.coverage.run]
+source = ["github_changelog_md"]
+omit = ["*/tests/*"]
 
 [tool.poe.tasks]
 # setup PoeThePoet tasks
@@ -94,7 +95,7 @@ test.help = "Run tests using Pytest"
 test.cmd = "pytest"
 markdown.cmd = "pymarkdown scan  -r github_changelog_md/**/*.md docs/**/*.md CHANGELOG.md"
 markdown.help = "Run markdown checks"
-zizmor.cmd = "zizmor --persona=pedantic --collect=workflows,actions ."
+zizmor.cmd = "zizmor --persona=pedantic ."
 zizmor.help = "Audit GitHub Actions with Zizmor"
 
 type.ignore_fail = "return_non_zero"
@@ -128,25 +129,22 @@ plugins.md046.enabled = false
 [tool.pytest.ini_options]
 addopts = ["--cov", "--cov-report", "term-missing", "--cov-report", "html"]
 filterwarnings = []
-mock_use_standalone_module = true
 pythonpath = ["github_changelog_md"]
-
-[tool.coverage.run]
-source = ["github_changelog_md"]
-omit = ["*/tests/*"]
+mock_use_standalone_module = true
 
 [tool.ruff]
 line-length = 80
 
 src = ["github_changelog_md"]
-target-version = "py310"      # minimum python version supported
+target-version = "py310"  # minimum python version supported
 
 [tool.ruff.lint]
-select = ["ALL"] # we are being very strict!
+select = ["ALL"]  # we are being very strict!
 ignore = [
-  "CPY001", # copyright in each file is overkill for this project.
-] # These rules are too strict even for us 😝
-extend-ignore = ["COM812", "ISC001"] # these are ignored for ruff formatting
+  "CPY001",  # copyright in each file is overkill for this project.
+  "COM812",  # ignored for ruff formatting
+  "ISC001"  # ignored for ruff formatting
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["github_changelog_md"]
@@ -162,13 +160,19 @@ convention = "google"
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = [
-  "S101", # we can (and MUST!) use 'assert' in test files.
+  "S101",  # we can (and MUST!) use 'assert' in test files.
 ]
 "github_changelog_md/main.py" = [
   "UP007",
   "PLR0913",
-] # These cause issues in Typer Apps
+]  # These cause issues in Typer Apps
 
 [tool.ruff.format]
 indent-style = "space"
 quote-style = "double"
+
+[tool.tombi.format.rules]
+line-width = 80
+
+[tool.uv.build-backend]
+module-root = ""
