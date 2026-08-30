@@ -43,7 +43,7 @@ latest to oldest in this release.
 It is possible to install this package both locally within your projects and
 globally so it can be used in every project. You also need to generate a GitHub
 Personal Access Token (PAT) to use this tool or use an existing one. This should
-be stored in a config file `.github-changelog-md.toml` in the directory you run
+be stored in a config file `.changelog-generator.toml` in the directory you run
 the tool from.
 
 ## Install Locally for a project
@@ -66,10 +66,20 @@ $ pip install github-changelog-md
 
 ## Install Globally
 
-You could also install the package globally if you want to use it in every
-project. See the
-[Documentation][docs-install] for more
-information.
+Install the package as a command-line tool with `uv` if you want to use it in
+every project:
+
+```console
+$ uv tool install github-changelog-md
+```
+
+Alternatively, install it with `pipx`:
+
+```console
+$ pipx install github-changelog-md
+```
+
+See the [Documentation][docs-install] for more information.
 
 ## Setup a GitHub PAT
 
@@ -127,7 +137,7 @@ but there is a small chance someone could use it to access your repositories.
 
 ## Development setup
 
-Install the dependencies using Poetry:
+Install the development dependencies using `uv`:
 
 ```terminal
 $ uv sync

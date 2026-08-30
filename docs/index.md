@@ -40,10 +40,10 @@ While the project is written in Python, it is **NOT** limited to just generating
 a changelog for Python projects. It will work with **any Github repository** and
 therefore **any coding language**. In this case a
 [global](installation.md#globally) installation is recommended. Most linux-based
-systems will already have Python installed, but if not, it is easy to install.
-Windows and the latest releases of MacOS will need Python to be installed, see
-the [Python documentation](https://www.python.org/downloads/){:target="_blank"}
-for details.
+systems will already have Python installed. When installing the tool with `uv`,
+`uv` will download a compatible Python version automatically if needed. For
+other installation methods, see the
+[Python documentation](https://www.python.org/downloads/){:target="_blank"}.
 
 For an example of the output, see the [Changelog](changelog.md) for this
 project.

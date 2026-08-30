@@ -25,7 +25,7 @@ bit daunting, please feel free to open a discussion and I can help you get
 started, or even pair on a PR.
 
 Currently, development is done primary on **Linux**, but I will also try to test
-on **Windows** and **Mac OS X** when possible. If you are using a different
+on **Windows** and **macOS** when possible. If you are using a different
 platform and find any issues, please let me know. I welcome any contributions,
 on any platform!
 
@@ -44,7 +44,7 @@ higher.
 I'd recommend using [pyenv](https://github.com/pyenv/pyenv) to manage your
 Python installations, the
 [pyenv-installer](https://github.com/pyenv/pyenv-installer) works for Linux and
-Mac OS X. For Windows, you can use the
+macOS. For Windows, you can use the
 [pyenv-win](https://github.com/pyenv-win/pyenv-win) port. See the [Pyenv-Win
 Website](https://github.com/pyenv-win/pyenv-win#installation ) for installation
 instructions.
@@ -134,28 +134,28 @@ We are using [Ruff](https://docs.astral.sh/ruff/) for linting and formatting.
 These are set up as pre-commit hooks and can be run as below. You can also use
 the `poe ruff` and `poe format` commands to run these manually.
 
-### Type hinting
+### Type checking
 
-All code must pass `mypy` checks. This can be run manually using the `poe mypy`
-and is part of the pre-commit hooks.
+All code must pass both `ty` and `mypy` checks. Run them together with
+`poe type`, or individually with `poe ty` and `poe mypy`. Both checks are also
+part of the pre-commit hooks.
 
 ### Install Git Pre-Commit hooks
 
 Please install this if you are intending to submit a PR. It will check commits
 locally before they are pushed up to the Repo. The GitHub CI runs the linting
-and mypy checks, and will fail if there are any errors.
+and both type checkers, and will fail if there are any errors.
 
 ```console
-$ pre-commit install
-pre-commit installed at .git/hooks/pre-commit
+$ prek install
 ```
 
 This will ensure that all code meets the required linting standard before being
 committed.
 
-### Run pre-commit manually
+### Run pre-commit checks manually
 
-You can run these checks manually on all staged files using the below command :
+Run all checks manually across the project with:
 
 ```console
 poe pre
@@ -165,14 +165,8 @@ poe pre
 
 We are using [pytest](https://docs.pytest.org/) for testing.
 
-At the moment the test framework is set up but we only have about 50% coverage.
-We will be adding more tests as we go along - and most definitely welcome any
-contributions to this area!
-
 If you add any new features, please add tests for them. This will help us to
 ensure that the code is working as expected and will prevent any regressions.
-_Currently we are not enforcing this until we have better coverage of the code -
-**however if you break any existing tests, the CI will fail.**_
 
 There is a task set up to run tests:
 
@@ -218,10 +212,22 @@ These are defined in the `pyproject.toml` file.
 Each of these tasks can have extra options added which will be passed to the
 underlying tool.
 
+Run **`ty`** on the code base:
+
+```console
+$ poe ty
+```
+
 Run **`mypy`** on the code base in strict mode:
 
 ```console
 $ poe mypy
+```
+
+Run both type checkers:
+
+```console
+$ poe type
 ```
 
 Format the code using **`ruff format`**:
@@ -242,7 +248,7 @@ Check the **Markdown**:
 $ poe markdown
 ```
 
-Run `ruff`, `mypy`, `format` and `markdown` at the same time:
+Run formatting, Ruff, both type checkers and Markdown checks:
 
 ```console
 $ poe lint
@@ -270,10 +276,11 @@ Here are some guidelines to follow when contributing to `github-changelog-md`:
   this also. [Ruff](https://docs.astral.sh/ruff/) is installed and set to pretty
   strict settings. Ruff now replaces all the original linters that were
   installed. There is also a Markdown linter.
-- [MyPy](https://mypy.readthedocs.io/en/stable/) is installed and we are using
-  type hints. Please try to add type hints to your code. If you see any areas of
-  the code that are missing type hints, please feel free to open a PR and add
-  them 😁!
+- [ty](https://docs.astral.sh/ty/) and
+  [MyPy](https://mypy.readthedocs.io/en/stable/) are installed and we use type
+  hints throughout the code. Please add type hints to new code. If you see any
+  areas that are missing type hints, please feel free to open a PR and add them
+  😁!
 - Write clear and concise commit messages.
 - Write tests for your code.
 - Make sure your code passes all existing and new tests before submitting a pull

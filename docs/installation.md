@@ -26,7 +26,14 @@ $ pip install github-changelog-md
 
 ## Globally
 
-Install with [pipx](https://pypa.github.io/pipx/) (recommended)
+Install as a command-line tool with
+[uv](https://docs.astral.sh/uv/guides/tools/){:target="_blank"} (recommended):
+
+```console
+$ uv tool install github-changelog-md
+```
+
+Alternatively, install with [pipx](https://pipx.pypa.io/){:target="_blank"}:
 
 ```console
 $ pipx install github-changelog-md

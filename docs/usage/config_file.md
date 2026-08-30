@@ -187,16 +187,16 @@ release = "unreleased"
 text = """
 These are the changes that have been merged to the repository since the last
 release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+version from the main branch with `uv` by running:
+
+```console
+$ uv add --dev git+https://github.com/seapagan/github-changelog-md
+```
+
+or, from inside a virtual environment:
 
 ```console
 $ pip install git+https://github.com/seapagan/github-changelog-md
-```
-
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
 ```
 Everything in this section will be included in the next official release.
 """
