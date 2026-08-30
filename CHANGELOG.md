@@ -11,27 +11,33 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 These are the changes that have been merged to the repository since the last
 release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
+version from the main branch with `uv` by running:
+
+```console
+$ uv add --dev git+https://github.com/seapagan/github-changelog-md
+```
+
+or, from inside a virtual environment:
 
 ```console
 $ pip install git+https://github.com/seapagan/github-changelog-md
 ```
-
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
 Everything in this section will be included in the next official release.
 
 ### New Features
 
+- Chore: migrate Prek configuration to TOML ([#429](https://github.com/seapagan/github-changelog-md/pull/429)) by [seapagan](https://github.com/seapagan)
+- Feat: integrate ty and enforce strict test typing ([#425](https://github.com/seapagan/github-changelog-md/pull/425)) by [seapagan](https://github.com/seapagan)
 - Feat: add configurable section heading styles ([#423](https://github.com/seapagan/github-changelog-md/pull/423)) by [seapagan](https://github.com/seapagan)
 
 ### Security
 
 - Chore(deps): update packages for security alerts ([#424](https://github.com/seapagan/github-changelog-md/pull/424)) by [seapagan](https://github.com/seapagan)
+
+### CI / CD Pipeline
+
+- Ci: harden GitHub Actions with Zizmor ([#428](https://github.com/seapagan/github-changelog-md/pull/428)) by [seapagan](https://github.com/seapagan)
+- Ci: build docs site during the CI run ([#427](https://github.com/seapagan/github-changelog-md/pull/427)) by [seapagan](https://github.com/seapagan)
 
 ### Refactoring
 
@@ -39,6 +45,7 @@ Everything in this section will be included in the next official release.
 
 ### Dependency Updates
 
+- Chore(deps): update dependencies ([#426](https://github.com/seapagan/github-changelog-md/pull/426)) by [seapagan](https://github.com/seapagan)
 - Chore(deps): update astral-sh/setup-uv action to v10 ([#422](https://github.com/seapagan/github-changelog-md/pull/422)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update dependency uv_build to >=0.12.7,<0.13.0 ([#421](https://github.com/seapagan/github-changelog-md/pull/421)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update actions/checkout action to v7 ([#410](https://github.com/seapagan/github-changelog-md/pull/410)) by [renovate[bot]](https://github.com/apps/renovate)
