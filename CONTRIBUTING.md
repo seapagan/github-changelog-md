@@ -154,6 +154,11 @@ $ prek install
 This will ensure that all code meets the required linting standard before being
 committed.
 
+GitHub Actions also runs tests, documentation builds, type checking, dependency
+review, CodeQL, and workflow security checks. See the
+[Continuous Integration guide](https://changelog.seapagan.net/ci/) for the
+hosted checks and their corresponding local commands.
+
 ### Run pre-commit checks manually
 
 Run all checks manually across the project with:
@@ -249,10 +254,16 @@ Check the **Markdown**:
 $ poe markdown
 ```
 
-Run formatting, Ruff, both type checkers and Markdown checks:
+Run formatting, Ruff, both type checkers, Markdown checks, and Zizmor:
 
 ```console
 $ poe lint
+```
+
+Audit only the GitHub Actions configuration with **Zizmor**:
+
+```console
+$ poe zizmor
 ```
 
 ## Documentation Tasks
@@ -262,7 +273,7 @@ These are to help with developing and updating the documentation.
 - `poe docs:serve` - Serve the MkDocs locally for testing and development
 - `poe docs:serve:all` - Same as above, but opens to all interfaces so you can
   view it on other devices on your network
-- `poe docs:build` - Build the MkDocs site into the `dist` folder
+- `poe docs:build` - Build the MkDocs site into the `site` folder
 - `poe docs:publish` - Publish the docs to your GitHub pages. **Note that only
   those with write-access to this repo can do this**.
 
