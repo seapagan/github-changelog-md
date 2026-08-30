@@ -21,7 +21,8 @@ $ poe pre
 linting, and Zizmor. The individual tasks, including `poe format`, `poe ruff`,
 `poe type`, `poe ty`, `poe mypy`, `poe markdown`, and `poe zizmor`, remain
 available for focused checks. `poe docs:build` writes the MkDocs site to
-`site`.
+`site`. The Prek configuration also runs Zizmor when checking workflow and
+action files.
 
 CodeQL analysis and dependency review are primarily hosted checks because they
 depend on GitHub's analysis and pull-request context.
@@ -35,11 +36,13 @@ workflows and action definitions. Run the repository's pedantic audit with:
 $ poe zizmor
 ```
 
-Zizmor is pinned as a development dependency and the dedicated hosted workflow
-pins the same CLI version. Keep these versions synchronized when updating it.
-Collection is deliberately restricted to `workflows,actions` because the
+Zizmor is pinned as a development dependency, a Prek hook, and in the dedicated
+hosted workflow. Keep all three versions synchronized when updating it. The Poe
+task and hosted workflow restrict collection to `workflows,actions` because the
 repository's `.pre-commit-config.yaml` uses Prek's `repo: builtin` extension,
-which is not an upstream pre-commit configuration.
+which is not an upstream pre-commit configuration. The Prek hook receives only
+matching workflow and action files directly, so it does not parse the Prek
+configuration.
 
 Local audits run offline unless a suitable GitHub token is already available
 through `ZIZMOR_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN`. A read-only token
