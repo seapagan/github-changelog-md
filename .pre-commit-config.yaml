@@ -29,6 +29,7 @@ repos:
         additional_dependencies:
           - pydantic
           - sqladmin
+          - types-markdown
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.

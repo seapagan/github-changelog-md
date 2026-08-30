@@ -74,13 +74,14 @@ dev = [
   "pygments>=2.18.0",
   "prek>=0.3.1",
   "ty>=0.0.75",
+  "types-markdown>=3.10.2.20260712",
 ]
 
 [tool.poe.tasks]
 # setup PoeThePoet tasks
 pre.cmd = "prek run --all-files"
 pre.help = "Run pre-commit checks using 'prek'"
-mypy.cmd = "mypy . --strict --exclude site --exclude docs"
+mypy.cmd = "mypy . --strict --exclude ^site/"
 mypy.help = "Run mypy checks"
 ty.cmd = "ty check --output-format concise"
 ty.help = "Run ty checks"

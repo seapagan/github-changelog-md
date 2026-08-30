@@ -90,7 +90,7 @@ jsmin==3.0.1
     # via mkdocs-minify-plugin
 librt==0.15.0 ; platform_python_implementation != 'PyPy'
     # via mypy
-markdown==3.9
+markdown==3.10.3
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -250,6 +250,7 @@ tqdm==4.67.1
 ty==0.0.75
 typer==0.25.1
     # via github-changelog-md
+types-markdown==3.10.2.20260712
 typing-extensions==4.15.0
     # via
     #   anyio
