@@ -7,31 +7,22 @@ project since the first release.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/seapagan/github-changelog-md/tree/HEAD)
-
-These are the changes that have been merged to the repository since the last
-release. If you want to try out these changes, you can install the latest
-version from the main branch by running:
-
-```console
-$ pip install git+https://github.com/seapagan/github-changelog-md
-```
-
-or, if using poetry:
-
-```console
-$ poetry add git+https://github.com/seapagan/github-changelog-md
-```
-
-Everything in this section will be included in the next official release.
+## [0.10.0](https://github.com/seapagan/github-changelog-md/releases/tag/0.10.0) (September 11, 2026)
 
 ### New Features
 
+- Chore: migrate Prek configuration to TOML ([#429](https://github.com/seapagan/github-changelog-md/pull/429)) by [seapagan](https://github.com/seapagan)
+- Feat: integrate ty and enforce strict test typing ([#425](https://github.com/seapagan/github-changelog-md/pull/425)) by [seapagan](https://github.com/seapagan)
 - Feat: add configurable section heading styles ([#423](https://github.com/seapagan/github-changelog-md/pull/423)) by [seapagan](https://github.com/seapagan)
 
 ### Security
 
 - Chore(deps): update packages for security alerts ([#424](https://github.com/seapagan/github-changelog-md/pull/424)) by [seapagan](https://github.com/seapagan)
+
+### CI / CD Pipeline
+
+- Ci: harden GitHub Actions with Zizmor ([#428](https://github.com/seapagan/github-changelog-md/pull/428)) by [seapagan](https://github.com/seapagan)
+- Ci: build docs site during the CI run ([#427](https://github.com/seapagan/github-changelog-md/pull/427)) by [seapagan](https://github.com/seapagan)
 
 ### Refactoring
 
@@ -39,6 +30,7 @@ Everything in this section will be included in the next official release.
 
 ### Dependency Updates
 
+- Chore(deps): update dependencies ([#426](https://github.com/seapagan/github-changelog-md/pull/426)) by [seapagan](https://github.com/seapagan)
 - Chore(deps): update astral-sh/setup-uv action to v10 ([#422](https://github.com/seapagan/github-changelog-md/pull/422)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update dependency uv_build to >=0.12.7,<0.13.0 ([#421](https://github.com/seapagan/github-changelog-md/pull/421)) by [renovate[bot]](https://github.com/apps/renovate)
 - Chore(deps): update actions/checkout action to v7 ([#410](https://github.com/seapagan/github-changelog-md/pull/410)) by [renovate[bot]](https://github.com/apps/renovate)
@@ -46,7 +38,7 @@ Everything in this section will be included in the next official release.
 - Chore(deps): update dependency pymdown-extensions to v11 [security] ([#406](https://github.com/seapagan/github-changelog-md/pull/406)) by [renovate[bot]](https://github.com/apps/renovate)
 - Build(deps): bump idna from 3.10 to 3.15 ([#405](https://github.com/seapagan/github-changelog-md/pull/405)) by [dependabot[bot]](https://github.com/apps/dependabot)
 
-[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...HEAD.patch)
+[`Full Changelog`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...0.10.0) | [`Diff`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...0.10.0.diff) | [`Patch`](https://github.com/seapagan/github-changelog-md/compare/0.9.9...0.10.0.patch)
 
 ## [0.9.9](https://github.com/seapagan/github-changelog-md/releases/tag/0.9.9) (May 12, 2026)
 
